@@ -8,6 +8,9 @@ import {authFc} from "./state/authReducer";
 import {getToken, isPending} from "./state/initial-selector";
 import {GlobalStateType} from "./state/root-reducer";
 import {initialise} from "./state/appReducer";
+import LoginPage from "./components/loginPage/loginPage";
+import {EnterCode, ForgotPassword, NewPassword, SignInForm} from "./components/loginPage/signInForms";
+import AdminPage from "./components/admin/AdminPage";
 
 const App = (props:any) => {
     const {login} = useAuth()
@@ -15,7 +18,7 @@ const App = (props:any) => {
         alert(promiseRejectionEvent)
     }
     useEffect( () => {
-        props.initialise()
+        // props.initialise(false)
         window.addEventListener('unhandledrejection', allPromiseRejection)
         return () => {
             window.removeEventListener('unhandledrejection', allPromiseRejection)
@@ -36,8 +39,27 @@ const App = (props:any) => {
             <Router>
                 <Switch>
                     <Route exact path={'/'}>
-                        <button onClick={() => log('adgdag', 'sagfsdg')}>LOGIN</button>
-                        {/*<input type="file" />*/}
+                        <LoginPage>
+                            <SignInForm login={log}/>
+                        </LoginPage>
+                    </Route>
+                    <Route path={'/forgot'}>
+                        <LoginPage>
+                            <ForgotPassword/>
+                        </LoginPage>
+                    </Route>
+                    <Route path={'/code'}>
+                        <LoginPage>
+                            <EnterCode />
+                        </LoginPage>
+                    </Route>
+                    <Route path={'/new-password'}>
+                        <LoginPage>
+                            <NewPassword />
+                        </LoginPage>
+                    </Route>
+                    <Route path={'/admin'}>
+                        <AdminPage/>
                     </Route>
                 </Switch>
             </Router>

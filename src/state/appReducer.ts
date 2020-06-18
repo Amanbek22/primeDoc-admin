@@ -3,7 +3,7 @@ const INITIALIZE_SUCCEED = "app/INITIALIZE_SUCCEED";
 
 
 const initialState = {
-    initialise: true,
+    initialise: false,
 }
 type InitialStateType = typeof initialState
 
@@ -12,7 +12,7 @@ export const appReducer = (state = initialState, action: any): InitialStateType 
         case INITIALIZE_SUCCEED:
             return {
                 ...state,
-                initialise: false
+                initialise: action.isPending
             }
         default:
             return {
@@ -22,8 +22,9 @@ export const appReducer = (state = initialState, action: any): InitialStateType 
 }
 
 
-export const initialise = () => {
+export const initialise = (isPending:boolean) => {
     return {
-        type: INITIALIZE_SUCCEED
+        type: INITIALIZE_SUCCEED,
+        isPending
     }
 }
