@@ -2,7 +2,6 @@ import api from '../api/Api'
 import {initialise} from "./appReducer";
 
 const IS_AUTHENTICATED = 'auth/IS_AUTHENTICATED'
-const IS_PENDING = 'auth/IS_PENDING'
 const AUTHORIZATION = 'auth/AUTHORIZATION'
 
 
