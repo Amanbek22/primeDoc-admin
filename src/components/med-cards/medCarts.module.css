@@ -1,0 +1,46 @@
+.tableWrapper{
+    margin-top: 80px;
+    background: #FFFFFF;
+    border: 1px solid #C4C4C4;
+    border-bottom: none;
+    box-sizing: border-box;
+}
+.header, .list{
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.3fr 1fr ;
+
+}
+.header{
+    background: #00BDD0;
+    text-align: center;
+}
+.header>div, .list>div{
+    padding: 15px 0;
+
+    border-right: 1px solid #C4C4C4;
+    font-size: 16px;
+    line-height: 21px;
+}
+.header>div{
+    font-size: 18px;
+    color: #FFFFFF;
+}
+.list>div{
+    padding-left: 10px;
+    white-space: nowrap; /* Запрещаем перенос строк */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.last{
+    border-right: none !important;
+}
+.list{
+    border-bottom: 1px solid #C4C4C4;
+}
+.watchPicture{
+    border-right: none !important;
+    text-align: center;
+    color: #20CF54;
+    font-weight: 500;
+    cursor: pointer;
+}
