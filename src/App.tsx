@@ -1,19 +1,15 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {useAuth} from "./hooks/auth.hook";
+import {BrowserRouter as Router} from "react-router-dom";
 import Preloader from "./components/preloader/Preloader";
 import {connect} from 'react-redux';
-import {authFc} from "./state/authReducer";
 import {getToken, isPending} from "./state/initial-selector";
 import {GlobalStateType} from "./state/root-reducer";
 import {initialise} from "./state/appReducer";
-import LoginPage from "./components/loginPage/loginPage";
-import {EnterCode, ForgotPassword, NewPassword, SignInForm} from "./components/loginPage/signInForms";
-import AdminPage from "./components/admin/AdminPage";
+import {useRoutes} from "./routes";
 
 const App = (props:any) => {
-    const {login} = useAuth()
+    const routs = useRoutes(props.isAuth)
     const allPromiseRejection = (promiseRejectionEvent: any) =>{
         alert(promiseRejectionEvent)
     }
@@ -25,11 +21,7 @@ const App = (props:any) => {
         }
     }, [props])
 
-    const log = async (password: string, log: string) => {
-        const res = await props.authFc('n1n2n3n4', 'Aman')
-        console.log(res)
-        login(res.refresh, 5)
-    }
+
     if (props.isPending) {
         return <div style={{height: '100vh'}}><Preloader/></div>
     }
@@ -37,31 +29,7 @@ const App = (props:any) => {
     return (
         <div className="App">
             <Router>
-                <Switch>
-                    <Route exact path={'/'}>
-                        <LoginPage>
-                            <SignInForm login={log}/>
-                        </LoginPage>
-                    </Route>
-                    <Route path={'/forgot'}>
-                        <LoginPage>
-                            <ForgotPassword/>
-                        </LoginPage>
-                    </Route>
-                    <Route path={'/code'}>
-                        <LoginPage>
-                            <EnterCode />
-                        </LoginPage>
-                    </Route>
-                    <Route path={'/new-password'}>
-                        <LoginPage>
-                            <NewPassword />
-                        </LoginPage>
-                    </Route>
-                    <Route path={'/admin'}>
-                        <AdminPage/>
-                    </Route>
-                </Switch>
+                {routs}
             </Router>
         </div>
     );
@@ -72,6 +40,7 @@ const App = (props:any) => {
 export default connect((state: GlobalStateType) => {
     return {
         token: getToken(state),
-        isPending: isPending(state)
+        isPending: isPending(state),
+        isAuth: state.auth.isAuth
     }
-},{initialise, authFc})(App);
+},{initialise})(App);

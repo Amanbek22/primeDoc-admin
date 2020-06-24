@@ -17,3 +17,19 @@ a{
     text-decoration: none;
     color: #000;
 }
+.prev{
+    border-bottom-right-radius: 15px;
+}
+.next{
+    border-top-right-radius: 15px;
+}
+.activeLink{
+    color: #00BDD0 !important;
+    background: #ffffff !important;
+    border-bottom-left-radius: 30px;
+    border-top-left-radius: 30px;
+    position: relative;
+}
+.activeLink>img{
+    filter: invert(57%) sepia(89%) saturate(1502%) hue-rotate(141deg) brightness(92%) contrast(101%);
+}
