@@ -2,12 +2,20 @@ import React from "react";
 import css from "./login.module.css";
 import {BtnNext, ErrorMessage, LogInput} from "./login-css";
 import {Link, useHistory} from "react-router-dom";
+import {connect} from "react-redux";
+import {authFc} from "../../state/authReducer";
+import {useAuth} from "../../hooks/auth.hook";
 
-
-export const SignInForm = ( props: any ) => {
+const SignIn = ( props: any ) => {
+    const {login} = useAuth()
+    const log = async (password: string, log: string) => {
+        const res = await props.authFc('n1n2n3n4', 'Aman')
+        console.log(res)
+        login(res.refresh, 5)
+    }
     const submit = (e: any) => {
         e.preventDefault()
-        props.login('sfsdf', 4)
+        log('adgadg','sdgsdg')
     }
     return (
         <form onSubmit={submit} className={css.loginWrapper}>
@@ -20,7 +28,7 @@ export const SignInForm = ( props: any ) => {
         </form>
     )
 }
-
+export const SignInForm = connect(null,{authFc})(SignIn)
 
 export const ForgotPassword = () => {
     const history = useHistory()

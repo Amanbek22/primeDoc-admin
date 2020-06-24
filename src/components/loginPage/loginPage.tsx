@@ -3,9 +3,9 @@ import {LoginWrapper, BlueBlock, LoginFormWrapper} from "./login-css";
 import logo from '../../img/logo.png'
 import css from './login.module.css'
 import {Link} from "react-router-dom";
-import {WithAuthRedirect} from "../../Hocs/AuthRedirect";
 
 const LoginPage = (props:any) => {
+
     return(
         <LoginWrapper>
             <LoginFormWrapper>
@@ -25,4 +25,4 @@ const LoginPage = (props:any) => {
 
 
 
-export default WithAuthRedirect(LoginPage)
+export default LoginPage

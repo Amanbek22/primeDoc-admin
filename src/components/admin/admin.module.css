@@ -1,0 +1,85 @@
+.cardWrapper{
+    height: 190px;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.4);
+    background: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    position: relative;
+
+}
+.link{
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.link>img{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+.blue{
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 189, 208, 0.2);
+}
+.title{
+    z-index: 1;
+    font-family: 'Balsamiq Sans', cursive;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    padding: 5px 15px 5px 10px;
+    background: #00BDD0;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 500;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+.buttonsWrapper{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 7px;
+}
+.buttonsWrapper>span{
+    font-weight: normal;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.buttonsWrapper>span>img{
+    margin-right: 5px;
+}
+.edit{
+    color: rgba(0,0,0,0.5);
+}
+.delete{
+    color: #FF5069;
+}
+
+.addCard{
+    font-family: 'Balsamiq Sans', cursive;
+
+    background: #EFEBEB;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 190px;
+    text-align: center;
+    position: relative;
+}
+.addCard>span{
+    font-size: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #00BDD0;
+    transform: translate(-50%, -50%);
+}
