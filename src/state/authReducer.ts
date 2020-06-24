@@ -8,7 +8,7 @@ const AUTHORIZATION = 'auth/AUTHORIZATION'
 const initialState = {
     token: null,
     userId: null,
-    isAuth: false
+    isAuth: true
 }
 
 type InitialStateType = typeof initialState
