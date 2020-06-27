@@ -4,36 +4,61 @@ import {EnterCode, ForgotPassword, NewPassword, SignInForm} from "./components/l
 import LoginPage from "./components/loginPage/loginPage";
 import AdminPage from "./components/admin/AdminPage";
 import NavBar from "./components/navbar/Navbar";
-import {AdminWrapper} from "./components/mainStyledComponents/MainStyledComponents";
+import {AdminHeader, AdminWrapper, Line} from "./components/mainStyledComponents/MainStyledComponents";
 import MedCarts from "./components/med-cards/MedCards";
 import Faq from "./components/FAQ/FAQ";
+import Personal from "./components/personal/Personal";
+import AboutUs from "./components/about-us/AboutUs";
+import Chat from "./components/chat/Chat";
+import ClinicDirection from "./components/ClinicDirection/ClinicDirection";
+import logout from './img/logout.png'
+import changePassword from './img/changePassword.png'
 
-export const useRoutes = (isAuth: boolean) => {
+export const useRoutes = (isAuth: boolean, header: string) => {
     if (isAuth) {
         return (
             <div>
                 <NavBar/>
                 <Switch>
                     <AdminWrapper>
-                        <Route exact path={'/admin'}>
+                        <AdminHeader>
+                            <span>
+                                {header}
+                            </span>
+                            <div>
+                                <div>
+                                    <img src={changePassword} alt="#"/>
+                                    <span>Сменить пароль</span>
+                                </div>
+                                <div>
+                                    <img src={logout} alt="#"/>
+                                    <span>Выйти</span>
+                                </div>
+                            </div>
+                        </AdminHeader>
+                        <Line/>
+                        <Route exact path={'/clinic'}>
                             <AdminPage/>
                         </Route>
-                        <Route path={'/card'}>
-                            <MedCarts />
+                        <Route path={'/clinic/:id'}>
+                            <ClinicDirection/>
                         </Route>
-                        <Route path={'/create'}>
-                            Create
+                        <Route path={'/card'}>
+                            <MedCarts/>
+                        </Route>
+                        <Route path={'/Personal'}>
+                            <Personal/>
                         </Route>
                         <Route path={'/FAQ'}>
                             <Faq/>
                         </Route>
                         <Route path={'/about-us'}>
-                            about-us
+                            <AboutUs/>
                         </Route>
                         <Route path={'/chat'}>
-                            chat
+                            <Chat/>
                         </Route>
-                        <Redirect to={'/admin'}/>
+                        <Redirect to={'/clinic'}/>
                     </AdminWrapper>
                 </Switch>
             </div>
