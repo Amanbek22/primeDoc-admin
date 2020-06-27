@@ -4,12 +4,11 @@ import logo from '../../img/WhiteLogo.png'
 import {NavLink, withRouter} from "react-router-dom";
 import css from "./navbar.module.css";
 import medCart from '../../img/MedKarta.png'
-import addUser from '../../img/add-user.png'
+import addUser from '../../img/user.png'
 import FAQ from '../../img/FAQ.png'
 import about from '../../img/about-us.png'
 import chat from '../../img/chat.png'
 import clinic from '../../img/Клиника.png'
-import logout from '../../img/logout.png'
 
 
 const NavBar = (props: any) => {
@@ -52,7 +51,7 @@ const NavBar = (props: any) => {
             </LogoWrapper>
             <LinksWrapper ref={links}>
                 <span className={css.spans}/>
-                <NavLink activeClassName={'activeLink'} to={'/admin'}>
+                <NavLink activeClassName={'activeLink'} to={'/clinic'}>
                     <img src={clinic} alt="#"/>
                     Клиника
                 </NavLink>
@@ -60,9 +59,9 @@ const NavBar = (props: any) => {
                     <img src={medCart} alt="#"/>
                     Мед карта
                 </NavLink>
-                <NavLink to={'/create'} activeClassName={'activeLink'}>
+                <NavLink to={'/personal'} activeClassName={'activeLink'}>
                     <img src={addUser} alt="#"/>
-                    Создать пользователя
+                    Персонал
                 </NavLink>
                 <NavLink to={'/FAQ'} activeClassName={'activeLink'}>
                     <img src={FAQ} alt="#"/>
@@ -78,12 +77,6 @@ const NavBar = (props: any) => {
                 </NavLink>
                 <span className={css.spans}/>
             </LinksWrapper>
-            <div className={css.logout}>
-                <span>
-                    <img src={logout} alt="#"/>
-                    Выйти
-                </span>
-            </div>
         </Navbar>
     )
 }
