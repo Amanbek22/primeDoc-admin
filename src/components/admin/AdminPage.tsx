@@ -1,36 +1,42 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {AdminPageWrapper, CardsWrapper, FormModalWrapper, Title} from "./AdminComponents";
-import {AdminHeader, Close, Line} from "../mainStyledComponents/MainStyledComponents";
+import { GreenBtn, Input} from "../mainStyledComponents/MainStyledComponents";
 import css from './admin.module.css'
 import edit from '../../img/edit.png'
 import del from '../../img/delete.png'
-import Modal from "react-awesome-modal";
+import pic from '../../img/pic.png'
+import ModalWrapper from "../modal/Modal";
+import {Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {setHeader} from "../../state/appReducer";
 
 
 const AdminPage = () => {
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        dispatch(setHeader("Клиника"))
+    }, [dispatch])
     const [visible, setVisible] = useState(false)
     const list = [1, 7, 2, 3, 6, 15, 74, 4]
     const els = list.map((item) => <Card key={item}/>)
     const onModal = () => setVisible(!visible)
     return (
         <AdminPageWrapper>
-            <AdminHeader>Клиника</AdminHeader>
-            <Line/>
             <Title>Направления</Title>
             <CardsWrapper>
                 {els}
                 <AddCard open={onModal}/>
-                <Modal visible={visible} width={"450"} height={"600"} onClickAway={onModal}>
+                <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"420"} onClickAway={onModal}>
                     <AddUserModal onModal={onModal}/>
-                </Modal>
+                </ModalWrapper>
             </CardsWrapper>
         </AdminPageWrapper>
     )
 }
 
-const Card = (props) => {
+const Card = (props:any) => {
     return (
-        <div className={css.cardWrapper}>
+        <Link to={'/clinic/5'} className={css.cardWrapper}>
             <div className={css.link}>
                 <img
                     src="https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"
@@ -51,14 +57,13 @@ const Card = (props) => {
                     Удалить
                 </span>
             </div>
-        </div>
+        </Link>
     )
 }
 
-const AddCard = (props) => {
+const AddCard = (props: any) => {
     return (
         <div onClick={props.open} className={css.addCard}>
-            {/*<img src=" " alt=""/>*/}
             <span>
                 +
             </span>
@@ -67,19 +72,31 @@ const AddCard = (props) => {
 }
 
 
-const AddUserModal = (props) => {
+const AddUserModal = (props: any) => {
+    const submit = (e:any) =>{
+        e.preventDefault()
+    }
     return (
         <FormModalWrapper>
-            <Close onClick={props.onModal}>x</Close>
-            <Title>
+            <Title className={css.modalTitle}>
                 Добавить направление
             </Title>
-            <form>
-                <div>
-
+            <form onSubmit={submit}>
+                <div className={css.downloadWrapper}>
+                    <div className={css.downloadPicture}>
+                        <img src={pic} alt="pic"/>
+                    </div>
+                    <GreenBtn>Загрузить фото</GreenBtn>
                 </div>
-                <div></div>
-                <div></div>
+                <div className={css.name}>
+                    <label>
+                        Название
+                        <Input type="text" />
+                    </label>
+                </div>
+                <div className={css.save}>
+                    <GreenBtn>Сохранить</GreenBtn>
+                </div>
             </form>
         </FormModalWrapper>
     )

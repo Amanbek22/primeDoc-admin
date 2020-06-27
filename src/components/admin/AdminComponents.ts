@@ -26,5 +26,5 @@ export const CardsWrapper = styled.div`
 `
 
 export const FormModalWrapper = styled.div`
-    padding: 15px 10px;
+    padding: 15px 20px;
 `

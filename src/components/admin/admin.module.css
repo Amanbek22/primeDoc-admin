@@ -83,3 +83,34 @@
     color: #00BDD0;
     transform: translate(-50%, -50%);
 }
+.modalTitle{
+    color: #777777 !important;
+}
+
+.downloadWrapper{
+    width: 50%;
+    text-align: center;
+}
+
+.downloadPicture{
+    width: 90px;
+    height: 90px;
+    text-align: center;
+    background: #F8F8F8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    margin: 20px auto;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.downloadPicture>img{
+    margin: auto;
+}
+.save{
+    text-align: right;
+}
+.name{
+    margin: 35px 0;
+}

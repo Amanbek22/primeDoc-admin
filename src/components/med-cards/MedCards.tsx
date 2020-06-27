@@ -1,48 +1,50 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import css from './medCarts.module.css'
-import {AdminHeader, Line} from "../mainStyledComponents/MainStyledComponents";
+import ModalWrapper from "../modal/Modal";
+import pic from '../../img/pic.png'
+import {TableWrapper, TableHeader, Last, TableList} from "../mainStyledComponents/MainStyledComponents";
+import {useDispatch} from "react-redux";
+import {setHeader} from "../../state/appReducer";
 
 const MedCarts = () => {
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        dispatch(setHeader("Медицинская карта"))
+    }, [dispatch])
     return (
-        <div>
-            <AdminHeader>Медицинская карта</AdminHeader>
-            <Line/>
-
-            <div className={css.tableWrapper}>
-                <div className={css.header}>
-                    <div>
-                        ФИО
-                    </div>
-
-                    <div>
-                        Дата рождения
-                    </div>
-                    <div>
-                        WhatsApp номер
-                    </div>
-                    <div className={css.last}>
-                        Фотография
-                    </div>
+        <TableWrapper>
+            <TableHeader>
+                <div>
+                    ФИО
                 </div>
-                <List fio={'Asylbekov Asylbekov Amanbek Taalaibekovich'} date={'22.11.2000'} number={'0708626798'} />
-                <List fio={'Asylbekov Asylbekov Amanbek Taalaibekovich'} date={'22.11.2000'} number={'0708626798'} />
-                <List fio={'Asylbekov Asylbekov Amanbek Taalaibekovich'} date={'22.11.2000'} number={'0708626798'} />
-                <List fio={'Asylbekov Asylbekov Amanbek Taalaibekovich'} date={'22.11.2000'} number={'0708626798'} />
-            </div>
-        </div>
+
+                <div>
+                    Дата рождения
+                </div>
+                <div>
+                    WhatsApp номер
+                </div>
+                <Last>
+                    Фотография
+                </Last>
+            </TableHeader>
+            <List fio={'Asylbekov Asylbekov Amanbek Taalaibekovich'} date={'22.11.2000'} number={'0708626798'}/>
+        </TableWrapper>
     )
 }
 
 type ListProps = {
     fio: string,
     date: string,
-    number: string,
+    number: string
 }
 
 const List: React.FC<ListProps> = (props) => {
+    const [visible, setVisible] = useState(false)
+    const onModal = () => setVisible(!visible)
     return (
         <div>
-            <div className={css.list}>
+            <TableList>
                 <div>
                     {props.fio}
                 </div>
@@ -53,10 +55,15 @@ const List: React.FC<ListProps> = (props) => {
                 <div>
                     {props.number}
                 </div>
-                <div className={css.watchPicture}>
+                <Last onClick={onModal} className={css.watchPicture}>
                     Посмотреть фото
+                </Last>
+            </TableList>
+            <ModalWrapper onModal={onModal} width={'450'} height={'420'} visible={visible}>
+                <div className={css.modalWrapper}>
+                    <img src={pic} alt="#"/>
                 </div>
-            </div>
+            </ModalWrapper>
         </div>
     )
 }
