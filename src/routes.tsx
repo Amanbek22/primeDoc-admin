@@ -13,6 +13,8 @@ import Chat from "./components/chat/Chat";
 import ClinicDirection from "./components/ClinicDirection/ClinicDirection";
 import logout from './img/logout.png'
 import changePassword from './img/changePassword.png'
+import AddDoctor from "./components/add-doctor/AddDoctor";
+import CreateTimeTable from "./components/create-time-table/CreateTimeTable";
 
 export const useRoutes = (isAuth: boolean, header: string) => {
     if (isAuth) {
@@ -40,7 +42,13 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                         <Route exact path={'/clinic'}>
                             <AdminPage/>
                         </Route>
-                        <Route path={'/clinic/:id'}>
+                        <Route exact path={'/clinic/:id/:id/:id'}>
+                            <CreateTimeTable />
+                        </Route>
+                        <Route exact path={'/clinic/:id/:id'}>
+                            <AddDoctor/>
+                        </Route>
+                        <Route exact path={'/clinic/:id'}>
                             <ClinicDirection/>
                         </Route>
                         <Route path={'/card'}>
@@ -58,7 +66,7 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                         <Route path={'/chat'}>
                             <Chat/>
                         </Route>
-                        <Redirect to={'/clinic'}/>
+                        {/*<Redirect to={'/clinic'}/>*/}
                     </AdminWrapper>
                 </Switch>
             </div>

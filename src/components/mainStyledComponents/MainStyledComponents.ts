@@ -11,7 +11,6 @@ export const AdminHeader = styled.div`
     justify-content: space-between;
     align-items: center;
     
-    
     &>span{
         color: #000000;
         font-family: 'Balsamiq Sans', cursive;
@@ -76,7 +75,7 @@ export const Input = styled.input`
     border-radius: 5px;
     width: 100%;
     height: 36px;
-    
+    margin-top: 5px;
     padding: 0 0 0 9px;
     font-family: 'Balsamiq Sans', cursive;
     font-weight: 200;
@@ -87,6 +86,24 @@ export const Input = styled.input`
     color: rgba(0, 0, 0, 0.5);
 `
 
+export const TextArea = styled.textarea`
+    background: #F8F8F8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 100%;
+    resize: vertical;
+    height: 70%;
+    margin-top: 5px;
+    padding: 5px 0 0 9px;
+    font-family: 'Balsamiq Sans', cursive;
+    font-weight: 200;
+    font-size: 14px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.5);
+`
 
 export const TableWrapper = styled.div`
     margin-top: 80px;
@@ -135,4 +152,22 @@ export const TableList = styled.div`
 export const Last = styled.div`
     text-align: center;
     border-right: none !important;
+`
+
+export const DownloadPictureWrapper = styled.div`
+    width: 90px;
+    height: 90px;
+    text-align: center;
+    background: #F8F8F8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    margin: 20px auto;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    
+    &>img{
+        margin: auto;
+    }
+    
 `

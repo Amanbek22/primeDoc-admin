@@ -7,6 +7,7 @@ import edit from '../../img/edit.png'
 import del from '../../img/delete.png'
 import addPicture from '../../img/add-pic.png'
 import Preloader from "../preloader/Preloader";
+import {Link} from "react-router-dom";
 
 const ClinicDirection = () => {
     const dispatch = useDispatch()
@@ -52,9 +53,9 @@ const ClinicDirection = () => {
                 <Doctors name={'Asylbekov Amanbek'} url={''}/>
             </div>
             <div className={css.addDoc}>
-                <GreenBtn>
-                    Добавить врача
-                </GreenBtn>
+                <Link to={'/clinic/5/add'}>
+                    <GreenBtn>Добавить врача</GreenBtn>
+                </Link>
             </div>
         </div>
     )
@@ -91,11 +92,14 @@ const Doctors = (props: DocType) => {
             <div className={css.ava}>
                 <div className={css.logoWrapper}>
                     {
-                        props.url 
-                            ? <img height={'auto'} width={'100%'}  src="https://image.freepik.com/free-vector/doctor-clinic-illustration_1270-69.jpg" alt="doc"/>
-                            : <img height={'auto'} width={'100%'} src="https://jardin.ee/wp-content/uploads/2014/08/No-profile-LinkedIn.jpg" alt="#"/>
+                        props.url
+                            ? <img height={'auto'} width={'100%'}
+                                   src="https://image.freepik.com/free-vector/doctor-clinic-illustration_1270-69.jpg"
+                                   alt="doc"/>
+                            : <img height={'auto'} width={'100%'}
+                                   src="https://jardin.ee/wp-content/uploads/2014/08/No-profile-LinkedIn.jpg" alt="#"/>
                     }
-                    <img src={addPicture} alt="+" className={css.addPicture} onClick={()=> alert('Add Picture')}/>
+                    <img src={addPicture} alt="+" className={css.addPicture} onClick={() => alert('Add Picture')}/>
                 </div>
                 <div className={css.name}>{props.name}</div>
             </div>
