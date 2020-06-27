@@ -44,8 +44,10 @@
 }
 .buttonsWrapper{
     display: flex;
+    align-items: center;
     justify-content: space-between;
     margin: 10px 7px;
+    height: 16px;
 }
 .buttonsWrapper>span{
     font-weight: normal;
@@ -53,9 +55,11 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    height: 16px;
 }
 .buttonsWrapper>span>img{
     margin-right: 5px;
+    height: 100%;
 }
 .edit{
     color: rgba(0,0,0,0.5);

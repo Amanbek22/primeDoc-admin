@@ -60,7 +60,7 @@ export const GreenBtn = styled.button`
     height: 40px;
     border: none;
     color: #FFFFFF;
-    
+    cursor: pointer;
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
