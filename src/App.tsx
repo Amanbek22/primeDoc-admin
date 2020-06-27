@@ -3,13 +3,13 @@ import './App.css';
 import {BrowserRouter as Router} from "react-router-dom";
 import Preloader from "./components/preloader/Preloader";
 import {connect} from 'react-redux';
-import {getToken, isPending} from "./state/initial-selector";
+import {getHeader, getToken, isPending} from "./state/initial-selector";
 import {GlobalStateType} from "./state/root-reducer";
 import {initialise} from "./state/appReducer";
 import {useRoutes} from "./routes";
 
 const App = (props:any) => {
-    const routs = useRoutes(props.isAuth)
+    const routs = useRoutes(props.isAuth, props.header)
     const allPromiseRejection = (promiseRejectionEvent: any) =>{
         alert(promiseRejectionEvent)
     }
@@ -41,6 +41,7 @@ export default connect((state: GlobalStateType) => {
     return {
         token: getToken(state),
         isPending: isPending(state),
-        isAuth: state.auth.isAuth
+        isAuth: state.auth.isAuth,
+        header: getHeader(state)
     }
 },{initialise})(App);
