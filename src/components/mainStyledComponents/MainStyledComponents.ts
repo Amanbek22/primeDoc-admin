@@ -112,7 +112,11 @@ export const TableWrapper = styled.div`
     border-bottom: none;
     box-sizing: border-box;
 `
-
+export const BtnFloat = styled.div`
+    float: right;
+    margin: 35px 0;
+    
+`
 
 export const TableHeader = styled.div`
     display: grid;
@@ -122,7 +126,6 @@ export const TableHeader = styled.div`
     
     &>div{
         padding: 15px 0;
-        font-size: 18px;
         color: #FFFFFF;
 
         border-right: 1px solid #C4C4C4;
@@ -137,11 +140,10 @@ export const TableList = styled.div`
     border-bottom: 1px solid #C4C4C4;
     
     &>div{
-        padding: 15px 0;
+        padding: 15px 0 15px 10px;
         border-right: 1px solid #C4C4C4;
         font-size: 16px;
         line-height: 21px;
-        padding-left: 10px;
         white-space: nowrap; /* Запрещаем перенос строк */
         overflow: hidden;
         text-overflow: ellipsis;
@@ -152,6 +154,10 @@ export const TableList = styled.div`
 export const Last = styled.div`
     text-align: center;
     border-right: none !important;
+    
+    &>span{
+        justify-content: center;
+    }
 `
 
 export const DownloadPictureWrapper = styled.div`
@@ -170,4 +176,15 @@ export const DownloadPictureWrapper = styled.div`
         margin: auto;
     }
     
+`
+
+export const EditDelete = styled.span`
+    display: flex;
+    align-items: center;
+    height: 25px;
+    
+    &>img{
+        margin: auto 4px;
+        cursor: pointer;
+    }
 `

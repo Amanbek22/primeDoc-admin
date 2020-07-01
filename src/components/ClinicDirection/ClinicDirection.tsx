@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
-import {GreenBtn} from "../mainStyledComponents/MainStyledComponents";
+import {EditDelete, GreenBtn} from "../mainStyledComponents/MainStyledComponents";
 import css from './clinicdirection.module.css'
 import edit from '../../img/edit.png'
 import del from '../../img/delete.png'
@@ -104,10 +104,10 @@ const Doctors = (props: DocType) => {
                 <div className={css.name}>{props.name}</div>
             </div>
             <div>
-                <span className={css.edit}>
+                <EditDelete>
                     <img src={edit} alt="edit"/>
                     <img src={del} alt="delete"/>
-                </span>
+                </EditDelete>
             </div>
         </div>
     )

@@ -1,9 +1,15 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Title} from "../admin/AdminComponents";
 import {GreenBtn, Input} from "../mainStyledComponents/MainStyledComponents";
 import css from './createPersonal.module.css'
+import {useDispatch} from "react-redux";
+import {setHeader} from "../../state/appReducer";
 
 const CreatePersonal = () => {
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(setHeader("Создание врача"))
+    }, [dispatch])
     return (
         <div>
             <Title>
