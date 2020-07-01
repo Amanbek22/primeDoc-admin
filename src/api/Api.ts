@@ -6,5 +6,5 @@ const http = axios.create({
 });
 
 export default {
-    // signIn: (data: any) => http.post("/api/token/", data),
+    signIn: (data: any) => http.post("/api/token/", data),
 }
