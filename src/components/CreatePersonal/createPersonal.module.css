@@ -1,0 +1,19 @@
+.formWrapper{
+    width: 400px;
+    display: grid;
+    grid-gap: 1em;
+}
+.btnWrapper{
+    margin-top: 1em;
+    margin-bottom: 2em;
+    text-align: end;
+}
+.label>span{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 17px;
+}
+.label>span>span{
+    color: #FF5069;
+}

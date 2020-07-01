@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap');
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,6 +9,64 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 *{
+
     margin: 0;
     padding: 0;
 }
+a{
+    text-decoration: none;
+    color: #000;
+}
+.prev{
+    border-bottom-right-radius: 15px;
+}
+.next{
+    border-top-right-radius: 15px;
+}
+.activeLink{
+    color: #00BDD0 !important;
+    background: #ffffff !important;
+    border-bottom-left-radius: 30px;
+    border-top-left-radius: 30px;
+    position: relative;
+}
+.activeLink>img{
+    filter: invert(57%) sepia(89%) saturate(1502%) hue-rotate(141deg) brightness(92%) contrast(101%);
+}
+
+
+
+
+
+/*Custom scroll*/
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #00BDD0;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #00BDD0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+/*Custom scroll*/

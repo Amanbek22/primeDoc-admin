@@ -1,0 +1,109 @@
+
+
+.headerWrapper{
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-gap: 2em;
+}
+
+.picWrapper{
+
+}
+.picWrapper>img{
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.descriptionWrapper{
+    display: grid;
+    grid-gap: 1em;
+    max-width: 450px;
+}
+.descriptionWrapper>div{
+    display: grid;
+    grid-gap: 1em;
+}
+.title{
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    color: #000000;
+}
+.description{
+    display: flex;
+    align-items: center;
+}
+.description>p{
+    margin-right: 20px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+
+    color: #000000;
+}
+
+.description>span{
+    display: flex;
+    align-items: center;
+}
+
+.description>span>img{
+    margin: auto 4px;
+    cursor: pointer;
+}
+.doctorsList{
+    margin-top: 75px;
+}
+.doctorWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid rgba(50, 10, 81, 0.2);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.ava{
+    display: flex;
+    align-items: center;
+}
+.logoWrapper{
+    width: 60px;
+    position: relative;
+}
+.logoWrapper>img{
+    border-radius: 50%;
+}
+.name{
+    margin-left: 20px;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 150%;
+    display: flex;
+    align-items: center;
+    color: #2A0200;
+}
+.edit{
+    display: flex;
+    align-items: center;
+    height: 25px;
+}
+.edit>img{
+    margin: auto 4px;
+    cursor: pointer;
+}
+
+.addDoc{
+    float: right;
+    margin: 35px 0 55px 0;
+}
+.addPicture{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+}

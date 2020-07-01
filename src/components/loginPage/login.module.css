@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap');
+
+.logoWrapper{
+    width: 160px;
+}
+
+.logoWrapper>img{
+    width: 100%;
+    height: 100%;
+}
+
+.welcome{
+    margin-top: 25px;
+    font-family: 'Balsamiq Sans', cursive;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 78px;
+    line-height: 91px;
+    color: #00BDD0;
+}
+.loginWrapper{
+    margin-top: 60px;
+    display: grid;
+    grid-gap: 1.5em;
+}
+
+.forgot{
+    text-align: right;
+}
+.forgot>a{
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #00BDD0;
+}
+.codesWrapper{
+    width: 80%;
+    display: grid;
+    grid-gap: 1em;
+}
+.codesWrapper>p{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 120%;
+
+    color: rgba(32, 32, 32, 0.5);
+}
+.codes{
+    display: flex;
+    justify-content: space-around;
+}
+.codes>input[type=number]{
+    text-align: center;
+    font-size: 18px;
+    width: 55px;
+    height: 35px;
+    background: #F8F8F8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+
+.code>input[type=number]::-webkit-inner-spin-button,
+.code>input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}

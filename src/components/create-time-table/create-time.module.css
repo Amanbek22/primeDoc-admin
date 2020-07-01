@@ -1,0 +1,52 @@
+.plus{
+    margin-left: 10px;
+    color: #00BDD0;
+}
+.timeList{
+    margin: 35px 0 70px 0;
+}
+.addTime{
+    cursor: pointer;
+}
+.timeWrapper{
+    display: flex;
+    align-items: center;
+}
+.timeWrapper>label{
+    margin: 0 30px 0 0;
+    display: flex;
+    align-items: center;
+}
+.timeWrapper>label>span{
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+
+    color: #000000;
+    margin: 0 10px 0 0;
+}
+.timePicker, .minPicker, .datePicker{
+    padding: 10px 15px;
+    font-size: 16px;
+    background: #F8F8F8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+.timePicker:focus, .minPicker:focus, .datePicker:focus{
+    outline: none;
+}
+.timePicker{
+    border-radius: 5px 0 0 5px;
+}
+.minPicker{
+    border-radius: 0 5px 5px 0;
+}
+.datePicker{
+    min-width: 300px;
+    border-radius: 5px;
+}
+.date{
+    border-radius: 10px;
+}
