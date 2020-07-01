@@ -1,0 +1,38 @@
+.infoWrapper{
+    display: grid;
+    grid-gap: 1em;
+    width: 400px;
+}
+.editWrapper{
+    margin-top: 10px;
+    float: right;
+}
+.contact{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 150%;
+    display: flex;
+    align-items: center;
+    color: #00BDD0;
+}
+.header{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 35px;
+    color: #000000;
+}
+.btnWrapper{
+    margin-top: 25px;
+    margin-left: auto;
+    display: grid;
+    grid-gap: 1em;
+}
+.blue{
+    background: #00BDD0 !important;
+}
+.save{
+    margin: 15px 0 55px auto;
+    float: right;
+}
