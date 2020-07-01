@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {AdminPageWrapper, CardsWrapper, FormModalWrapper, Title} from "./AdminComponents";
-import { GreenBtn, Input} from "../mainStyledComponents/MainStyledComponents";
+import {DownloadPictureWrapper, GreenBtn, Input} from "../mainStyledComponents/MainStyledComponents";
 import css from './admin.module.css'
 import edit from '../../img/edit.png'
 import del from '../../img/delete.png'
@@ -36,8 +36,8 @@ const AdminPage = () => {
 
 const Card = (props:any) => {
     return (
-        <Link to={'/clinic/5'} className={css.cardWrapper}>
-            <div className={css.link}>
+        <div  className={css.cardWrapper}>
+            <Link to={'/clinic/5'} className={css.link}>
                 <img
                     src="https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"
                     alt="#"
@@ -46,18 +46,18 @@ const Card = (props:any) => {
                     Терапевт
                 </span>
                 <div className={css.blue}/>
-            </div>
+            </Link>
             <div className={css.buttonsWrapper}>
                 <span className={css.edit}>
                     <img src={edit} alt="edit"/>
                     Редактировать
                 </span>
-                <span className={css.delete}>
+                <span onClick={()=> alert('Hello world!!!')} className={css.delete}>
                     <img src={del} alt="delete"/>
                     Удалить
                 </span>
             </div>
-        </Link>
+        </div>
     )
 }
 
@@ -83,9 +83,9 @@ const AddUserModal = (props: any) => {
             </Title>
             <form onSubmit={submit}>
                 <div className={css.downloadWrapper}>
-                    <div className={css.downloadPicture}>
+                    <DownloadPictureWrapper>
                         <img src={pic} alt="pic"/>
-                    </div>
+                    </DownloadPictureWrapper>
                     <GreenBtn>Загрузить фото</GreenBtn>
                 </div>
                 <div className={css.name}>

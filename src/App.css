@@ -34,6 +34,11 @@ a{
     filter: invert(57%) sepia(89%) saturate(1502%) hue-rotate(141deg) brightness(92%) contrast(101%);
 }
 
+.picker-input__text{
+    background: #F8F8F8;
+    border-radius: 5px;
+    border: 1px solid #e4e4e4;
+}
 
 
 
