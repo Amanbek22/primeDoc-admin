@@ -15,6 +15,7 @@ import logout from './img/logout.png'
 import changePassword from './img/changePassword.png'
 import AddDoctor from "./components/add-doctor/AddDoctor";
 import CreateTimeTable from "./components/create-time-table/CreateTimeTable";
+import CreatePersonal from "./components/CreatePersonal/CreatePerssonal";
 
 export const useRoutes = (isAuth: boolean, header: string) => {
     if (isAuth) {
@@ -54,8 +55,11 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                         <Route path={'/card'}>
                             <MedCarts/>
                         </Route>
-                        <Route path={'/Personal'}>
+                        <Route exact path={'/personal'}>
                             <Personal/>
+                        </Route>
+                        <Route exact path={'/personal/:id'}>
+                            <CreatePersonal />
                         </Route>
                         <Route path={'/FAQ'}>
                             <Faq/>
@@ -66,7 +70,7 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                         <Route path={'/chat'}>
                             <Chat/>
                         </Route>
-                        {/*<Redirect to={'/clinic'}/>*/}
+                        <Redirect to={'/clinic'}/>
                     </AdminWrapper>
                 </Switch>
             </div>
