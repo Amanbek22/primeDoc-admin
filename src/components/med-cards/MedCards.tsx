@@ -3,14 +3,36 @@ import css from './medCarts.module.css'
 import ModalWrapper from "../modal/Modal";
 import pic from '../../img/pic.png'
 import {TableWrapper, TableHeader, Last, TableList} from "../mainStyledComponents/MainStyledComponents";
-import {useDispatch} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
+import {GlobalStateType} from "../../state/root-reducer";
+import { getUsersList } from "../../state/initial-selector";
+import {getUsers} from "../../state/appReducer";
+import Preloader from '../preloader/Preloader'
+import api from '../../api/Api'
 
-const MedCarts = () => {
+type Props = {
+    users: any,
+    getUsers: () => void
+}
+const MedCarts: React.FC<Props> = (props) => {
+    const {getUsers, users} = props
+    const [pending, setPending] = useState(true)
+    const [user, setUser] = useState([])
     const dispatch = useDispatch()
     useEffect(()=>{
         dispatch(setHeader("Медицинская карта"))
     }, [dispatch])
+    useEffect(()=>{
+        api.getUser().then((res:any)=>{
+            setUser(res.data)
+            setPending(false)
+        }, (error:any)=>console.error(error))
+    }, [getUsers])
+
+    if(pending){
+        return <Preloader />
+    }
     return (
         <TableWrapper>
             <TableHeader>
@@ -28,7 +50,13 @@ const MedCarts = () => {
                     Фотография
                 </Last>
             </TableHeader>
-            <List fio={'Asylbekov Asylbekov Amanbek Taalaibekovich'} date={'22.11.2000'} number={'0708626798'}/>
+            {
+                user.map((item:any)=> <List
+                    key={item.id}
+                    fio={`${item.firstName} ${item.lastName}`}
+                    number={item.username}
+                    date={item.birthDate} />)
+            }
         </TableWrapper>
     )
 }
@@ -42,6 +70,7 @@ type ListProps = {
 const List: React.FC<ListProps> = (props) => {
     const [visible, setVisible] = useState(false)
     const onModal = () => setVisible(!visible)
+    let date = new Date(props.date).toISOString().substring(0, 10).replace(/-/g, '.');
     return (
         <div>
             <TableList>
@@ -50,7 +79,7 @@ const List: React.FC<ListProps> = (props) => {
                 </div>
 
                 <div>
-                    {props.date}
+                    {date}
                 </div>
                 <div>
                     {props.number}
@@ -68,5 +97,9 @@ const List: React.FC<ListProps> = (props) => {
     )
 }
 
-
-export default MedCarts
+const mapStateToProps = (state:GlobalStateType) => {
+    return {
+        users: getUsersList(state)
+    }
+}
+export default connect(mapStateToProps, {getUsers})(MedCarts)
