@@ -90,8 +90,23 @@ const AddCard = (props: any) => {
 
 
 const AddUserModal = (props: any) => {
+    const [name, setName] = useState('')
+    const [img, setImg] = useState<any>({})
+    const [url, setUrl] = useState('')
+    console.log(url )
     const submit = (e:any) =>{
         e.preventDefault()
+
+        const data = new FormData()
+        data.append('name', name)
+        data.append('image', img)
+        api.setCategory({
+            name: name,
+            image: url
+        })
+            .then((res:any)=>{
+                console.log(res)
+            })
     }
     return (
         <FormModalWrapper>
@@ -101,14 +116,26 @@ const AddUserModal = (props: any) => {
             <form onSubmit={submit}>
                 <div className={css.downloadWrapper}>
                     <DownloadPictureWrapper>
-                        <img src={pic} alt="pic"/>
+                        <img src={ url === '' ? pic : url} alt="pic"/>
                     </DownloadPictureWrapper>
-                    <GreenBtn>Загрузить фото</GreenBtn>
+                    <label>
+                        <InputNone type="file"  onChange={(e:any)=>{
+                            setImg(e.target.files[0])
+
+                            const reader = new FileReader();
+
+                            reader.readAsDataURL(e.target.files[0]);
+
+                            reader.onload = (e:any) => setUrl(e.target.result)
+
+                        }}/>
+                        <GreenDiv>Загрузить фото</GreenDiv>
+                    </label>
                 </div>
                 <div className={css.name}>
                     <label>
                         Название
-                        <Input type="text" />
+                        <Input value={name} onChange={(e:any) => setName(e.target.value)} type="text" />
                     </label>
                 </div>
                 <div className={css.save}>
