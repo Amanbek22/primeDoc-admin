@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     BtnFloat,
     EditDelete,
@@ -13,13 +13,32 @@ import {setHeader} from "../../state/appReducer";
 import edit from "../../img/edit.png";
 import del from "../../img/delete.png";
 import {Link} from "react-router-dom";
+import api from "../../api/Api";
+import Pending from '../preloader/Preloader'
 
-
-const Personal = () => {
+type Props = {}
+const Personal: React.FC<Props> = (props) => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader("Персонал"))
     }, [dispatch])
+
+    const [doctors, setDoctors] = useState([])
+    const [pending, setPending] = useState(true)
+
+    console.log(doctors)
+
+    useEffect(()=>{
+        api.getDoctor().then((res:any)=>{
+            setDoctors(res.data)
+            setPending(false)
+        },(error:any)=>console.error(error))
+    }, [])
+
+    if (pending){
+        return <Pending />
+    }
+
     return (
         <>
             <TableWrapper>
@@ -38,7 +57,9 @@ const Personal = () => {
                         Операции
                     </Last>
                 </TableHeader>
-                <List fio={'Adsnfasgn ADomdlm'} direction={'terapevt'} email={'asknkg@mail.ru'}/>
+                {
+                    doctors.map((item:any)=> <List key={item.id} fio={'Adsnfasgn ADomdlm'} direction={'terapevt'} email={'sadadaad'} />)
+                }
             </TableWrapper>
             <BtnFloat>
                 <Link to={'/personal/5'}>
