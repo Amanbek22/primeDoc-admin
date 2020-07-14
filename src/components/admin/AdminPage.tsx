@@ -1,25 +1,36 @@
 import React, {useEffect, useState} from "react";
 import {AdminPageWrapper, CardsWrapper, FormModalWrapper, Title} from "./AdminComponents";
-import {DownloadPictureWrapper, GreenBtn, Input} from "../mainStyledComponents/MainStyledComponents";
+import {
+    DownloadPictureWrapper,
+    GreenBtn,
+    GreenDiv,
+    Input,
+    InputNone
+} from "../mainStyledComponents/MainStyledComponents";
 import css from './admin.module.css'
 import edit from '../../img/edit.png'
 import del from '../../img/delete.png'
 import pic from '../../img/pic.png'
 import ModalWrapper from "../modal/Modal";
 import {Link} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
+import {GlobalStateType} from "../../state/root-reducer";
+import api from '../../api/Api'
 
-
-const AdminPage = () => {
+type AdminPageProps = {
+    directions: any
+}
+const AdminPage: React.FC<AdminPageProps> = (props) => {
+    const {directions} = props
     const dispatch = useDispatch()
     useEffect(()=>{
         dispatch(setHeader("Клиника"))
     }, [dispatch])
     const [visible, setVisible] = useState(false)
-    const list = [1, 7, 2, 3, 6, 15, 74, 4]
-    const els = list.map((item) => <Card key={item}/>)
+    const els = directions.map((item:any) => <Card image={item.image}  title={item.name} key={item.id}/>)
     const onModal = () => setVisible(!visible)
+
     return (
         <AdminPageWrapper>
             <Title>Направления</Title>
@@ -34,16 +45,22 @@ const AdminPage = () => {
     )
 }
 
-const Card = (props:any) => {
+type CardProps = {
+    title: string
+    image: string
+}
+
+const Card: React.FC<CardProps> = (props) => {
     return (
         <div  className={css.cardWrapper}>
             <Link to={'/clinic/5'} className={css.link}>
                 <img
-                    src="https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"
-                    alt="#"
+
+                    src={props.image ? "data:image/jpg;base64," + props.image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
+                    alt={props.title}
                 />
                 <span className={css.title}>
-                    Терапевт
+                    {props.title}
                 </span>
                 <div className={css.blue}/>
             </Link>
@@ -102,4 +119,10 @@ const AddUserModal = (props: any) => {
     )
 }
 
-export default AdminPage
+const mapStateToProps = (state: GlobalStateType) => {
+    return {
+        directions: state.app.directions
+    }
+}
+
+export default connect(mapStateToProps, {})(AdminPage)
