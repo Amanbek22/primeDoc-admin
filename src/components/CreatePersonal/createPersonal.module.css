@@ -1,11 +1,14 @@
 .formWrapper{
-    width: 400px;
     display: grid;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 1em;
+}
+.form{
+    display: grid;
+    grid-template-columns: 1fr;
 }
 .btnWrapper{
     margin-top: 1em;
-    margin-bottom: 2em;
     text-align: end;
 }
 .label>span{
@@ -16,4 +19,17 @@
 }
 .label>span>span{
     color: #FF5069;
+}
+.upload {
+    text-align: center;
+}
+.blue{
+    text-align: left;
+    margin-top: auto;
+}
+.blue>button{
+    background: #00BDD0 !important;
+}
+.imgWrapper{
+    display: grid;
 }

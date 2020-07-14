@@ -65,6 +65,24 @@ export const GreenBtn = styled.button`
     font-size: 14px;
     line-height: 19px;
     font-family: 'Balsamiq Sans', cursive;
+`
+export const GreenDiv = styled.div`
+    background: #20CF54;
+    border-radius: 10px;
+    width: 200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    height: 40px;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 19px;
+    font-family: 'Balsamiq Sans', cursive;
 
 `
 
@@ -173,6 +191,7 @@ export const DownloadPictureWrapper = styled.div`
     align-items: center;
     
     &>img{
+        
         margin: auto;
     }
     
@@ -182,9 +201,12 @@ export const EditDelete = styled.span`
     display: flex;
     align-items: center;
     height: 25px;
-    
+    cursor: pointer !important;
     &>img{
         margin: auto 4px;
-        cursor: pointer;
+        cursor: pointer !important;
     }
+`
+export const InputNone = styled.input`
+    display: none;
 `
