@@ -17,7 +17,7 @@ import AddDoctor from "./components/add-doctor/AddDoctor";
 import CreateTimeTable from "./components/create-time-table/CreateTimeTable";
 import CreatePersonal from "./components/CreatePersonal/CreatePerssonal";
 
-export const useRoutes = (isAuth: boolean, header: string) => {
+export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) => {
     if (isAuth) {
         return (
             <div>
@@ -33,7 +33,7 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                                     <img src={changePassword} alt="#"/>
                                     <span>Сменить пароль</span>
                                 </div>
-                                <div>
+                                <div onClick={Logout}>
                                     <img src={logout} alt="#"/>
                                     <span>Выйти</span>
                                 </div>
@@ -48,6 +48,7 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                         </Route>
                         <Route exact path={'/clinic/:id/:id'}>
                             <AddDoctor/>
+                            {/*<CreatePersonal />*/}
                         </Route>
                         <Route exact path={'/clinic/:id'}>
                             <ClinicDirection/>

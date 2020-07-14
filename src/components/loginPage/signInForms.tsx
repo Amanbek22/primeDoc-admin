@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import css from "./login.module.css";
 import {BtnNext, ErrorMessage, LogInput} from "./login-css";
 import {Link, useHistory} from "react-router-dom";
@@ -8,19 +8,21 @@ import {useAuth} from "../../hooks/auth.hook";
 
 const SignIn = ( props: any ) => {
     const {login} = useAuth()
+    const [loginInp, setLoginInp] = useState('')
+    const [password, setPassword] = useState('')
     const log = async (password: string, log: string) => {
-        const res = await props.authFc('n1n2n3n4', 'Aman')
+        const res = await props.authFc(password, log)
         console.log(res)
         login(res.refresh, 5)
     }
     const submit = (e: any) => {
         e.preventDefault()
-        log('adgadg','sdgsdg')
+        log(password,loginInp)
     }
     return (
         <form onSubmit={submit} className={css.loginWrapper}>
-            <LogInput required type={'text'} placeholder={'Введите логин'}/>
-            <LogInput required type={'password'} placeholder={'Введите пароль'}/>
+            <LogInput required type={'text'} value={loginInp} onChange={(e:any)=> setLoginInp(e.target.value)} placeholder={'Введите логин'}/>
+            <LogInput required type={'password'} value={password} onChange={(e:any)=> setPassword(e.target.value) } placeholder={'Введите пароль'}/>
             <div className={css.forgot}>
                 <Link to={'/forgot'}>забыли пароль?</Link>
             </div>
@@ -41,7 +43,7 @@ export const ForgotPassword = () => {
             <ErrorMessage>
                 Восстановление пароля
             </ErrorMessage>
-            <LogInput required type={'text'} placeholder={'Введите номер телефона'}/>
+            <LogInput required type={'email'} placeholder={'Введите email'}/>
             <BtnNext>Отправить код</BtnNext>
         </form>
     )
