@@ -47,8 +47,8 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                             <CreateTimeTable />
                         </Route>
                         <Route exact path={'/clinic/:id/:id'}>
-                            <AddDoctor/>
-                            {/*<CreatePersonal />*/}
+                            {/*<AddDoctor/>*/}
+                            <CreatePersonal />
                         </Route>
                         <Route exact path={'/clinic/:id'}>
                             <ClinicDirection/>
@@ -71,7 +71,7 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         <Route path={'/chat'}>
                             <Chat/>
                         </Route>
-                        <Redirect to={'/clinic'}/>
+                        {/*<Redirect to={'/clinic'}/>*/}
                     </AdminWrapper>
                 </Switch>
             </div>

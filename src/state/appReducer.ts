@@ -5,13 +5,16 @@ const INITIALIZE_SUCCEED = "app/INITIALIZE_SUCCEED";
 const SET_HEADER = "app/SET_HEADER";
 const SET_DIRECTIONS = "app/SET_DIRECTIONS"
 const SET_USERS = "app/SET_USERS"
-
+const DIRECTION_EDIT = "app/DIRECTION_EDIT"
+const SET_ILLNESS = "app/SET_ILLNESS"
 
 const initialState = {
     initialise: false,
     header: 'Клиника',
     directions: [],
-    users: []
+    users: [],
+    illnesses: [],
+    directionEdit: false,
 }
 type InitialStateType = typeof initialState
 
@@ -21,6 +24,16 @@ export const appReducer = (state = initialState, action: any): InitialStateType 
             return {
                 ...state,
                 initialise: action.isPending
+            }
+        case DIRECTION_EDIT:
+            return {
+                ...state,
+                directionEdit: action.edit
+            }
+        case SET_ILLNESS:
+            return {
+                ...state,
+                illnesses: action.data
             }
         case SET_HEADER:
             return {
@@ -65,7 +78,12 @@ export const setUsers = (users: any) => {
         users
     }
 }
-
+export const editDirection = (edit:boolean) => {
+    return {
+        type: DIRECTION_EDIT,
+        edit
+    }
+}
 export const getUsers = () => (dispatch: any) => {
      dispatch(checkToken(api.getUser()))
         .then((res: any) => {
@@ -94,13 +112,23 @@ export const setDirections = (payload: any): SetDirectionActionType => {
 export const getDirections = () => async (dispatch: any) => {
     dispatch(checkToken(api.getCategory()))
         .then((res: any) => {
-                console.log(res)
+                // console.log(res)
                 dispatch(setDirections(res.data))
             },
             (error: any) => {
                 console.log(error)
             }
         )
+}
+export const getIllness = () => async (dispatch: any) => {
+    dispatch(checkToken(api.getIllness()))
+        .then((res:any)=> {
+            console.log(res)
+            dispatch({
+                type: SET_ILLNESS,
+                data: res.data
+            })
+        })
 }
 
 export const initialiseApp = () => async (dispatch: any) => {
@@ -111,6 +139,7 @@ export const initialiseApp = () => async (dispatch: any) => {
                 isAuth: true
             }))
             dispatch(getDirections())
+            dispatch(getIllness())
             dispatch(initialise(false))
         } else {
             localStorage.removeItem('userData')

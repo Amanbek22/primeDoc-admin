@@ -1,18 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import {
     BtnFloat,
-    EditDelete,
     GreenBtn,
     Last,
     TableHeader,
     TableList,
-    TableWrapper,
-    ModalBtnWrapper
+    TableWrapper
 } from "../mainStyledComponents/MainStyledComponents";
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
-import edit from "../../img/edit.png";
-import del from "../../img/delete.png";
 import {Link} from "react-router-dom";
 import api from "../../api/Api";
 import Pending from '../preloader/Preloader'

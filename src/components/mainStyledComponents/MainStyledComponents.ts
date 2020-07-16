@@ -66,6 +66,11 @@ export const GreenBtn = styled.button`
     line-height: 19px;
     font-family: 'Balsamiq Sans', cursive;
 `
+export const ModalBtnWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
 export const GreenDiv = styled.div`
     background: #20CF54;
     border-radius: 10px;
@@ -131,9 +136,10 @@ export const TableWrapper = styled.div`
     box-sizing: border-box;
 `
 export const BtnFloat = styled.div`
-    float: right;
+    //float: right;
     margin: 35px 0;
-    
+    justify-self: end;
+    text-align: end;
 `
 
 export const TableHeader = styled.div`
@@ -189,9 +195,10 @@ export const DownloadPictureWrapper = styled.div`
     border-radius: 50px;
     display: flex;
     align-items: center;
-    
+    overflow: hidden;
     &>img{
-        
+        max-width: 100%;
+        max-height: 100%;
         margin: auto;
     }
     
@@ -205,6 +212,7 @@ export const EditDelete = styled.span`
     &>img{
         margin: auto 4px;
         cursor: pointer !important;
+        height: 100%;
     }
 `
 export const InputNone = styled.input`

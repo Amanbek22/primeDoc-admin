@@ -5,4 +5,6 @@ export const getHeader = (state: GlobalStateType) => state.app.header
 
 export const isPending = (state: GlobalStateType) => state.app.initialise
 
-export const getUsersList = (state: GlobalStateType) => state.app.users
+// export const getUsersList = (state: GlobalStateType) => state.app.users
+
+export const getIllnesses = (state: GlobalStateType) => state.app.illnesses

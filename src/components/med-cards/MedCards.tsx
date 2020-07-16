@@ -3,20 +3,12 @@ import css from './medCarts.module.css'
 import ModalWrapper from "../modal/Modal";
 import pic from '../../img/pic.png'
 import {TableWrapper, TableHeader, Last, TableList} from "../mainStyledComponents/MainStyledComponents";
-import {connect, useDispatch} from "react-redux";
+import { useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
-import {GlobalStateType} from "../../state/root-reducer";
-import { getUsersList } from "../../state/initial-selector";
-import {getUsers} from "../../state/appReducer";
 import Preloader from '../preloader/Preloader'
 import api from '../../api/Api'
 
-type Props = {
-    users: any,
-    getUsers: () => void
-}
-const MedCarts: React.FC<Props> = (props) => {
-    const {getUsers, users} = props
+const MedCarts = () => {
     const [pending, setPending] = useState(true)
     const [user, setUser] = useState([])
     const dispatch = useDispatch()
@@ -28,8 +20,7 @@ const MedCarts: React.FC<Props> = (props) => {
             setUser(res.data)
             setPending(false)
         }, (error:any)=>console.error(error))
-    }, [getUsers])
-
+    }, [])
     if(pending){
         return <Preloader />
     }
@@ -77,7 +68,6 @@ const List: React.FC<ListProps> = (props) => {
                 <div>
                     {props.fio}
                 </div>
-
                 <div>
                     {date}
                 </div>
@@ -97,9 +87,4 @@ const List: React.FC<ListProps> = (props) => {
     )
 }
 
-const mapStateToProps = (state:GlobalStateType) => {
-    return {
-        users: getUsersList(state)
-    }
-}
-export default connect(mapStateToProps, {getUsers})(MedCarts)
+export default MedCarts
