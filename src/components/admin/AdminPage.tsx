@@ -12,11 +12,12 @@ import edit from '../../img/edit.png'
 import del from '../../img/delete.png'
 import pic from '../../img/pic.png'
 import ModalWrapper from "../modal/Modal";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {connect, useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import {GlobalStateType} from "../../state/root-reducer";
 import api from '../../api/Api'
+import DeleteModal from "../utils/DeleteModal";
 
 type AdminPageProps = {
     directions: any
@@ -24,11 +25,11 @@ type AdminPageProps = {
 const AdminPage: React.FC<AdminPageProps> = (props) => {
     const {directions} = props
     const dispatch = useDispatch()
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(setHeader("Клиника"))
     }, [dispatch])
     const [visible, setVisible] = useState(false)
-    const els = directions.map((item:any) => <Card image={item.image}  title={item.name} key={item.id}/>)
+    const els = directions.map((item: any) => <Card id={item.id} image={item.image} title={item.name} key={item.id}/>)
     const onModal = () => setVisible(!visible)
 
     return (
@@ -46,14 +47,23 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
 }
 
 type CardProps = {
+    id: number
     title: string
     image: string
 }
 
 const Card: React.FC<CardProps> = (props) => {
+
+    const [visible, setVisible] = useState(false)
+    const onModal = () => setVisible(!visible)
+
+    const deleteDirection = () => {
+        api.delCategory(props.id)
+            .then((res: any) => console.log(res))
+    }
     return (
-        <div  className={css.cardWrapper}>
-            <Link to={'/clinic/5'} className={css.link}>
+        <div className={css.cardWrapper}>
+            <Link to={`/clinic/${props.id}`} className={css.link}>
                 <img
 
                     src={props.image ? "data:image/jpg;base64," + props.image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
@@ -69,11 +79,14 @@ const Card: React.FC<CardProps> = (props) => {
                     <img src={edit} alt="edit"/>
                     Редактировать
                 </span>
-                <span onClick={()=> alert('Hello world!!!')} className={css.delete}>
+                <span onClick={onModal} className={css.delete}>
                     <img src={del} alt="delete"/>
                     Удалить
                 </span>
             </div>
+            <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
+                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.title} del={deleteDirection}/>
+            </ModalWrapper>
         </div>
     )
 }
@@ -81,31 +94,32 @@ const Card: React.FC<CardProps> = (props) => {
 const AddCard = (props: any) => {
     return (
         <div onClick={props.open} className={css.addCard}>
-            <span>
-                +
-            </span>
+            <span>+</span>
         </div>
     )
 }
 
-
 const AddUserModal = (props: any) => {
+    const history = useHistory()
+    console.log(history)
     const [name, setName] = useState('')
-    const [img, setImg] = useState<any>({})
     const [url, setUrl] = useState('')
-    console.log(url )
-    const submit = (e:any) =>{
+    const submit = (e: any) => {
         e.preventDefault()
+        const newUrl = url.split(',')
+        props.onModal()
 
-        const data = new FormData()
-        data.append('name', name)
-        data.append('image', img)
-        api.setCategory({
+        const data = {
+            description: '',
+            doctors: [],
+            illnesses: [],
             name: name,
-            image: url
-        })
-            .then((res:any)=>{
+            image: newUrl[1]
+        }
+        api.setCategory(data)
+            .then((res: any) => {
                 console.log(res)
+                history.go(1)
             })
     }
     return (
@@ -116,17 +130,13 @@ const AddUserModal = (props: any) => {
             <form onSubmit={submit}>
                 <div className={css.downloadWrapper}>
                     <DownloadPictureWrapper>
-                        <img src={ url === '' ? pic : url} alt="pic"/>
+                        <img src={url === '' ? pic : url} alt="pic"/>
                     </DownloadPictureWrapper>
                     <label>
-                        <InputNone type="file"  onChange={(e:any)=>{
-                            setImg(e.target.files[0])
-
+                        <InputNone type="file" onChange={(e: any) => {
                             const reader = new FileReader();
-
                             reader.readAsDataURL(e.target.files[0]);
-
-                            reader.onload = (e:any) => setUrl(e.target.result)
+                            reader.onload = (e: any) => setUrl(e.target.result)
 
                         }}/>
                         <GreenDiv>Загрузить фото</GreenDiv>
@@ -135,7 +145,7 @@ const AddUserModal = (props: any) => {
                 <div className={css.name}>
                     <label>
                         Название
-                        <Input value={name} onChange={(e:any) => setName(e.target.value)} type="text" />
+                        <Input value={name} onChange={(e: any) => setName(e.target.value)} type="text"/>
                     </label>
                 </div>
                 <div className={css.save}>
