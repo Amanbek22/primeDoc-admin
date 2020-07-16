@@ -100,18 +100,31 @@ const Time = () => {
 export default Time
 
 
+const colourStyles3 = {
+    control: (styles) => ({
+        ...styles,
+        background: '#F8F8F8',
+        width: '350px',
+        border: '1px solid rgba(0, 0, 0, 0.1)',
+        borderRadius: '5px',
+        boxSizing: 'border-box',
+        padding: '3px 5px',
+        marginTop: '50px',
+    }),
+    // option: (styles) => {
+    //     return {...styles,width:'350px'}
+    // }
+};
 export const Date = () => {
     const days = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье']
+    const option = days.map(item => ({
+        value: item,
+        label: item
+    }))
     return (
-        <>
-            <select className={css.datePicker}>
-                {
-                    days.map((item) => {
-                        return <option value={item} key={item}>{item}</option>
-                    })
-                }
-            </select>
+        <div className={css.selectWrapper}>
+            <Select options={option} styles={colourStyles3} />
             {/*<DatePicker locale={'ru'} multiple onChange={(e) => console.log(e)}/>*/}
-        </>
+        </div>
     )
 }

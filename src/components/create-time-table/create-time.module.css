@@ -57,3 +57,6 @@
 .del{
     cursor: pointer;
 }
+.selectWrapper{
+    width: 350px;
+}
