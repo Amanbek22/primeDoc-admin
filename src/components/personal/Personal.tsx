@@ -6,7 +6,8 @@ import {
     Last,
     TableHeader,
     TableList,
-    TableWrapper
+    TableWrapper,
+    ModalBtnWrapper
 } from "../mainStyledComponents/MainStyledComponents";
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
@@ -15,6 +16,9 @@ import del from "../../img/delete.png";
 import {Link} from "react-router-dom";
 import api from "../../api/Api";
 import Pending from '../preloader/Preloader'
+import ModalWrapper from "../modal/Modal";
+import DeleteModal from "../utils/DeleteModal";
+import EditDeleteComponent from "../utils/EditDelete";
 
 type Props = {}
 const Personal: React.FC<Props> = (props) => {
@@ -26,13 +30,12 @@ const Personal: React.FC<Props> = (props) => {
     const [doctors, setDoctors] = useState([])
     const [pending, setPending] = useState(true)
 
-    console.log(doctors)
-
     useEffect(()=>{
         api.getDoctor().then((res:any)=>{
             setDoctors(res.data)
             setPending(false)
         },(error:any)=>console.error(error))
+        console.log(doctors)
     }, [])
 
     if (pending){
@@ -58,7 +61,7 @@ const Personal: React.FC<Props> = (props) => {
                     </Last>
                 </TableHeader>
                 {
-                    doctors.map((item:any)=> <List key={item.id} fio={'Adsnfasgn ADomdlm'} direction={'terapevt'} email={'sadadaad'} />)
+                    doctors.map((item:any)=> <List id={item.id} key={item.id} fio={'Adsnfasgn ADomdlm'} direction={'terapevt'} email={'sadadaad'} />)
                 }
             </TableWrapper>
             <BtnFloat>
@@ -73,33 +76,66 @@ export default Personal
 
 
 type ListProps = {
-    fio: string,
-    direction: string,
-    email: string,
+    id: number
+    fio: string
+    direction: string
+    email: string
 }
 
 
 const List: React.FC<ListProps> = (props) => {
+    const deleteDoctor = () => {
+        api.delDoctor(props.id)
+            .then((res:any)=>{
+                console.log(res)
+            })
+    }
+    const [visible, setVisible] = useState(false)
+    const [editing, setEditing] = useState(false)
+    const onModal = () => setVisible(!visible)
+
+    const [fio, setFio] = useState(props.fio)
+    const [direction, setDirection] = useState(props.direction)
+    const [email, setEmail] = useState(props.email)
+
+    const onEdit = () => setEditing(!editing)
+    const setDoctor = () => {
+        onEdit()
+        alert(fio + direction + email)
+    }
     return (
         <div>
             <TableList>
                 <div>
-                    {props.fio}
-                </div>
-
-                <div>
-                    {props.direction}
+                    {
+                        editing ? <input onChange={(e)=>setFio(e.target.value)} type="text" value={fio}/> : fio
+                    }
                 </div>
                 <div>
-                    {props.email}
+                    {
+                        editing ? <input onChange={(e)=>setDirection(e.target.value)} type="text" value={direction}/> : direction
+                    }
+                </div>
+                <div>
+                    {
+                        editing ? <input onChange={(e)=>setEmail(e.target.value)} type="text" value={email}/> : email
+                    }
                 </div>
                 <Last>
-                    <EditDelete>
-                        <img src={edit} alt="edit"/>
-                        <img src={del} alt="delete"/>
-                    </EditDelete>
+                    {/*<EditDelete>*/}
+                    {/*    {*/}
+                    {/*        editing*/}
+                    {/*            ? <img onClick={setDoctor} src="https://image.flaticon.com/icons/svg/1632/1632596.svg" alt="done"/>*/}
+                    {/*            : <img onClick={onEdit} src={edit} alt="edit"/>*/}
+                    {/*    }*/}
+                    {/*    <img onClick={onModal} src={del} alt="delete"/>*/}
+                    {/*</EditDelete>*/}
+                    <EditDeleteComponent editing={editing} onEdit={onEdit} onModal={onModal} onDone={setDoctor} />
                 </Last>
             </TableList>
+            <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
+                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.fio} del={deleteDoctor}/>
+            </ModalWrapper>
         </div>
     )
 }
