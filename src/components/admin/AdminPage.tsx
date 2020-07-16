@@ -14,7 +14,7 @@ import pic from '../../img/pic.png'
 import ModalWrapper from "../modal/Modal";
 import {Link, useHistory} from "react-router-dom";
 import {connect, useDispatch} from "react-redux";
-import {setHeader} from "../../state/appReducer";
+import {editDirection, setHeader} from "../../state/appReducer";
 import {GlobalStateType} from "../../state/root-reducer";
 import api from '../../api/Api'
 import DeleteModal from "../utils/DeleteModal";
@@ -28,8 +28,9 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
     useEffect(() => {
         dispatch(setHeader("Клиника"))
     }, [dispatch])
+    const setEdit = () => dispatch(editDirection(true))
     const [visible, setVisible] = useState(false)
-    const els = directions.map((item: any) => <Card id={item.id} image={item.image} title={item.name} key={item.id}/>)
+    const els = directions.map((item: any) => <Card setEdit={setEdit} id={item.id} image={item.image} title={item.name} key={item.id}/>)
     const onModal = () => setVisible(!visible)
 
     return (
@@ -50,6 +51,7 @@ type CardProps = {
     id: number
     title: string
     image: string
+    setEdit: () => void
 }
 
 const Card: React.FC<CardProps> = (props) => {
@@ -75,10 +77,10 @@ const Card: React.FC<CardProps> = (props) => {
                 <div className={css.blue}/>
             </Link>
             <div className={css.buttonsWrapper}>
-                <span className={css.edit}>
+                <Link to={`/clinic/${props.id}`} onClick={props.setEdit} className={css.edit}>
                     <img src={edit} alt="edit"/>
                     Редактировать
-                </span>
+                </Link>
                 <span onClick={onModal} className={css.delete}>
                     <img src={del} alt="delete"/>
                     Удалить
@@ -100,8 +102,6 @@ const AddCard = (props: any) => {
 }
 
 const AddUserModal = (props: any) => {
-    const history = useHistory()
-    console.log(history)
     const [name, setName] = useState('')
     const [url, setUrl] = useState('')
     const submit = (e: any) => {
@@ -114,12 +114,11 @@ const AddUserModal = (props: any) => {
             doctors: [],
             illnesses: [],
             name: name,
-            image: newUrl[1]
+            image: url
         }
         api.setCategory(data)
             .then((res: any) => {
                 console.log(res)
-                history.go(1)
             })
     }
     return (
@@ -136,7 +135,10 @@ const AddUserModal = (props: any) => {
                         <InputNone type="file" onChange={(e: any) => {
                             const reader = new FileReader();
                             reader.readAsDataURL(e.target.files[0]);
-                            reader.onload = (e: any) => setUrl(e.target.result)
+                            reader.onload = (e: any) => {
+                                const newUrl = e.target.result.split(',')
+                                setUrl(newUrl[1])
+                            }
 
                         }}/>
                         <GreenDiv>Загрузить фото</GreenDiv>
