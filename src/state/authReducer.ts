@@ -1,5 +1,5 @@
 import api from '../api/Api'
-import {getDirections, initialise} from "./appReducer";
+import {getDirections, getIllness, initialise} from "./appReducer";
 
 
 const storageName = 'userData'
@@ -57,6 +57,7 @@ export const authFc = (password: string, log: string) => (dispatch: any,) => {
                     refresh_life: res.data.expirationTime
                 }))
                 dispatch(getDirections())
+                dispatch(getIllness())
                 return true
             },
             (error: any) => {
@@ -84,7 +85,7 @@ export const setDataRefresh = () => async (dispatch: any) => {
 
 
 export const checkToken = (req: any) =>  async (dispatch: any) => {
-    let token = JSON.parse(<string>localStorage.getItem('userData'));
+    let token = JSON.parse(localStorage.getItem('userData') as string);
     const now = new Date()
     if ( token && new Date(token.access_life) > now) {
         return  await req
@@ -93,7 +94,6 @@ export const checkToken = (req: any) =>  async (dispatch: any) => {
         await dispatch(setDataRefresh())
         return  await req
     } else {
-
         return new Error('Something went wrong')
     }
 }

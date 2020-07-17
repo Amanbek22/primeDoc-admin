@@ -13,9 +13,10 @@ import Chat from "./components/chat/Chat";
 import ClinicDirection from "./components/ClinicDirection/ClinicDirection";
 import logout from './img/logout.png'
 import changePassword from './img/changePassword.png'
-import AddDoctor from "./components/add-doctor/AddDoctor";
+// import AddDoctor from "./components/add-doctor/AddDoctor";
 import CreateTimeTable from "./components/create-time-table/CreateTimeTable";
 import CreatePersonal from "./components/CreatePersonal/CreatePerssonal";
+import Payment from "./components/payment/Payment";
 
 export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) => {
     if (isAuth) {
@@ -70,6 +71,9 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         </Route>
                         <Route path={'/chat'}>
                             <Chat/>
+                        </Route>
+                        <Route path={'/payment'}>
+                            <Payment />
                         </Route>
                         {/*<Redirect to={'/clinic'}/>*/}
                     </AdminWrapper>

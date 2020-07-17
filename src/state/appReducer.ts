@@ -84,6 +84,7 @@ export const editDirection = (edit:boolean) => {
         edit
     }
 }
+
 export const getUsers = () => (dispatch: any) => {
      dispatch(checkToken(api.getUser()))
         .then((res: any) => {
@@ -107,12 +108,17 @@ export const setDirections = (payload: any): SetDirectionActionType => {
         payload
     }
 }
+export const setIllnesses = (data:any) => {
+    return {
+        type: SET_ILLNESS,
+        data: data
+    }
+}
 
 
 export const getDirections = () => async (dispatch: any) => {
     dispatch(checkToken(api.getCategory()))
         .then((res: any) => {
-                // console.log(res)
                 dispatch(setDirections(res.data))
             },
             (error: any) => {
@@ -123,12 +129,11 @@ export const getDirections = () => async (dispatch: any) => {
 export const getIllness = () => async (dispatch: any) => {
     dispatch(checkToken(api.getIllness()))
         .then((res:any)=> {
-            console.log(res)
-            dispatch({
-                type: SET_ILLNESS,
-                data: res.data
+            dispatch(setIllnesses(res.data))
+        },
+            (error: any) => {
+                console.log(error)
             })
-        })
 }
 
 export const initialiseApp = () => async (dispatch: any) => {
@@ -138,8 +143,8 @@ export const initialiseApp = () => async (dispatch: any) => {
             dispatch(signIn({
                 isAuth: true
             }))
-            dispatch(getDirections())
             dispatch(getIllness())
+            dispatch(getDirections())
             dispatch(initialise(false))
         } else {
             localStorage.removeItem('userData')
