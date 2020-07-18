@@ -6,8 +6,12 @@ const http = axios.create({
 });
 
 const getToken = () => {
-    let data = JSON.parse(<string>localStorage.getItem('userData'))
+    let data = JSON.parse(localStorage.getItem('userData') as string)
     return data.access_token
+}
+const getRefresh = () => {
+    let data = JSON.parse(localStorage.getItem('userData') as string)
+    return data.refresh_token
 }
 
 
@@ -19,7 +23,11 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-
+    getAboutUs: () => http.get(`about/`,{
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
     getCategory: (id?:string) => http.get(`category/${id ? id : ''}`, {
         headers: {
             "Authorization": "Bearer " + getToken()
@@ -52,6 +60,11 @@ export default {
         }
     }),
     createFaq: (data:{answer:string, question: string, order: number}) => http.post(`faq`,data , {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    putFaq: (data:{answer:string, question: string, order: number},id:number) => http.put(`faq/${id}`,data , {
         headers: {
             "Authorization": "Bearer " + getToken()
         }

@@ -1,0 +1,6 @@
+.editWrapper{
+    margin-top: 90px;
+    padding: 0 25px;
+    display: grid;
+    grid-gap: 1em;
+}

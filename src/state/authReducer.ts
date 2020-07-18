@@ -70,7 +70,7 @@ export const authFc = (password: string, log: string) => (dispatch: any,) => {
 export const setDataRefresh = () => async (dispatch: any) => {
     const res = await api.refreshToken();
     const access_life = res.data.expirationTime
-    const userData = JSON.parse(<string>localStorage.getItem('userData'))
+    const userData = JSON.parse(localStorage.getItem('userData') as string)
     const { refresh_token,  refresh_life} = userData;
     localStorage.setItem('userData', JSON.stringify({
         access_token: res.data.access,

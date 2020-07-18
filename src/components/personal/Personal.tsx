@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {
     BtnFloat,
-    GreenBtn,
+    GreenBtn, Input,
     Last,
     TableHeader,
     TableList,
     TableWrapper
 } from "../mainStyledComponents/MainStyledComponents";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import {Link} from "react-router-dom";
 import api from "../../api/Api";
@@ -15,6 +15,10 @@ import Pending from '../preloader/Preloader'
 import ModalWrapper from "../modal/Modal";
 import DeleteModal from "../utils/DeleteModal";
 import EditDeleteComponent from "../utils/EditDelete";
+import css from './personal.module.css'
+import Select from "react-select";
+import {GlobalStateType} from "../../state/root-reducer";
+import {getCategories} from "../../state/initial-selector";
 
 type Props = {}
 const Personal: React.FC<Props> = (props) => {
@@ -26,16 +30,15 @@ const Personal: React.FC<Props> = (props) => {
     const [doctors, setDoctors] = useState([])
     const [pending, setPending] = useState(true)
 
-    useEffect(()=>{
-        api.getDoctor().then((res:any)=>{
+    useEffect(() => {
+        api.getDoctor().then((res: any) => {
             setDoctors(res.data)
             setPending(false)
-        },(error:any)=>console.error(error))
-        console.log(doctors)
+        }, (error: any) => console.error(error))
     }, [])
 
-    if (pending){
-        return <Pending />
+    if (pending) {
+        return <Pending/>
     }
 
     return (
@@ -57,7 +60,8 @@ const Personal: React.FC<Props> = (props) => {
                     </Last>
                 </TableHeader>
                 {
-                    doctors.map((item:any)=> <List id={item.id} key={item.id} fio={'Adsnfasgn ADomdlm'} direction={'terapevt'} email={'sadadaad'} />)
+                    doctors.map((item: any) => <List id={item.id} key={item.id} fio={'Adsnfasgn ADomdlm'}
+                                                     direction={'terapevt'} email={'sadadaad'}/>)
                 }
             </TableWrapper>
             <BtnFloat>
@@ -82,55 +86,59 @@ type ListProps = {
 const List: React.FC<ListProps> = (props) => {
     const deleteDoctor = () => {
         api.delDoctor(props.id)
-            .then((res:any)=>{
+            .then((res: any) => {
                 console.log(res)
             })
     }
+
+
+    const [editVisible, setEditVisible] = useState(false)
     const [visible, setVisible] = useState(false)
-    const [editing, setEditing] = useState(false)
     const onModal = () => setVisible(!visible)
+    const onEditModal = () => setEditVisible(!editVisible)
 
     const [fio, setFio] = useState(props.fio)
-    const [direction, setDirection] = useState(props.direction)
+    const [direction, setDirection] = useState<any>(props.direction)
     const [email, setEmail] = useState(props.email)
+    const [options, setOptions] = useState<any>(null)
+    const categories = useSelector((state: GlobalStateType) => getCategories(state))
 
-    const onEdit = () => setEditing(!editing)
+    useEffect(()=>{
+        const data = categories.map((item:any) =>({
+            value: item.id,
+            label: item.name
+        }))
+        setOptions(data)
+    }, [categories])
     const setDoctor = () => {
-        onEdit()
+        onEditModal()
         alert(fio + direction + email)
+
     }
+
     return (
         <div>
             <TableList>
-                <div>
-                    {
-                        editing ? <input onChange={(e)=>setFio(e.target.value)} type="text" value={fio}/> : fio
-                    }
-                </div>
-                <div>
-                    {
-                        editing ? <input onChange={(e)=>setDirection(e.target.value)} type="text" value={direction}/> : direction
-                    }
-                </div>
-                <div>
-                    {
-                        editing ? <input onChange={(e)=>setEmail(e.target.value)} type="text" value={email}/> : email
-                    }
-                </div>
+                <div>{fio}</div>
+                <div>{direction}</div>
+                <div>{email}</div>
                 <Last>
-                    {/*<EditDelete>*/}
-                    {/*    {*/}
-                    {/*        editing*/}
-                    {/*            ? <img onClick={setDoctor} src="https://image.flaticon.com/icons/svg/1632/1632596.svg" alt="done"/>*/}
-                    {/*            : <img onClick={onEdit} src={edit} alt="edit"/>*/}
-                    {/*    }*/}
-                    {/*    <img onClick={onModal} src={del} alt="delete"/>*/}
-                    {/*</EditDelete>*/}
-                    <EditDeleteComponent editing={editing} onEdit={onEdit} onModal={onModal} onDone={setDoctor} />
+                    <EditDeleteComponent editing={false} onEdit={onEditModal} onModal={onModal} onDone={setDoctor}/>
                 </Last>
             </TableList>
+            <ModalWrapper onModal={onEditModal} visible={editVisible} width={"450"} height={"400"}
+                          onClickAway={onEditModal}>
+                <div className={css.editWrapper}>
+                    <Input onChange={(e) => setFio(e.target.value)} type="text" value={fio}/>
+                    <Select options={options} placeholder={'Направление'}  onChange={(e) => setDirection(e)} value={direction}/>
+                    {/*<Input onChange={(e) => setDirection(e.target.value)} type="text" value={direction}/>*/}
+                    <Input onChange={(e) => setEmail(e.target.value)} type="text" value={email}/>
+                    <GreenBtn onClick={setDoctor}>Сохранить</GreenBtn>
+                </div>
+            </ModalWrapper>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
-                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.fio} del={deleteDoctor}/>
+                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.fio}
+                             del={deleteDoctor}/>
             </ModalWrapper>
         </div>
     )

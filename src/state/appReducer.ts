@@ -137,7 +137,7 @@ export const getIllness = () => async (dispatch: any) => {
 }
 
 export const initialiseApp = () => async (dispatch: any) => {
-    let data = JSON.parse(<string>localStorage.getItem('userData'));
+    let data = JSON.parse(localStorage.getItem('userData') as string);
     if (data && data.refresh_token) {
         if (new Date(data.refresh_life) > new Date()) {
             dispatch(signIn({
