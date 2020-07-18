@@ -6,6 +6,7 @@
 .form{
     display: grid;
     grid-template-columns: 1fr;
+    grid-gap: 1em;
 }
 .btnWrapper{
     margin-top: 1em;
@@ -16,18 +17,22 @@
     font-weight: normal;
     font-size: 15px;
     line-height: 17px;
+    display: flex;
 }
 .label>span>span{
     color: #FF5069;
 }
-.upload {
+.error{
+    margin-left: auto;
+}
+.upload{
     text-align: center;
 }
 .blue{
     text-align: left;
     margin-top: auto;
 }
-.blue>button{
+.blue>div{
     background: #00BDD0 !important;
 }
 .imgWrapper{

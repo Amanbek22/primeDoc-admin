@@ -15,6 +15,9 @@
     color: #000000;
     border-bottom: 2px solid #00BDD0;
 }
+.question>div{
+    margin-left: 40px;
+}
 .q{
     font-style: normal;
     font-weight: 500;

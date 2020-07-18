@@ -106,7 +106,6 @@ const AddUserModal = (props: any) => {
     const [url, setUrl] = useState('')
     const submit = (e: any) => {
         e.preventDefault()
-        const newUrl = url.split(',')
         props.onModal()
 
         const data = {
@@ -129,7 +128,7 @@ const AddUserModal = (props: any) => {
             <form onSubmit={submit}>
                 <div className={css.downloadWrapper}>
                     <DownloadPictureWrapper>
-                        <img src={url === '' ? pic : url} alt="pic"/>
+                        <img src={url === '' ? "data:image/jpg;base64," + pic : url} alt="pic"/>
                     </DownloadPictureWrapper>
                     <label>
                         <InputNone type="file" onChange={(e: any) => {

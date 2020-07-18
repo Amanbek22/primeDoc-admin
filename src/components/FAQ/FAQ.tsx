@@ -1,9 +1,7 @@
-import React, {SetStateAction, useEffect, useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
-import edit from "../../img/edit.png";
-import del from "../../img/delete.png";
-import {BtnFloat, EditDelete, GreenBtn, Input} from "../mainStyledComponents/MainStyledComponents";
+import {BtnFloat, GreenBtn, Input} from "../mainStyledComponents/MainStyledComponents";
 import css from './faq.module.css'
 import api from "../../api/Api";
 import Preloader from "../preloader/Preloader";
@@ -45,7 +43,7 @@ const Faq = React.memo(() => {
     useEffect(() => {
         dispatch(setHeader("FAQ"))
     }, [dispatch])
-    console.log(questions)
+
 
     function compare(a: any, b: any) {
         const bandA = a.order
@@ -87,22 +85,28 @@ const Faq = React.memo(() => {
         }
     })
 
-    function onChange(sourceId: any, sourceIndex: any, targetIndex: any, targetId: any) {
+    function onChange(sourceId: any,sourceIndex:any, targetIndex: any,) {
         const nextState = swap(questions, sourceIndex, targetIndex);
         const newArr = nextState.map((item: any, index: number) => {
             return {
                 ...item,
-                order: index + 1
+                order: index
             }
         })
+        if(newArr) {
+            api.putFaq({
+                answer: newArr[targetIndex].answer,
+                order: newArr[targetIndex].order,
+                question: newArr[targetIndex].question,
+            }, newArr[targetIndex].id)
+                .then((res) => console.log(res))
+        }
         // @ts-ignore
         setQuestions(newArr);
     }
-
     if (pending) {
         return <Preloader/>
     }
-
     return (
         <div className={css.wrapper}>
             <BtnFloat>
@@ -133,10 +137,7 @@ const Faq = React.memo(() => {
                     </GridContextProvider>
             }
             <BtnFloat>
-                <GreenBtn onClick={() => {
-
-                    setVisible(!visible)
-                }}>Добавить вопрос</GreenBtn>
+                <GreenBtn onClick={() => setVisible(!visible)}>Добавить вопрос</GreenBtn>
             </BtnFloat>
             <div>
                 {
@@ -223,7 +224,7 @@ const List: React.FC<ListProps> = (props) => {
         // @ts-ignore
         <div ref={innerRef} className={css.questionWrapper}>
             <div
-                onClick={() => props.noClick ? null : setVisible(!visible)}
+                onClick={() => props.noClick ? null : setVisible1(!visible1)}
                 className={css.question}>
                 <span className={css.q}>{props.questions}</span>
                 <div>
@@ -237,11 +238,12 @@ const List: React.FC<ListProps> = (props) => {
             <span>
                 {
                     props.noItem ? null :
-                        <EditDeleteComponent editing={editing} onEdit={onEdit} onModal={onModal} onDone={setFaq} />
+                        <EditDeleteComponent editing={editing} onEdit={onEdit} onModal={onModal} onDone={setFaq}/>
                 }
             </span>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
-                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.questions} del={onDelete}/>
+                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.questions}
+                             del={onDelete}/>
             </ModalWrapper>
         </div>
     )
