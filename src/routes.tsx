@@ -44,7 +44,7 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         <Route exact path={'/clinic'}>
                             <AdminPage/>
                         </Route>
-                        <Route exact path={'/clinic/:id/:id/:id'}>
+                        <Route exact path={'/add/time/'}>
                             <CreateTimeTable />
                         </Route>
                         <Route exact path={'/clinic/:id/:id'}>

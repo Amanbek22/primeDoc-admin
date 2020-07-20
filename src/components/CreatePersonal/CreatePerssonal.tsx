@@ -14,30 +14,27 @@ import pic from "../../img/pic.png";
 import {useFormik} from "formik";
 import api from '../../api/Api'
 import {Link} from "react-router-dom";
+import DatePicker, {registerLocale} from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ru from 'date-fns/locale/ru';
+registerLocale('ru', ru)
 
-
-
-
-const validate = (values:any) => {
-    const errors:any = {};
+const validate = (values: any) => {
+    const errors: any = {};
 
     if (!values.surname) {
         errors.surname = 'Обязательно';
-    }
-    if (!values.name) {
+    }else if (!values.name) {
         errors.name = 'Обязательно';
-    }
-    if(!values.password1){
+    }else if (!values.password1) {
         errors.password1 = 'Обязательно';
-    }else if(values.password1.length < 8){
+    } else if (values.password1.length < 8) {
         errors.password1 = 'Минимум 8 символов';
-    }
-    if(!values.password2){
+    }else if (!values.password2) {
         errors.password2 = 'Обязательно';
-    }else if(values.password2 !== values.password1) {
+    } else if (values.password2 !== values.password1) {
         errors.password2 = 'Не совподают';
-    }
-    if(!values.login){
+    }else if (!values.login) {
         errors.login = 'Обязательно';
     }
     // if(!values.pa){
@@ -57,6 +54,8 @@ const CreatePersonal = () => {
         dispatch(setHeader("Создание врача"))
     }, [dispatch])
     const [img, setImg] = useState('')
+    const [start, setStart] = useState<any>(null)
+    const [end, setEnd] = useState<any>(null)
     const formik = useFormik({
         initialValues: {
             surname: '',
@@ -69,29 +68,27 @@ const CreatePersonal = () => {
             password1: '',
             password2: '',
             email: '',
+            start: '',
+            end: '',
+            organizationName: ''
         },
         validate,
         onSubmit: (values) => {
-            // alert(JSON.stringify({...values, image: img}, null, 2));
-            console.log({
-                bio: values.aboutDoctor,
-                birthDate: null,
-                categories: null,
-                firstName: values.name,
-                image: img,
-                lastName: values.surname,
-                password: values.password1,
-                patronymic: null,
-                position: null,
-                schedules: null,
-                username: values.login
-            })
             api.setDoctor({
                 bio: values.aboutDoctor,
                 birthDate: null,
                 categories: null,
                 firstName: values.name,
                 image: img,
+                information: [{
+                    infoType: 'EXPERIENCE',
+                    name: values.degree,
+                    id: 1,
+                    organizationName: values.organizationName,
+                    start: '2010-07-03',
+                    end: '2010-07-03',
+
+                }],
                 lastName: values.surname,
                 password: values.password1,
                 patronymic: null,
@@ -100,7 +97,7 @@ const CreatePersonal = () => {
                 username: values.login
 
             })
-                .then((res:any)=>{
+                .then((res: any) => {
                     console.log(res)
                 })
         },
@@ -164,25 +161,61 @@ const CreatePersonal = () => {
                             onChange={formik.handleChange}
                             value={formik.values.login}
                             name={"login"}
-                            pattern={'banana|cherry'}
                             type={'text'}/>
                     </label>
-                    {/*<label className={css.label}>*/}
-                    {/*    <span><span>*</span>Опыт работы</span>*/}
-                    {/*    <Input*/}
-                    {/*        onChange={formik.handleChange}*/}
-                    {/*        value={formik.values.degree}*/}
-                    {/*        name={"degree"}*/}
-                    {/*        type={'text'}/>*/}
-                    {/*</label>*/}
                     <label className={css.label}>
-                        <span><span>*</span>Регалии</span>
+                        <span><span>*</span>Опыт работы</span>
+                        {/*<Input*/}
+                        {/*    onChange={formik.handleChange}*/}
+                        {/*    value={formik.values.degree}*/}
+                        {/*    name={"degree"}*/}
+                        {/*    type={'text'}/>*/}
                         <Input
                             onChange={formik.handleChange}
-                            value={formik.values.regalia}
-                            name={"regalia"}
-                            type={'text'}/>
+                            value={formik.values.degree}
+                            name={"degree"}
+                            placeholder={'Название'}
+                            type={'text'}
+                        />
+                        <div className={css.dateWrapper}>
+                            <DatePicker
+                                onChange={(e) => setStart(e)}
+                                selected={start}
+                                locale={'ru'}
+                                className={css.datePicker}
+                                placeholderText={'Начало'}
+                            />
+                            <span className={css.second} />
+                            <DatePicker
+                                className={css.datePicker}
+                                onChange={(e) => setEnd(e)}
+                                selected={end}
+                                locale={'ru'}
+                                placeholderText={'Конец'}
+                            />
+                            {/*<Input*/}
+                            {/*    onChange={formik.handleChange}*/}
+                            {/*    value={formik.values.end}*/}
+                            {/*    name={"end"}*/}
+                            {/*    min={formik.values.start}*/}
+                            {/*    type={'date'} placeholder={'Конец '}/>*/}
+                        </div>
+                        <Input
+                            onChange={formik.handleChange}
+                            value={formik.values.organizationName}
+                            name={"organizationName"}
+                            placeholder={'Название Организации'}
+                            type={'text'}
+                        />
                     </label>
+                    {/*<label className={css.label}>*/}
+                    {/*    <span><span>*</span>Регалии</span>*/}
+                    {/*    <Input*/}
+                    {/*        onChange={formik.handleChange}*/}
+                    {/*        value={formik.values.regalia}*/}
+                    {/*        name={"regalia"}*/}
+                    {/*        type={'text'}/>*/}
+                    {/*</label>*/}
                     <label className={css.label}>
                         <span><span>*</span>Пароль
                         <span className={css.error}>
@@ -207,37 +240,29 @@ const CreatePersonal = () => {
                             name={"password2"}
                             type={'password'}/>
                     </label>
-                    {/*<label className={css.label}>*/}
-                    {/*    <span><span>*</span>Электронная почта</span>*/}
-                    {/*    <Input*/}
-                    {/*        onChange={formik.handleChange}*/}
-                    {/*        value={formik.values.email}*/}
-                    {/*        name={"email"}*/}
-                    {/*        type={'email'}/>*/}
-                    {/*</label>*/}
                     <div className={css.btnWrapper}>
                         <GreenBtn type={'submit'}>Зарегестрировать</GreenBtn>
                     </div>
                 </div>
                 <div className={css.imgWrapper}>
                     <div>
-                    <label className={css.upload}>
-                        <InputNone onChange={(e:any)=> {
-                            const reader = new FileReader();
-                            reader.readAsDataURL(e.target.files[0]);
-                            reader.onload = (e: any) => {
-                                const newUrl = e.target.result.split(',')
-                                setImg(newUrl[1])
-                            }
-                        }} type={'file'} />
-                        <DownloadPictureWrapper>
-                            <img src={img ? "data:image/jpg;base64," + img : pic} alt="pic"/>
-                        </DownloadPictureWrapper>
-                        <GreenDiv>Загрузить фото</GreenDiv>
-                    </label>
+                        <label className={css.upload}>
+                            <InputNone onChange={(e: any) => {
+                                const reader = new FileReader();
+                                reader.readAsDataURL(e.target.files[0]);
+                                reader.onload = (e: any) => {
+                                    const newUrl = e.target.result.split(',')
+                                    setImg(newUrl[1])
+                                }
+                            }} type={'file'}/>
+                            <DownloadPictureWrapper>
+                                <img src={img ? "data:image/jpg;base64," + img : pic} alt="pic"/>
+                            </DownloadPictureWrapper>
+                            <GreenDiv>Загрузить фото</GreenDiv>
+                        </label>
                     </div>
                     <div className={css.blue}>
-                        <Link to={'add/time'}>
+                        <Link to={'/add/time'}>
                             <GreenDiv>Создать расписание</GreenDiv>
                         </Link>
                     </div>

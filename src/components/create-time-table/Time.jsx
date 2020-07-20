@@ -1,8 +1,6 @@
 import React from 'react'
 import css from './create-time.module.css'
 import del from '../../img/delete.png'
-import 'dayjs/locale/ru'
-import './date.scss'
 import Select from 'react-select'
 
 const colourStyles = {
