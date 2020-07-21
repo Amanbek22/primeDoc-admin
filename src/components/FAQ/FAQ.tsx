@@ -93,16 +93,26 @@ const Faq = React.memo(() => {
                 order: index
             }
         })
-        if(newArr) {
-            api.putFaq({
-                answer: newArr[targetIndex].answer,
-                order: newArr[targetIndex].order,
-                question: newArr[targetIndex].question,
-            }, newArr[targetIndex].id)
-                .then((res) => console.log(res))
-        }
+        // if(newArr[targetIndex]) {
+        //     api.putFaq({
+        //         answer: newArr[targetIndex].answer,
+        //         order: newArr[targetIndex].order,
+        //         question: newArr[targetIndex].question,
+        //     }, newArr[targetIndex].id)
+        //         .then((res) => console.log(res))
+        // }
         // @ts-ignore
         setQuestions(newArr);
+    }
+
+    const changeSubmit = () => {
+        let newArr = questions.map((item:any) => ({
+            id: item.id,
+            order: item.order
+        }))
+        newArr.sort((a:any, b:any) => a.id - b.id )
+        api.orderFaq(newArr)
+            .then((res)=>console.log(res))
     }
     if (pending) {
         return <Preloader/>
@@ -112,7 +122,10 @@ const Faq = React.memo(() => {
             <BtnFloat>
                 {
                     change
-                        ? <GreenBtn onClick={() => setChange(!change)}>Сохранить</GreenBtn>
+                        ? <GreenBtn onClick={() => {
+                            setChange(!change)
+                            changeSubmit()
+                        }}>Сохранить</GreenBtn>
                         : <GreenBtn onClick={() => setChange(!change)}>Изменить порядок</GreenBtn>
                 }
             </BtnFloat>

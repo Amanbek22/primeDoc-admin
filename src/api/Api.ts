@@ -69,13 +69,18 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
+    orderFaq: (data:any) => http.put(`faq/order/`,data,{
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
     deleteFaq: (id:number|string) => http.delete(`faq/${id}` , {
         headers: {
             "Authorization": "Bearer " + getToken()
         }
     }),
 
-    getDoctor: () => http.get(`doctor/`,{
+    getDoctor: () => http.get(`doctor/data/`,{
         headers: {
             "Authorization": "Bearer " + getToken()
         }
