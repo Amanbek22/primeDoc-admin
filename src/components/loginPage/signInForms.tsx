@@ -5,6 +5,7 @@ import {Link, useHistory} from "react-router-dom";
 import {connect} from "react-redux";
 import {authFc} from "../../state/authReducer";
 import {useAuth} from "../../hooks/auth.hook";
+import ReactCodeInput from "react-verification-code-input/dist";
 
 const SignIn = ( props: any ) => {
     const {login} = useAuth()
@@ -66,12 +67,9 @@ export const EnterCode = () => {
                     на ваш номер телефона
                 </p>
                 <div className={css.codes}>
-                    <LogInput required type={'number'}/>
-                    <LogInput required type={'number'}/>
-                    <LogInput required type={'number'}/>
-                    <LogInput required type={'number'}/>
+                    <ReactCodeInput className={css.codeVerification} fields={4}  onChange={(e)=> console.log(e)} />
                 </div>
-                <BtnNext >Подтвердить</BtnNext>
+                <BtnNext>Подтвердить</BtnNext>
             </div>
         </form>
     )

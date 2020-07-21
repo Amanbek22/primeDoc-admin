@@ -83,10 +83,9 @@ const CreatePersonal = () => {
                 information: [{
                     infoType: 'EXPERIENCE',
                     name: values.degree,
-                    id: 1,
                     organizationName: values.organizationName,
-                    start: '2010-07-03',
-                    end: '2010-07-03',
+                    start: start,
+                    end: end,
 
                 }],
                 lastName: values.surname,
@@ -190,6 +189,7 @@ const CreatePersonal = () => {
                                 className={css.datePicker}
                                 onChange={(e) => setEnd(e)}
                                 selected={end}
+                                minDate={start}
                                 locale={'ru'}
                                 placeholderText={'Конец'}
                             />
