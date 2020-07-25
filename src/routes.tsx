@@ -75,7 +75,7 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         <Route path={'/payment'}>
                             <Payment />
                         </Route>
-                        {/*<Redirect to={'/clinic'}/>*/}
+                        <Redirect to={'/clinic'}/>
                     </AdminWrapper>
                 </Switch>
             </div>

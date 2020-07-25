@@ -262,5 +262,4 @@ const List: React.FC<ListProps> = (props) => {
     )
 }
 
-
 export default Faq

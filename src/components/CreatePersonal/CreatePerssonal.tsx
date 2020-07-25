@@ -8,15 +8,19 @@ import {
     InputNone
 } from "../mainStyledComponents/MainStyledComponents";
 import css from './createPersonal.module.css'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import pic from "../../img/pic.png";
 import {useFormik} from "formik";
 import api from '../../api/Api'
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ru from 'date-fns/locale/ru';
+import Select from "react-select";
+import {selectStyles} from "../utils/customSelect";
+import {GlobalStateType} from "../../state/root-reducer";
+import {getCategories} from "../../state/initial-selector";
 registerLocale('ru', ru)
 
 const validate = (values: any) => {
@@ -53,9 +57,21 @@ const CreatePersonal = () => {
     useEffect(() => {
         dispatch(setHeader("Создание врача"))
     }, [dispatch])
+    const history = useHistory()
+
+    const categories = useSelector((state:GlobalStateType) => getCategories(state))
     const [img, setImg] = useState('')
     const [start, setStart] = useState<any>(null)
     const [end, setEnd] = useState<any>(null)
+    const [category, setCategory] = useState<any>([])
+    const [options, setOptions] = useState<any>([])
+    useEffect(()=>{
+        const data = categories.map((item:any)=>({
+            value: item.id,
+            label: item.name
+        }))
+        setOptions(data)
+    }, [categories])
     const formik = useFormik({
         initialValues: {
             surname: '',
@@ -77,7 +93,7 @@ const CreatePersonal = () => {
             api.setDoctor({
                 bio: values.aboutDoctor,
                 birthDate: null,
-                categories: null,
+                categories: category.map((item:any) => item.value),
                 firstName: values.name,
                 image: img,
                 information: [{
@@ -94,10 +110,10 @@ const CreatePersonal = () => {
                 position: null,
                 schedules: null,
                 username: values.login
-
             })
                 .then((res: any) => {
                     console.log(res)
+                    history.push('/personal')
                 })
         },
     });
@@ -161,6 +177,22 @@ const CreatePersonal = () => {
                             value={formik.values.login}
                             name={"login"}
                             type={'text'}/>
+                    </label>
+                    <label className={css.label}>
+                        <span><span>*</span>Категории
+                        <span className={css.error}>
+                                {/*{formik.errors.categories ? <div>{formik.errors.categories}</div> : null}*/}
+                            </span>
+                        </span>
+                        <Select
+                            isMulti
+                            styles={selectStyles}
+                            options={options}
+                            onChange={(e)=>setCategory(e)}
+                            value={category}
+                            name={"category"}
+                            placeholder={''}
+                        />
                     </label>
                     <label className={css.label}>
                         <span><span>*</span>Опыт работы</span>

@@ -80,8 +80,9 @@ const ClinicDirection = () => {
                 setPending(false)
 
                 let arr: any = []
-                res.data.illnesses.forEach((item: any) => arr.push(...options.filter((i: { value: number, label: string }) => item.id === i.value ? i : null)))
-                console.log(arr)
+                if(res.data.illnesses) {
+                    res.data.illnesses.forEach((item: any) => arr.push(...options.filter((i: { value: number, label: string }) => item.id === i.value ? i : null)))
+                }
                 setIllness(arr)
 
             })
@@ -148,8 +149,10 @@ const ClinicDirection = () => {
             </div>
             <div className={css.doctorsList}>
                 {
-                    doctors.map((item: any) => <Doctors id={item.id} key={item.id} name={'Asylbekov Amanbek'}
+                    doctors
+                        ? doctors.map((item: any) => <Doctors id={item.id} key={item.id} name={'Asylbekov Amanbek'}
                                                         url={`data:image/jpg;base64,${item.image}`}/>)
+                        : null
                 }
             </div>
             <div className={css.addDoc}>
