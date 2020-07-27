@@ -7,8 +7,9 @@ type Props = {
     editing: boolean
     onEdit: () => void
     onModal: () => void
-    onDone: () => void
+    onDone: (e:any) => void
     noEdit?: boolean
+    noDel?: boolean
 }
 const EditDeleteComponent: React.FC<Props> = (props) => {
     return (
@@ -21,7 +22,10 @@ const EditDeleteComponent: React.FC<Props> = (props) => {
                             : <img onClick={props.onEdit} src={edit} alt="edit"/>
 
             }
-            <img onClick={props.onModal} src={del} alt="delete"/>
+            {
+                props.noDel ? <span />
+                    : <img onClick={props.onModal} src={del} alt="delete"/>
+            }
         </EditDelete>
     )
 }

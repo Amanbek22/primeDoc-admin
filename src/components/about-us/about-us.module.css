@@ -7,6 +7,12 @@
     margin-top: 10px;
     float: right;
 }
+.editModalWrapper{
+    margin-top: 90px;
+    padding: 0 25px;
+    display: grid;
+    grid-gap: 1em;
+}
 .contact{
     font-style: normal;
     font-weight: bold;
@@ -35,4 +41,10 @@
 .save{
     margin: 15px 0 55px auto;
     float: right;
+}
+.partWrapper{
+    margin: 15px 0;
+}
+.textArea{
+    height: 150px !important;
 }
