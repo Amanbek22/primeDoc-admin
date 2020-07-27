@@ -37,7 +37,7 @@ const validate = (values: any) => {
     }else if (!values.password2) {
         errors.password2 = 'Обязательно';
     } else if (values.password2 !== values.password1) {
-        errors.password2 = 'Не совподают';
+        errors.password2 = 'Не совпадают';
     }else if (!values.login) {
         errors.login = 'Обязательно';
     }

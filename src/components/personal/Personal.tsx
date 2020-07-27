@@ -60,8 +60,13 @@ const Personal: React.FC<Props> = (props) => {
                     </Last>
                 </TableHeader>
                 {
-                    doctors.map((item: any) => <List id={item.id} key={item.id} fio={'Adsnfasgn ADomdlm'}
-                                                     direction={'terapevt'} email={'sadadaad'}/>)
+                    doctors.map((item: any) => <List
+                        id={item.id}
+                        key={item.id}
+                        fio={item.firstName + ' ' + item.lastName}
+                        direction={item.categories}
+                        email={item.username}
+                    />)
                 }
             </TableWrapper>
             <BtnFloat>
@@ -78,7 +83,7 @@ export default Personal
 type ListProps = {
     id: number
     fio: string
-    direction: string
+    direction: [any]
     email: string
 }
 
@@ -91,18 +96,16 @@ const List: React.FC<ListProps> = (props) => {
             })
     }
 
-
     const [editVisible, setEditVisible] = useState(false)
     const [visible, setVisible] = useState(false)
     const onModal = () => setVisible(!visible)
     const onEditModal = () => setEditVisible(!editVisible)
 
     const [fio, setFio] = useState(props.fio)
-    const [direction, setDirection] = useState<any>(props.direction)
+    const [direction, setDirection] = useState<any>([])
     const [email, setEmail] = useState(props.email)
-    const [options, setOptions] = useState<any>(null)
+    const [options, setOptions] = useState<any>([])
     const categories = useSelector((state: GlobalStateType) => getCategories(state))
-
     useEffect(()=>{
         const data = categories.map((item:any) =>({
             value: item.id,
@@ -110,17 +113,23 @@ const List: React.FC<ListProps> = (props) => {
         }))
         setOptions(data)
     }, [categories])
-    const setDoctor = () => {
+    useEffect(()=>{
+        let arr:any = []
+        props.direction.forEach((item:any) =>arr.push(...options.filter((i:any) => +item.id === +i.value ? item : null )))
+        setDirection(arr)
+    }, [props.direction, options])
+    const setDoctor = (e:any) => {
+        e.preventDefault()
+        console.log(direction)
+        // api.setDoctor()
         onEditModal()
-        alert(fio + direction + email)
-
     }
 
     return (
         <div>
             <TableList>
                 <div>{fio}</div>
-                <div>{direction}</div>
+                <div>{direction ? direction.map((item:any) => item.label + ', ') : ''}</div>
                 <div>{email}</div>
                 <Last>
                     <EditDeleteComponent editing={false} onEdit={onEditModal} onModal={onModal} onDone={setDoctor}/>
@@ -128,13 +137,13 @@ const List: React.FC<ListProps> = (props) => {
             </TableList>
             <ModalWrapper onModal={onEditModal} visible={editVisible} width={"450"} height={"400"}
                           onClickAway={onEditModal}>
-                <div className={css.editWrapper}>
+                <form onSubmit={setDoctor} className={css.editWrapper}>
                     <Input onChange={(e) => setFio(e.target.value)} type="text" value={fio}/>
-                    <Select options={options} placeholder={'Направление'}  onChange={(e) => setDirection(e)} value={direction}/>
+                    <Select isMulti options={options} placeholder={'Направление'}  onChange={(e) => setDirection(e)} value={direction}/>
                     {/*<Input onChange={(e) => setDirection(e.target.value)} type="text" value={direction}/>*/}
                     <Input onChange={(e) => setEmail(e.target.value)} type="text" value={email}/>
-                    <GreenBtn onClick={setDoctor}>Сохранить</GreenBtn>
-                </div>
+                    <GreenBtn>Сохранить</GreenBtn>
+                </form>
             </ModalWrapper>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
                 <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.fio}

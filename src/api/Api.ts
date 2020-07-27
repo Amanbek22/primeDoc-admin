@@ -28,6 +28,21 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
+    setAboutUs: (id: number, data: any ) => http.put(`about/${id}`,data,{
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    docsUpload: (data:any) => http.post(`docs/upload`,data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    // getDocs: () => http.get(`docs/upload`, {
+    //     headers: {
+    //         "Authorization": "Bearer " + getToken()
+    //     }
+    // }),
     getCategory: (id?:string) => http.get(`category/${id ? id : ''}`, {
         headers: {
             "Authorization": "Bearer " + getToken()
@@ -95,5 +110,5 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-
+    // editDoctor: () => http.put(``)
 }

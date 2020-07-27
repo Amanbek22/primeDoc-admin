@@ -13,6 +13,7 @@ import EditDeleteComponent from "../utils/EditDelete";
 import {GlobalStateType} from "../../state/root-reducer";
 import {getIllnesses} from '../../state/initial-selector'
 import Select from "react-select";
+import {selectStyles} from "../utils/customSelect";
 
 const ClinicDirection = () => {
     const dispatch = useDispatch()
@@ -186,13 +187,6 @@ const DescriptionElement = (props: descriptionType) => {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-const colourStyles = {
-    control: (styles: any) => ({
-        ...styles,
-
-    })
-};
-
 type descriptionIllnessType = {
     title: string,
     illnesses: any,
@@ -208,8 +202,9 @@ const DescriptionIllnessElement = (props: descriptionIllnessType) => {
             <div className={css.description}>
                 {
                     props.editing
-                        ? <Select isMulti={true} styles={colourStyles} options={props.options}
+                        ? <Select isMulti={true} styles={selectStyles} options={props.options}
                                   value={props.illnesses}
+                                  placeholder={''}
                                   onChange={(e: any) => e ? props.setText([...e]) : props.setText([])}
                         />
                         : <p>{props.illnesses.map((item: any, index: number) => <React.Fragment key={item.label}>

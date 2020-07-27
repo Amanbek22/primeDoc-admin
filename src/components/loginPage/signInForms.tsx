@@ -6,24 +6,61 @@ import {connect} from "react-redux";
 import {authFc} from "../../state/authReducer";
 import {useAuth} from "../../hooks/auth.hook";
 import ReactCodeInput from "react-verification-code-input/dist";
+import {useFormik} from "formik";
 
-const SignIn = ( props: any ) => {
+const validate = (values: any) => {
+    const errors: any = {};
+    if (!values.login) {
+        errors.login = 'Объязательное поле';
+    } else if (!values.password) {
+        errors.password = 'Объязательно поле';
+    } else if (values.password.length < 8) {
+        errors.password = 'Минимум 8 символов'
+    }
+
+    return errors;
+};
+
+
+const SignIn = (props: any) => {
     const {login} = useAuth()
-    const [loginInp, setLoginInp] = useState('')
-    const [password, setPassword] = useState('')
     const log = async (password: string, log: string) => {
         const res = await props.authFc(password, log)
-        console.log(res)
         login(res.refresh, 5)
     }
-    const submit = (e: any) => {
-        e.preventDefault()
-        log(password,loginInp)
-    }
+    const formik = useFormik({
+        initialValues: {
+            login: '',
+            password: ''
+        },
+        validate,
+        onSubmit: (values: any) => {
+            log(values.password, values.login)
+        },
+    });
     return (
-        <form onSubmit={submit} className={css.loginWrapper}>
-            <LogInput required type={'text'} value={loginInp} onChange={(e:any)=> setLoginInp(e.target.value)} placeholder={'Введите логин'}/>
-            <LogInput required type={'password'} value={password} onChange={(e:any)=> setPassword(e.target.value) } placeholder={'Введите пароль'}/>
+        <form onSubmit={formik.handleSubmit} className={css.loginWrapper}>
+            <div>
+                {formik.errors.login ? <div className={css.error}>{formik.errors.login}</div> : null}
+                <LogInput type={'text'}
+                          value={formik.values.login}
+                          id="login"
+                          name="login"
+                          onChange={formik.handleChange}
+                          placeholder={'Введите логин'}
+                />
+            </div>
+            <div>
+                {formik.errors.password ? <div className={css.error}>{formik.errors.password}</div> : null}
+                <LogInput
+                id={'password'}
+                name={'password'}
+                type={'password'}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                placeholder={'Введите пароль'}
+            />
+            </div>
             <div className={css.forgot}>
                 <Link to={'/forgot'}>забыли пароль?</Link>
             </div>
@@ -31,7 +68,7 @@ const SignIn = ( props: any ) => {
         </form>
     )
 }
-export const SignInForm = connect(null,{authFc})(SignIn)
+export const SignInForm = connect(null, {authFc})(SignIn)
 
 export const ForgotPassword = () => {
     const history = useHistory()
@@ -67,7 +104,7 @@ export const EnterCode = () => {
                     на ваш номер телефона
                 </p>
                 <div className={css.codes}>
-                    <ReactCodeInput className={css.codeVerification} fields={4}  onChange={(e)=> console.log(e)} />
+                    <ReactCodeInput className={css.codeVerification} fields={4} onChange={(e) => console.log(e)}/>
                 </div>
                 <BtnNext>Подтвердить</BtnNext>
             </div>
@@ -89,7 +126,7 @@ export const NewPassword = () => {
             </ErrorMessage>
             <LogInput required type={'password'} placeholder={'Введите новый пароль'}/>
             <LogInput required type={'password'} placeholder={'Подвердите пароль'}/>
-            <BtnNext >ПОДВЕРДИТЬ</BtnNext>
+            <BtnNext>ПОДВЕРДИТЬ</BtnNext>
         </form>
     )
 }
