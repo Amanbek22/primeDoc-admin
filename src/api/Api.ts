@@ -38,11 +38,12 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-    // getDocs: () => http.get(`docs/upload`, {
-    //     headers: {
-    //         "Authorization": "Bearer " + getToken()
-    //     }
-    // }),
+    getDocs: () => http.get(`docs/`, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    docsDownload: (code:string) => http.get(`docs/download/${code}`),
     getCategory: (id?:string) => http.get(`category/${id ? id : ''}`, {
         headers: {
             "Authorization": "Bearer " + getToken()

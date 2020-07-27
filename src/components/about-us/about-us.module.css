@@ -48,3 +48,37 @@
 .textArea{
     height: 150px !important;
 }
+.files{
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-gap: 1em;
+}
+.file{
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap; /* Запрещаем перенос строк */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.file__name{
+    width: 200px;
+    white-space: nowrap; /* Запрещаем перенос строк */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.file>span{
+    width: 50px;
+}
+.fileWrapper{
+    height: 45px;
+    width: 45px;
+    text-align: center;
+    margin: 0 auto;
+}
+.fileWrapper>img{
+    width: 100%;
+    height: 100%;
+}
+.none{
+    display: none;
+}

@@ -4,12 +4,15 @@ import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import edit from "../../img/edit.png";
 import del from "../../img/delete.png";
-import {EditDelete, GreenBtn, Input, TextArea} from "../mainStyledComponents/MainStyledComponents";
+import {EditDelete, GreenBtn, GreenDiv, Input, TextArea} from "../mainStyledComponents/MainStyledComponents";
 import api from '../../api/Api'
 import EditDeleteComponent from "../utils/EditDelete";
 import {useFormik} from "formik";
-import Select from "react-select";
 import ModalWrapper from "../modal/Modal";
+import Preloader from "../preloader/Preloader";
+
+
+
 
 const AboutUs = () => {
     const dispatch = useDispatch()
@@ -17,14 +20,34 @@ const AboutUs = () => {
         dispatch(setHeader("О нас"))
     }, [dispatch])
     const [data, setData] = useState<any>([])
+    const [files, setFiles] = useState<any>([])
+    const [file, setFile] = useState<any>(null)
+    const [pending, setPending] = useState(true)
+
     useEffect(()=>{
         api.getAboutUs()
             .then((res)=>{
-                console.log(res)
                 setData(res.data)
+            })
+        api.getDocs()
+            .then((res)=>{
+                setFiles(res.data)
+                setPending(false)
             })
 
     },[])
+    const saveFile = () => {
+        api.docsUpload(file)
+            .then((res)=>{
+                console.log(res)
+            })
+    }
+
+
+
+    if(pending) {
+        return <Preloader />
+    }
     return (
         <div>
             <div className={css.infoWrapper}>
@@ -54,14 +77,59 @@ const AboutUs = () => {
                         </EditDelete>
                     </span>
                 </div>
+                <div className={css.files}>
+                    {
+                        files.map((item:any)=><File key={item.id} id={item.id} code={item.code} name={item.fileName} />)
+                    }
+                </div>
                 <div className={css.btnWrapper}>
-                    <GreenBtn>Добавить фото</GreenBtn>
+                    {
+                        file
+                            ? <div>
+                                <div className={css.file__name}>
+                                    <span>{file.name}</span>
+                                    </div>
+                                <GreenBtn onClick={saveFile}>Сохранить</GreenBtn>
+                            </div>
+                            : <label>
+                                <input className={css.none} onChange={(e:any) => setFile(e.target.files[0])} type={'file'} />
+                                <GreenDiv>Добавить файл</GreenDiv>
+                            </label>
+                    }
                     <GreenBtn className={css.blue}>Загрузить с...</GreenBtn>
                 </div>
             </div>
-            {/*<div className={css.save}>*/}
-            {/*    <GreenBtn>Сохранить</GreenBtn>*/}
-            {/*</div>*/}
+        </div>
+    )
+}
+
+type FileProps = {
+    name: string
+    code: string
+    id: number
+}
+const File = (props:FileProps) => {
+    const getFile = () => {
+        get_file_url(`http://165.22.74.215:8080/api/v1/docs/download/${props.code}`)
+    }
+    function get_file_url(url:string) {
+
+        let link_url:any = document.createElement("a");
+
+        link_url.download = url.substring((url.lastIndexOf("/") + 1), url.length);
+        link_url.href = url;
+        document.body.appendChild(link_url);
+        link_url.click();
+        document.body.removeChild(link_url);
+
+        link_url = null;
+    }
+    return (
+        <div onClick={getFile} className={css.file}>
+            <div className={css.fileWrapper}>
+                <img src="https://image.flaticon.com/icons/svg/2921/2921724.svg" alt="file"/>
+            </div>
+            <span>{props.name}</span>
         </div>
     )
 }
