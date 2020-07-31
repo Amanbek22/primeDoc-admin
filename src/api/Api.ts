@@ -33,7 +33,7 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-    docsUpload: (data:any) => http.post(`docs/upload`,data, {
+    docsUpload: (data:any) => http.post(`docs/upload/`,data, {
         headers: {
             "Authorization": "Bearer " + getToken()
         }
@@ -43,8 +43,7 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-    docsDownload: (code:string) => http.get(`docs/download/${code}`),
-    getCategory: (id?:string) => http.get(`category/${id ? id : ''}`, {
+    getCategory: (id?:string) => http.get(`category/${id ? 'info/details/' + id : ''}`, {
         headers: {
             "Authorization": "Bearer " + getToken()
         }
@@ -111,5 +110,14 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-    // editDoctor: () => http.put(``)
+    editDoctor: (id:number,data:any) => http.put(`doctor/${id}`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    getSchedule: () => http.get(`schedule/`, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    })
 }

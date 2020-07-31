@@ -44,13 +44,13 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         <Route exact path={'/clinic'}>
                             <AdminPage/>
                         </Route>
-                        <Route exact path={'/add/time/'}>
-                            <CreateTimeTable />
-                        </Route>
-                        <Route exact path={'/clinic/:id/:id'}>
-                            {/*<AddDoctor/>*/}
-                            <CreatePersonal />
-                        </Route>
+                        {/*<Route exact path={'/add/time/'}>*/}
+                        {/*    <CreateTimeTable />*/}
+                        {/*</Route>*/}
+                        {/*<Route exact path={'/clinic/:id/:id'}>*/}
+                        {/*    /!*<AddDoctor/>*!/*/}
+                        {/*    <CreatePersonal />*/}
+                        {/*</Route>*/}
                         <Route exact path={'/clinic/:id'}>
                             <ClinicDirection/>
                         </Route>
@@ -62,6 +62,9 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         </Route>
                         <Route exact path={'/personal/:id'}>
                             <CreatePersonal />
+                        </Route>
+                        <Route exact path={'/personal/:id/:time'}>
+                            <CreateTimeTable />
                         </Route>
                         <Route path={'/FAQ'}>
                             <Faq/>
@@ -75,7 +78,7 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         <Route path={'/payment'}>
                             <Payment />
                         </Route>
-                        {/*<Redirect to={'/clinic'}/>*/}
+                        <Redirect to={'/clinic'}/>
                     </AdminWrapper>
                 </Switch>
             </div>

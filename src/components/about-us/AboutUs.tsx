@@ -34,10 +34,12 @@ const AboutUs = () => {
                 setFiles(res.data)
                 setPending(false)
             })
-
     },[])
     const saveFile = () => {
-        api.docsUpload(file)
+        console.log(file)
+        const f = new FormData()
+        f.append('file',file)
+        api.docsUpload(f)
             .then((res)=>{
                 console.log(res)
             })
@@ -96,7 +98,7 @@ const AboutUs = () => {
                                 <GreenDiv>Добавить файл</GreenDiv>
                             </label>
                     }
-                    <GreenBtn className={css.blue}>Загрузить с...</GreenBtn>
+                    {/*<GreenBtn className={css.blue}>Загрузить с...</GreenBtn>*/}
                 </div>
             </div>
         </div>

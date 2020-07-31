@@ -157,7 +157,7 @@ const ClinicDirection = () => {
                 }
             </div>
             <div className={css.addDoc}>
-                <Link to={'/clinic/5/add'}>
+                <Link to={'/personal/add'}>
                     <GreenBtn>Добавить врача</GreenBtn>
                 </Link>
             </div>

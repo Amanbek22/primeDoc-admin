@@ -294,7 +294,7 @@ const CreatePersonal = () => {
                         </label>
                     </div>
                     <div className={css.blue}>
-                        <Link to={'/add/time'}>
+                        <Link to={'/personal/add/time'}>
                             <GreenDiv>Создать расписание</GreenDiv>
                         </Link>
                     </div>
