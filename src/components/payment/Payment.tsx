@@ -2,7 +2,7 @@ import {useDispatch} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {setHeader} from "../../state/appReducer";
 import {useFormik} from "formik";
-// import api from "../../api/Api";
+import api from "../../api/Api";
 import {Title} from "../admin/AdminComponents";
 import cs from './payment.module.css'
 import css from "../CreatePersonal/createPersonal.module.css";
@@ -14,28 +14,54 @@ import {
     InputNone
 } from "../mainStyledComponents/MainStyledComponents";
 import pic from "../../img/pic.png";
-import {Link} from "react-router-dom";
-
+import {useRouteMatch, useHistory} from 'react-router-dom'
 
 const Payment = () => {
+    const {url} = useRouteMatch()
+    const history = useHistory()
+
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(setHeader("Создание врача"))
+        dispatch(setHeader("Способы оплаты"))
     }, [dispatch])
     const [img, setImg] = useState('')
+
     const formik = useFormik({
         initialValues: {
             ste0: '',
-            step1: '',
-            step2: '',
-            step3: '',
-            step4: '',
-            step5: '',
-            step6: '',
+            paymentSteps: {
+                step1: '',
+                step2: '',
+                step3: '',
+                step4: '',
+                step5: '',
+            },
+            last: '',
         },
         onSubmit: (values) => {
-            alert(JSON.stringify({...values, image: img}, null, 2));
-
+            let arr:any = []
+            let i = 0;
+            for(let key in values.paymentSteps) {
+                const {paymentSteps} = values;
+                i++
+                let a = {
+                    number: i,
+                    // @ts-ignore
+                    text: paymentSteps[key]
+                }
+                arr.push(a)
+            }
+            const data = {
+                logo: img,
+                name: values.ste0,
+                nextSteps: values.last,
+                paymentSteps: arr
+            }
+            api.createPayment(data)
+                .then((res)=>{
+                    history.push(url)
+                })
+            console.log(data)
         },
     });
     return (
@@ -57,48 +83,48 @@ const Payment = () => {
                         <span>1 шаг</span>
                         <Input
                             onChange={formik.handleChange}
-                            value={formik.values.step1}
-                            name={"step1"}
+                            value={formik.values.paymentSteps.step1}
+                            name={"paymentSteps.step1"}
                             type={'text'}/>
                     </label>
                     <label className={css.label}>
                         <span>2 шаг</span>
                         <Input
                             onChange={formik.handleChange}
-                            name={"step2"}
-                            value={formik.values.step2}
+                            name={"paymentSteps.step2"}
+                            value={formik.values.paymentSteps.step2}
                             type={'text'}/>
                     </label>
                     <label className={css.label}>
                         <span>3 шаг</span>
                         <Input
                             onChange={formik.handleChange}
-                            value={formik.values.step3}
-                            name={"step3"}
+                            value={formik.values.paymentSteps.step3}
+                            name={"paymentSteps.step3"}
                             type={'text'}/>
                     </label>
                     <label className={css.label}>
                         <span>4 шаг</span>
                         <Input
                             onChange={formik.handleChange}
-                            value={formik.values.step4}
-                            name={"step4"}
+                            value={formik.values.paymentSteps.step4}
+                            name={"paymentSteps.step4"}
                             type={'text'}/>
                     </label>
                     <label className={css.label}>
                         <span>5 шаг</span>
                         <Input
                             onChange={formik.handleChange}
-                            value={formik.values.step5}
-                            name={"step5"}
+                            value={formik.values.paymentSteps.step5}
+                            name={"paymentSteps.step5"}
                             type={'text'}/>
                     </label>
                     <label className={css.label}>
                         <span>Дальнейшие действия</span>
                         <Input
                             onChange={formik.handleChange}
-                            value={formik.values.step6}
-                            name={"step6"}
+                            value={formik.values.last}
+                            name={"last"}
                             type={'text'}/>
                     </label>
                 </div>
@@ -108,10 +134,13 @@ const Payment = () => {
                             <InputNone onChange={(e:any)=> {
                                 const reader = new FileReader();
                                 reader.readAsDataURL(e.target.files[0]);
-                                reader.onload = (e: any) => setImg(e.target.result)
+                                reader.onload = (e: any) => {
+                                    const newUrl = e.target.result.split(',')
+                                    setImg(newUrl[1])
+                                }
                             }} type={'file'} />
                             <DownloadPictureWrapper>
-                                <img src={pic} alt="pic"/>
+                                <img src={img ? "data:image/jpg;base64," + img : pic} alt="pic"/>
                             </DownloadPictureWrapper>
                             <GreenDiv>Загрузить фото</GreenDiv>
                         </label>

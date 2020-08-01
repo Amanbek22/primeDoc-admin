@@ -17,6 +17,7 @@ import changePassword from './img/changePassword.png'
 import CreateTimeTable from "./components/create-time-table/CreateTimeTable";
 import CreatePersonal from "./components/CreatePersonal/CreatePerssonal";
 import Payment from "./components/payment/Payment";
+import Payments from "./components/payment/Payments";
 
 export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) => {
     if (isAuth) {
@@ -75,8 +76,14 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         <Route path={'/chat'}>
                             <Chat/>
                         </Route>
-                        <Route path={'/payment'}>
+                        <Route exact path={'/payment/'}>
+                            <Payments />
+                        </Route>
+                        <Route exact path={'/payment/:add'}>
                             <Payment />
+                        </Route>
+                        <Route exact path={'/payment/:detail/:id'}>
+                            Hello
                         </Route>
                         <Redirect to={'/clinic'}/>
                     </AdminWrapper>
