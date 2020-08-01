@@ -218,3 +218,42 @@ export const EditDelete = styled.span`
 export const InputNone = styled.input`
     display: none;
 `
+
+
+export const CardWrapper = styled.div`
+    height: 190px;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.4);
+    background: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    position: relative;
+    
+    &>a{
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        
+        &>.span{
+              z-index: 1;
+                font-family: 'Balsamiq Sans', cursive;
+                position: absolute;
+                left: 0;
+                top: 25px;
+                padding: 5px 15px 5px 10px;
+                background: #00BDD0;
+                color: #FFFFFF;
+                font-size: 20px;
+                font-weight: 500;
+                border-top-right-radius: 6px;
+                border-bottom-right-radius: 6px;
+        }
+        
+        &>img{
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+    }
+`

@@ -35,6 +35,7 @@ const Personal: React.FC<Props> = (props) => {
             setDoctors(res.data)
             setPending(false)
         }, (error: any) => console.error(error))
+        api.getSchedule().then((res) => console.log(res))
     }, [])
 
     if (pending) {
@@ -120,8 +121,15 @@ const List: React.FC<ListProps> = (props) => {
     }, [props.direction, options])
     const setDoctor = (e:any) => {
         e.preventDefault()
-        console.log(direction)
-        // api.setDoctor()
+        let newFio = fio.split(' ')
+        api.editDoctor(props.id, {
+            categories: direction.map((item:any) => item.value),
+            username: email,
+            firstName: newFio[0],
+            lastName: newFio[1] ? newFio[1] : '',
+            patronymic: newFio[2] ? newFio[2] : ''
+        })
+            .then((res:any)=> console.log(res))
         onEditModal()
     }
 
@@ -138,7 +146,7 @@ const List: React.FC<ListProps> = (props) => {
             <ModalWrapper onModal={onEditModal} visible={editVisible} width={"450"} height={"400"}
                           onClickAway={onEditModal}>
                 <form onSubmit={setDoctor} className={css.editWrapper}>
-                    <Input onChange={(e) => setFio(e.target.value)} type="text" value={fio}/>
+                    <Input required onChange={(e) => setFio(e.target.value)} type="text" value={fio}/>
                     <Select isMulti options={options} placeholder={'Направление'}  onChange={(e) => setDirection(e)} value={direction}/>
                     {/*<Input onChange={(e) => setDirection(e.target.value)} type="text" value={direction}/>*/}
                     <Input onChange={(e) => setEmail(e.target.value)} type="text" value={email}/>

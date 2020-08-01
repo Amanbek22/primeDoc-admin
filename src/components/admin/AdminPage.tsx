@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {AdminPageWrapper, CardsWrapper, FormModalWrapper, Title} from "./AdminComponents";
 import {
+    CardWrapper,
     DownloadPictureWrapper,
     GreenBtn,
     GreenDiv,
@@ -64,7 +65,7 @@ const Card: React.FC<CardProps> = (props) => {
             .then((res: any) => console.log(res))
     }
     return (
-        <div className={css.cardWrapper}>
+        <CardWrapper>
             <Link to={`/clinic/${props.id}`} className={css.link}>
                 <img
 
@@ -89,11 +90,11 @@ const Card: React.FC<CardProps> = (props) => {
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
                 <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.title} del={deleteDirection}/>
             </ModalWrapper>
-        </div>
+        </CardWrapper>
     )
 }
 
-const AddCard = (props: any) => {
+export const AddCard = (props: any) => {
     return (
         <div onClick={props.open} className={css.addCard}>
             <span>+</span>

@@ -151,7 +151,7 @@ const ClinicDirection = () => {
             <div className={css.doctorsList}>
                 {
                     doctors
-                        ? doctors.map((item: any) => <Doctors id={item.id} key={item.id} name={'Asylbekov Amanbek'}
+                        ? doctors.map((item: any) => <Doctors id={item.id} key={item.id} name={item.firstName + ' ' + item.lastName}
                                                         url={`data:image/jpg;base64,${item.image}`}/>)
                         : null
                 }

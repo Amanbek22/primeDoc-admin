@@ -106,7 +106,7 @@ const CreatePersonal = () => {
                 }],
                 lastName: values.surname,
                 password: values.password1,
-                patronymic: null,
+                patronymic: values.middleName,
                 position: null,
                 schedules: null,
                 username: values.login
@@ -196,11 +196,6 @@ const CreatePersonal = () => {
                     </label>
                     <label className={css.label}>
                         <span><span>*</span>Опыт работы</span>
-                        {/*<Input*/}
-                        {/*    onChange={formik.handleChange}*/}
-                        {/*    value={formik.values.degree}*/}
-                        {/*    name={"degree"}*/}
-                        {/*    type={'text'}/>*/}
                         <Input
                             onChange={formik.handleChange}
                             value={formik.values.degree}
@@ -225,12 +220,6 @@ const CreatePersonal = () => {
                                 locale={'ru'}
                                 placeholderText={'Конец'}
                             />
-                            {/*<Input*/}
-                            {/*    onChange={formik.handleChange}*/}
-                            {/*    value={formik.values.end}*/}
-                            {/*    name={"end"}*/}
-                            {/*    min={formik.values.start}*/}
-                            {/*    type={'date'} placeholder={'Конец '}/>*/}
                         </div>
                         <Input
                             onChange={formik.handleChange}

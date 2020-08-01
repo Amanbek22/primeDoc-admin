@@ -119,5 +119,15 @@ export default {
         headers: {
             "Authorization": "Bearer " + getToken()
         }
-    })
+    }),
+    getPayments: () => http.get(`payment/`,{
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    createPayment: (data:any) => http.post(`payment`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
 }
