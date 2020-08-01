@@ -6,10 +6,12 @@ import {CardsWrapper} from "../admin/AdminComponents";
 import {CardWrapper} from "../mainStyledComponents/MainStyledComponents";
 import css from "../admin/admin.module.css";
 import {Link, useHistory} from "react-router-dom";
-import edit from "../../img/edit.png";
+// import edit from "../../img/edit.png";
 import del from "../../img/delete.png";
 import {AddCard} from "../admin/AdminPage";
 import Preloader from "../preloader/Preloader";
+import DeleteModal from "../utils/DeleteModal";
+import ModalWrapper from "../modal/Modal";
 
 
 const Payments = () => {
@@ -26,7 +28,7 @@ const Payments = () => {
     useEffect(() => {
         api.getPayments()
             .then((res) => {
-                console.log(res)
+                // console.log(res)
                 setPayments(res.data)
                 setPending(false)
             })
@@ -39,7 +41,7 @@ const Payments = () => {
     return (
         <CardsWrapper>
             {
-                payments.map((item: any) => <Card title={item.name} id={item.id} setEdit={() => {
+                payments.map((item: any) => <Card key={item.id} title={item.name} id={item.id} setEdit={() => {
                 }} image={item.logo}/>)
             }
             <AddCard open={()=>{
@@ -57,6 +59,8 @@ type CardProps = {
 }
 
 const Card = (props: CardProps) => {
+    const [visible, setVisible] = useState(false)
+    const onModal = () => setVisible(!visible)
     return (
         <CardWrapper>
             <Link to={`/payment/detail/${props.id}`}>
@@ -75,12 +79,15 @@ const Card = (props: CardProps) => {
                 {/*    Редактировать*/}
                 {/*</Link>*/}
                 <span />
-                <span onClick={()=>{}} className={css.delete}>
+                <span onClick={onModal} className={css.delete}>
                     <img src={del} alt="delete"/>
                     Удалить
                 </span>
                 <span />
             </div>
+            <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
+                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.title} del={()=>{}}/>
+            </ModalWrapper>
         </CardWrapper>
     )
 }

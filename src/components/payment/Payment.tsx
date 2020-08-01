@@ -59,7 +59,7 @@ const Payment = () => {
             }
             api.createPayment(data)
                 .then((res)=>{
-                    history.push(url)
+                    history.push('/payment')
                 })
             console.log(data)
         },
@@ -147,7 +147,7 @@ const Payment = () => {
                     </div>
                     <div className={cs.blue}>
                         {/*<Link to={'add/time'}>*/}
-                            <GreenDiv className={cs.blueBtn}>Добавить способ оплаты</GreenDiv>
+                        {/*    <GreenDiv className={cs.blueBtn}>Добавить способ оплаты</GreenDiv>*/}
                         {/*</Link>*/}
                         <div className={css.btnWrapper}>
                             <GreenBtn type={'submit'}>Сохранить</GreenBtn>
