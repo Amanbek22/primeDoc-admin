@@ -34,6 +34,12 @@ export const LogInput = styled.input`
     display: flex;
     align-items: center;
     color: rgba(0, 0, 0, 0.5);
+    
+    :focus{
+      border-color: #00BDD0;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(0, 126, 255, 0.1);
+      outline: none;
+    }
 `
 export const BtnNext = styled.button`
     width: 100%;
@@ -47,6 +53,15 @@ export const BtnNext = styled.button`
     cursor: pointer;
     background: #00BDD0;
     border-radius: 10px;
+    
+    ${(props: any) =>
+        props.disabled ? `
+            background: #979797;
+            cursor: not-allowed !important;
+        ` : `
+        background: #00BDD0;
+        `
+    };
     
     :focus{
         outline: none;

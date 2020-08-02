@@ -76,6 +76,11 @@
     margin: 0;
 }
 .error{
-    color: red;
-    margin: 0 0 4px 5px;
+    color: red !important;
+    margin: 0 0 4px 5px !important;
+}
+.success {
+    border-color: rgb(25, 200, 25) !important;
+    margin: 0 0 4px 5px !important;
+
 }

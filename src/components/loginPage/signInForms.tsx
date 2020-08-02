@@ -4,71 +4,117 @@ import {BtnNext, ErrorMessage, LogInput} from "./login-css";
 import {Link, useHistory} from "react-router-dom";
 import {connect} from "react-redux";
 import {authFc} from "../../state/authReducer";
-import {useAuth} from "../../hooks/auth.hook";
 import ReactCodeInput from "react-verification-code-input/dist";
-import {useFormik} from "formik";
-
-const validate = (values: any) => {
-    const errors: any = {};
-    if (!values.login) {
-        errors.login = 'Объязательное поле';
-    } else if (!values.password) {
-        errors.password = 'Объязательно поле';
-    } else if (values.password.length < 8) {
-        errors.password = 'Минимум 8 символов'
-    }
-
-    return errors;
-};
+import {Form, Formik} from "formik";
+import * as Yup from 'yup';
+import deepEqual from 'lodash.isequal';
 
 
-const SignIn = (props: any) => {
-    const {login} = useAuth()
-    const log = async (password: string, log: string) => {
-        const res = await props.authFc(password, log)
-        login(res.refresh, 5)
-    }
-    const formik = useFormik({
-        initialValues: {
-            login: '',
-            password: ''
-        },
-        validate,
-        onSubmit: (values: any) => {
-            log(values.password, values.login)
-        },
-    });
+const validateFormik = {
+    login: Yup.string()
+        .required('Объязательное поле'),
+    password: Yup.string()
+        .min(8, 'Минимум 8 символов')
+        .required('Объязательное поле'),
+
+
+}
+
+const SignInFormik = (props: any) => {
+    const [error, setError] = useState(false)
     return (
-        <form onSubmit={formik.handleSubmit} className={css.loginWrapper}>
-            <div>
-                {formik.errors.login ? <div className={css.error}>{formik.errors.login}</div> : null}
-                <LogInput type={'text'}
-                          value={formik.values.login}
-                          id="login"
-                          name="login"
-                          onChange={formik.handleChange}
-                          placeholder={'Введите логин'}
-                />
-            </div>
-            <div>
-                {formik.errors.password ? <div className={css.error}>{formik.errors.password}</div> : null}
-                <LogInput
-                id={'password'}
-                name={'password'}
-                type={'password'}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                placeholder={'Введите пароль'}
-            />
-            </div>
-            <div className={css.forgot}>
-                <Link to={'/forgot'}>забыли пароль?</Link>
-            </div>
-            <BtnNext>Далее</BtnNext>
-        </form>
+        <Formik
+            initialValues={{
+                login: '',
+                password: ''
+            }}
+            validationSchema={Yup.object().shape(validateFormik)}
+            onSubmit={(values, {setSubmitting}) => {
+                setSubmitting(true);
+                props.authFc(values.password, values.login)
+                    .then((res: any) => {
+                        console.log(res)
+                        setError(!res)
+                        setSubmitting(false)
+                    })
+            }}
+        >
+            {
+                ({
+                     values,
+                     touched,
+                     errors,
+                     initialValues,
+                     isSubmitting,
+                     handleChange,
+                     handleBlur,
+                 }) => {
+                    const hasChanged = !deepEqual(values, initialValues);
+                    const hasErrors = Object.keys(errors).length > 0;
+                    if(values === initialValues){
+                        setError(false)
+                    }
+                    return <Form className={css.loginWrapper}>
+                        {
+                            error ? <div className={css.error}>Пароль или логин введен не верно.</div>
+                                : null
+                        }
+                        <div>
+                            {touched.login && errors.login && <div className={css.error}>{errors.login}</div>}
+                            <LogInput type={'text'}
+                                      value={values.login}
+                                      id="login"
+                                      name="login"
+                                      autoComplete={'false'}
+                                      onChange={(e) => {
+                                          handleChange(e)
+                                          setError(false)
+                                      }}
+                                      onBlur={handleBlur}
+                                      className={
+                                          hasChanged ? errors.login ? css.error : css.success : ('')
+                                      }
+                                      placeholder={'Введите логин'}
+                            />
+                        </div>
+                        <div>
+                            {touched.password && errors.password && <div className={css.error}>{errors.password}</div>}
+                            <LogInput type={'password'}
+                                      value={values.password}
+                                      id="password"
+                                      name="password"
+                                      autoComplete={'false'}
+                                      onChange={(e) => {
+                                          handleChange(e)
+                                          setError(false)
+                                      }}
+                                      onBlur={handleBlur}
+                                      className={
+                                          hasChanged ? errors.password ? (
+                                              css.error
+                                          ) : (
+                                              css.success
+                                          ) : (
+                                              ''
+                                          )
+                                      }
+                                      placeholder={'Введите пароль'}
+                            />
+                        </div>
+                        <div className={css.forgot}>
+                            <Link to={'/forgot'}>забыли пароль?</Link>
+                        </div>
+                        <BtnNext type="submit" disabled={!hasChanged || hasErrors || isSubmitting}>
+                            Далее
+                        </BtnNext>
+
+                    </Form>
+                }}
+        </Formik>
     )
 }
-export const SignInForm = connect(null, {authFc})(SignIn)
+
+export const SignInForm = connect(null, {authFc})(SignInFormik)
 
 export const ForgotPassword = () => {
     const history = useHistory()

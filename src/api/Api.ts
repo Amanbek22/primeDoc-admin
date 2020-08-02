@@ -125,6 +125,11 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
+    delPayments: (id:number) => http.delete(`payment/${id}`,{
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
     createPayment: (data:any) => http.post(`payment`, data, {
         headers: {
             "Authorization": "Bearer " + getToken()

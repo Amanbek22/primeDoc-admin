@@ -42,10 +42,11 @@ export const signIn = (payload: any) => {
     }
 }
 
-export const authFc = (password: string, log: string) => (dispatch: any,) => {
+export const authFc = (password: string, log: string) => async (dispatch: any,) => {
     dispatch(initialise(true))
-    api.signIn({username: log, password: password})
-        .then((res: any) => {
+    let a = false
+    await api.signIn({username: log, password: password})
+        .then((res) => {
                 dispatch(signIn({
                     userId: 1,
                     isAuth: true
@@ -58,13 +59,14 @@ export const authFc = (password: string, log: string) => (dispatch: any,) => {
                 }))
                 dispatch(getDirections())
                 dispatch(getIllness())
-                return true
+                a = true
             },
-            (error: any) => {
+            (error) => {
                 console.log(error)
+                a = false
             })
     dispatch(initialise(false))
-    return true
+    return a
 }
 
 export const setDataRefresh = () => async (dispatch: any) => {
