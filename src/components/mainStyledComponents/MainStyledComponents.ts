@@ -65,6 +65,19 @@ export const GreenBtn = styled.button`
     font-size: 14px;
     line-height: 19px;
     font-family: 'Balsamiq Sans', cursive;
+    
+     ${(props: any) =>
+    props.disabled ? `
+            background: #979797;
+            cursor: not-allowed !important;
+        ` : `
+        background: #20CF54;
+        `
+};
+    
+    :focus{
+        outline: none;
+    }
 `
 export const ModalBtnWrapper = styled.div`
     display: flex;

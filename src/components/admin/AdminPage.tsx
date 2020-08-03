@@ -13,7 +13,7 @@ import edit from '../../img/edit.png'
 import del from '../../img/delete.png'
 import pic from '../../img/pic.png'
 import ModalWrapper from "../modal/Modal";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {connect, useDispatch} from "react-redux";
 import {editDirection, setHeader} from "../../state/appReducer";
 import {GlobalStateType} from "../../state/root-reducer";

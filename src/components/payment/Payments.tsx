@@ -35,16 +35,35 @@ const Payments = () => {
     }, [])
 
 
-    if(pending){
-        return <Preloader />
+    const onDelete = (id: number) => {
+        setPending(true)
+        api.delPayments(id)
+            .then((res) => {
+                    api.getPayments()
+                        .then((res) => {
+                            // console.log(res)
+                            setPayments(res.data)
+                            setPending(false)
+                        })
+                },
+                (error: any) => {
+                    console.log(error)
+                    setPending(false)
+                }
+            )
+    }
+
+    if (pending) {
+        return <Preloader/>
     }
     return (
         <CardsWrapper>
             {
-                payments.map((item: any) => <Card key={item.id} title={item.name} id={item.id} setEdit={() => {
-                }} image={item.logo}/>)
+                payments.map((item: any) => <Card onDel={onDelete} key={item.id} title={item.name} id={item.id}
+                                                  setEdit={() => {
+                                                  }} image={item.logo}/>)
             }
-            <AddCard open={()=>{
+            <AddCard open={() => {
                 history.push('/payment/add')
             }}/>
         </CardsWrapper>
@@ -56,11 +75,19 @@ type CardProps = {
     title: string
     image: string
     setEdit: () => void
+    onDel: (id: number) => void
 }
 
 const Card = (props: CardProps) => {
     const [visible, setVisible] = useState(false)
     const onModal = () => setVisible(!visible)
+    const onDelete = () => {
+        props.onDel(props.id)
+        // api.delPayments(props.id)
+        //     .then((res)=> {
+        //
+        //     })
+    }
     return (
         <CardWrapper>
             <Link to={`/payment/detail/${props.id}`}>
@@ -78,15 +105,16 @@ const Card = (props: CardProps) => {
                 {/*    <img src={edit} alt="edit"/>*/}
                 {/*    Редактировать*/}
                 {/*</Link>*/}
-                <span />
+                <span/>
                 <span onClick={onModal} className={css.delete}>
                     <img src={del} alt="delete"/>
                     Удалить
                 </span>
-                <span />
+                <span/>
             </div>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
-                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.title} del={()=>{}}/>
+                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.title}
+                             del={onDelete}/>
             </ModalWrapper>
         </CardWrapper>
     )

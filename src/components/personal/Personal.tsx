@@ -107,6 +107,7 @@ const List: React.FC<ListProps> = (props) => {
     const [email, setEmail] = useState(props.email)
     const [options, setOptions] = useState<any>([])
     const categories = useSelector((state: GlobalStateType) => getCategories(state))
+
     useEffect(()=>{
         const data = categories.map((item:any) =>({
             value: item.id,
@@ -114,11 +115,13 @@ const List: React.FC<ListProps> = (props) => {
         }))
         setOptions(data)
     }, [categories])
+
     useEffect(()=>{
         let arr:any = []
         props.direction.forEach((item:any) =>arr.push(...options.filter((i:any) => +item.id === +i.value ? item : null )))
         setDirection(arr)
     }, [props.direction, options])
+
     const setDoctor = (e:any) => {
         e.preventDefault()
         let newFio = fio.split(' ')

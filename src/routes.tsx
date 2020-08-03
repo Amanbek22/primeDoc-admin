@@ -85,7 +85,7 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         <Route exact path={'/payment/:detail/:id'}>
                             Hello
                         </Route>
-                        <Redirect to={'/clinic'}/>
+                        {/*<Redirect to={'/clinic'}/>*/}
                     </AdminWrapper>
                 </Switch>
             </div>

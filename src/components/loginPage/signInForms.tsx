@@ -51,9 +51,6 @@ const SignInFormik = (props: any) => {
                  }) => {
                     const hasChanged = !deepEqual(values, initialValues);
                     const hasErrors = Object.keys(errors).length > 0;
-                    if(values === initialValues){
-                        setError(false)
-                    }
                     return <Form className={css.loginWrapper}>
                         {
                             error ? <div className={css.error}>Пароль или логин введен не верно.</div>

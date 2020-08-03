@@ -14,10 +14,9 @@ import {
     InputNone
 } from "../mainStyledComponents/MainStyledComponents";
 import pic from "../../img/pic.png";
-import {useRouteMatch, useHistory} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 
 const Payment = () => {
-    const {url} = useRouteMatch()
     const history = useHistory()
 
     const dispatch = useDispatch()
