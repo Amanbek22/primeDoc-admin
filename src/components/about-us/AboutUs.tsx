@@ -34,14 +34,15 @@ const AboutUs = () => {
                 setFiles(res.data)
                 setPending(false)
             })
-    },[])
+    },[pending])
     const saveFile = () => {
-        console.log(file)
+        setPending(true)
         const f = new FormData()
         f.append('file',file)
         api.docsUpload(f)
             .then((res)=>{
                 console.log(res)
+                setFile(null)
             })
     }
 
@@ -61,24 +62,24 @@ const AboutUs = () => {
                         header={item.header}
                         paragraph={item.paragraph} />)
                 }
-                <div className={css.contact}>Контакты</div>
-                <div>
-                    <div className={css.header}>Адрес в Бишкеке:</div>
-                    <span>г.Бишкек ул.Сыдыкова 113, пер. ул.Тоголок-Молдо</span>
-                </div>
-                <div>
-                    <div className={css.header}>Контактные данные:</div>
-                    <div>
-                    <span>+996 501 116 622</span><br/>
-                    <span>+996 551 152 200</span>
-                    </div>
-                    <span className={css.editWrapper}>
-                        <EditDelete>
-                            <img src={edit} alt="edit"/>
-                            <img src={del} alt="delete"/>
-                        </EditDelete>
-                    </span>
-                </div>
+                {/*<div className={css.contact}>Контакты</div>*/}
+                {/*<div>*/}
+                {/*    <div className={css.header}>Адрес в Бишкеке:</div>*/}
+                {/*    <span>г.Бишкек ул.Сыдыкова 113, пер. ул.Тоголок-Молдо</span>*/}
+                {/*</div>*/}
+                {/*<div>*/}
+                {/*    <div className={css.header}>Контактные данные:</div>*/}
+                {/*    <div>*/}
+                {/*    <span>+996 501 116 622</span><br/>*/}
+                {/*    <span>+996 551 152 200</span>*/}
+                {/*    </div>*/}
+                {/*    <span className={css.editWrapper}>*/}
+                {/*        <EditDelete>*/}
+                {/*            <img src={edit} alt="edit"/>*/}
+                {/*            <img src={del} alt="delete"/>*/}
+                {/*        </EditDelete>*/}
+                {/*    </span>*/}
+                {/*</div>*/}
                 <div className={css.files}>
                     {
                         files.map((item:any)=><File key={item.id} id={item.id} code={item.code} name={item.fileName} />)
