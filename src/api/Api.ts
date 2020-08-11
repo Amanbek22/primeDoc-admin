@@ -135,4 +135,9 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
+    putPaymentSteps: (id:number, data:any) => http.put(`payment/${id}`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    })
 }

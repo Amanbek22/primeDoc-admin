@@ -22,6 +22,7 @@ const validateFormik = {
 
 const SignInFormik = (props: any) => {
     const [error, setError] = useState(false)
+    const history = useHistory()
     return (
         <Formik
             initialValues={{
@@ -33,9 +34,11 @@ const SignInFormik = (props: any) => {
                 setSubmitting(true);
                 props.authFc(values.password, values.login)
                     .then((res: any) => {
-                        console.log(res)
                         setError(!res)
                         setSubmitting(false)
+                        if(res) {
+                            history.push('/clinic')
+                        }
                     })
             }}
         >
