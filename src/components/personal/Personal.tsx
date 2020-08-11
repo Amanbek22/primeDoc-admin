@@ -34,14 +34,16 @@ const Personal: React.FC<Props> = (props) => {
         api.getDoctor().then((res: any) => {
             setDoctors(res.data)
             setPending(false)
-        }, (error: any) => console.error(error))
+        }, (error: any) => {
+            setPending(false)
+            console.error(error)
+        })
         api.getSchedule().then((res) => console.log(res))
     }, [pending])
 
     if (pending) {
         return <Pending/>
     }
-
     return (
         <>
             <TableWrapper>
@@ -72,7 +74,7 @@ const Personal: React.FC<Props> = (props) => {
                 }
             </TableWrapper>
             <BtnFloat>
-                <Link to={'/personal/5'}>
+                <Link to={'/personal/add'}>
                     <GreenBtn>Создать врача</GreenBtn>
                 </Link>
             </BtnFloat>

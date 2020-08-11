@@ -2,9 +2,7 @@ import React, {useEffect, useState} from 'react'
 import css from './about-us.module.css'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
-import edit from "../../img/edit.png";
-import del from "../../img/delete.png";
-import {EditDelete, GreenBtn, GreenDiv, Input, TextArea} from "../mainStyledComponents/MainStyledComponents";
+import {GreenBtn, GreenDiv, Input, TextArea} from "../mainStyledComponents/MainStyledComponents";
 import api from '../../api/Api'
 import EditDeleteComponent from "../utils/EditDelete";
 import {useFormik} from "formik";
@@ -45,8 +43,6 @@ const AboutUs = () => {
                 setFile(null)
             })
     }
-
-
 
     if(pending) {
         return <Preloader />
