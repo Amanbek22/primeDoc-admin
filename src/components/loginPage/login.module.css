@@ -49,7 +49,7 @@
     display: flex;
     justify-content: space-around;
 }
-.codes>input[type=number]{
+.codeVerification>div>input{
     text-align: center;
     font-size: 18px;
     width: 55px;
@@ -58,8 +58,15 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     border-radius: 5px;
+    margin: 0 10px;
 }
-
+.codeVerification{
+    /*border: 1px solid red;*/
+}
+.codeVerification>div{
+    display: flex;
+    justify-content: space-around;
+}
 
 .code>input[type=number]::-webkit-inner-spin-button,
 .code>input[type=number]::-webkit-outer-spin-button {
@@ -67,4 +74,13 @@
     -moz-appearance: none;
     appearance: none;
     margin: 0;
+}
+.error{
+    color: red !important;
+    margin: 0 0 4px 5px !important;
+}
+.success {
+    border-color: rgb(25, 200, 25) !important;
+    margin: 0 0 4px 5px !important;
+
 }

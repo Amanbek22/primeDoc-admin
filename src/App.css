@@ -41,7 +41,9 @@ a{
 }
 
 
-
+.react-datepicker-wrapper{
+    width: 100%;
+}
 
 /*Custom scroll*/
 ::-webkit-scrollbar {

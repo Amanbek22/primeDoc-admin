@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import {Title} from "../admin/AdminComponents";
@@ -11,14 +11,17 @@ const CreateTimeTable = () => {
     useEffect(() => {
         dispatch(setHeader("Создание расписания"))
     }, [dispatch])
+    const [times, setTimes] = useState([<Time/>])
     return (
         <>
             <Title>Расписание</Title>
             <Date />
             <div className={css.timeList}>
-                <Time/>
+                {
+                    times.map((item:any, index:number)=> <Time key={index} />)
+                }
             </div>
-            <Title className={css.addTime}>
+            <Title className={css.addTime} onClick={()=>setTimes([...times, <Time/>])}>
                 Добавить интервал работы
                 <span className={css.plus}>+</span>
             </Title>

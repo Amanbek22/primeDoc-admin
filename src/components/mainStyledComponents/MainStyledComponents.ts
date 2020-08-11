@@ -65,6 +65,42 @@ export const GreenBtn = styled.button`
     font-size: 14px;
     line-height: 19px;
     font-family: 'Balsamiq Sans', cursive;
+    
+     ${(props: any) =>
+    props.disabled ? `
+            background: #979797;
+            cursor: not-allowed !important;
+        ` : `
+        background: #20CF54;
+        `
+};
+    
+    :focus{
+        outline: none;
+    }
+`
+export const ModalBtnWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+export const GreenDiv = styled.div`
+    background: #20CF54;
+    border-radius: 10px;
+    width: 200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    height: 40px;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 19px;
+    font-family: 'Balsamiq Sans', cursive;
 
 `
 
@@ -113,9 +149,10 @@ export const TableWrapper = styled.div`
     box-sizing: border-box;
 `
 export const BtnFloat = styled.div`
-    float: right;
+    //float: right;
     margin: 35px 0;
-    
+    justify-self: end;
+    text-align: end;
 `
 
 export const TableHeader = styled.div`
@@ -171,8 +208,10 @@ export const DownloadPictureWrapper = styled.div`
     border-radius: 50px;
     display: flex;
     align-items: center;
-    
+    overflow: hidden;
     &>img{
+        max-width: 100%;
+        max-height: 100%;
         margin: auto;
     }
     
@@ -182,9 +221,52 @@ export const EditDelete = styled.span`
     display: flex;
     align-items: center;
     height: 25px;
-    
+    cursor: pointer !important;
     &>img{
         margin: auto 4px;
+        cursor: pointer !important;
+        height: 100%;
+    }
+`
+export const InputNone = styled.input`
+    display: none;
+`
+
+
+export const CardWrapper = styled.div`
+    height: 190px;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.4);
+    background: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    position: relative;
+    
+    &>a{
         cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        
+        &>.span{
+              z-index: 1;
+                font-family: 'Balsamiq Sans', cursive;
+                position: absolute;
+                left: 0;
+                top: 25px;
+                padding: 5px 15px 5px 10px;
+                background: #00BDD0;
+                color: #FFFFFF;
+                font-size: 20px;
+                font-weight: 500;
+                border-top-right-radius: 6px;
+                border-bottom-right-radius: 6px;
+        }
+        
+        &>img{
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
     }
 `

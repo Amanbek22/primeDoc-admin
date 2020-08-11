@@ -1,0 +1,220 @@
+.bodyBg{
+    background: #F8F8F8;
+    height: 100vh;
+    position: relative;
+}
+.wrapper{
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-gap: 3em;
+
+}
+.users{
+    height: 70vh;
+    overflow: hidden;
+    overflow-y: scroll;
+    /*direction: rtl;*/
+    /*padding: 10px 0;*/
+}
+.userList{
+    border-left: 4px solid rgba(196, 196, 196, 0.43);
+    padding: 8px 0;
+
+}
+.searchWrapper{
+    margin: 0 auto 10px auto;
+    text-align: center;
+}
+.search{
+    width: 80%;
+    padding: 3px 5px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    line-height: 150%;
+    text-align: center;
+    color: #777777;
+}
+.users::-webkit-scrollbar {
+    width: 0;
+}
+
+.user{
+    margin: 15px 0;
+    display: grid;
+    padding: 5px 5px;
+    grid-template-columns: 45px 1fr 40px;
+    grid-gap: 1em;
+    align-self: center;
+    /*border: 1px solid black;*/
+}
+.all{
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 150%;
+    text-decoration-line: underline;
+    color: #20CF54;
+    cursor: pointer;
+}
+.activeUser{
+    background: rgba(0, 189, 208, 0.1);
+    border-radius: 0 10px 10px 0;
+}
+.avaWrapper{
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+.avaWrapper>img{
+    position: absolute;
+    top: 0;
+    margin: 0 auto;
+    height: 100%;
+}
+.name{
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 150%;
+    color: #2A0200;
+}
+.lastMessage{
+    font-size: 16px;
+    line-height: 150%;
+
+    color: #585454;
+}
+.count{
+    margin: auto;
+    height: 26px;
+    width: 26px;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 160%;
+    background: #FF5069;
+    font-size: 14px;
+    color: #FFFFFF;
+}
+
+/*/////////////////////////////////////////////*/
+
+.chat{
+    background: #FFFFFF;
+    position: relative;
+    border-radius: 25px;
+
+}
+.chat__header{
+    padding: 20px 15px;
+    display: grid;
+    grid-template-columns: 1fr  40px;
+    align-self: center;
+    border-bottom: 1.5px solid rgba(119, 119, 119, 0.31);
+}
+.header__name{
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 150%;
+    margin: 0 0 0 25px;
+    color: #2A0200;
+}
+.messages{
+    /*height: 65vh;*/
+    display: inline-grid;
+    overflow-y: scroll;
+    position: absolute;
+    top: 76px;
+    bottom: 51px;
+    right: 0;
+    left: 0;
+}
+.messages::-webkit-scrollbar{
+    width: 4px;
+}
+.messages::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+}
+.input__wrapper{
+    border-top: 1.5px solid rgba(119, 119, 119, 0.31);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+.input__wrapper>.search{
+    width: 100%;
+    margin: 0 15px;
+    background: #F8F8F8;
+    border: 1px solid rgba(42, 2, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 35px;
+    text-align: left;
+    padding-left: 10px;
+    height: 38px;
+}
+.input__wrapper>.search:focus{
+    outline: none;
+}
+.send{
+    background: #00BDD0;
+    border: none;
+    border-radius: 50%;
+    padding: 5px;
+    height: 38px;
+    width: 38px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin: auto;
+}
+.send>img{
+    margin: auto;
+    width: 70%;
+    height: 70%;
+}
+.message__wrapper>div{
+    display: grid;
+    grid-template-columns: 60px 1fr;
+}
+.message_ava{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 5px 15px 0 15px;
+}
+.message_ava>img{
+    height: 100%;
+}
+.message__name{
+    margin: 5px 15px 0 15px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 150%;
+    color: #2A0200;
+}
+.message{
+    margin-right: 40px;
+    padding: 2px 25px 4px 10px;
+    color: #FFFFFF;
+    background: rgba(255, 80, 105, 0.58);
+    border-radius: 15px;
+    display: inline-block;
+}
+.my__message{
+    float: right;
+    margin: 15px 10px  15px 60px;
+    padding: 2px 25px 4px 10px;
+    color: #FFFFFF;
+    background: #00BDD0;
+    border-radius: 15px;
+    display: inline-block;
+}

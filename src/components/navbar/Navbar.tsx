@@ -9,7 +9,7 @@ import FAQ from '../../img/FAQ.png'
 import about from '../../img/about-us.png'
 import chat from '../../img/chat.png'
 import clinic from '../../img/Клиника.png'
-
+import payment from '../../img/payment.png'
 
 const NavBar = (props: any) => {
     const links: any = createRef()
@@ -74,6 +74,10 @@ const NavBar = (props: any) => {
                 <NavLink to={'/chat'} activeClassName={'activeLink'}>
                     <img src={chat} alt="#"/>
                     Чат
+                </NavLink>
+                <NavLink to={'/payment'} activeClassName={'activeLink'}>
+                    <img src={payment} alt="#"/>
+                    Способы оплаты
                 </NavLink>
                 <span className={css.spans}/>
             </LinksWrapper>
