@@ -40,6 +40,7 @@ const Faq = React.memo(() => {
     const [pending, setPending] = useState(true)
     const [questions, setQuestions] = useState([])
     const [change, setChange] = useState(false)
+
     useEffect(() => {
         dispatch(setHeader("FAQ"))
     }, [dispatch])
@@ -63,7 +64,8 @@ const Faq = React.memo(() => {
             setQuestions(data)
             setPending(false)
         }, (error: any) => console.error(error))
-    }, [])
+    }, [pending])
+
     const formik = useFormik({
         initialValues: {
             question: "",
@@ -93,14 +95,6 @@ const Faq = React.memo(() => {
                 order: index
             }
         })
-        // if(newArr[targetIndex]) {
-        //     api.putFaq({
-        //         answer: newArr[targetIndex].answer,
-        //         order: newArr[targetIndex].order,
-        //         question: newArr[targetIndex].question,
-        //     }, newArr[targetIndex].id)
-        //         .then((res) => console.log(res))
-        // }
         // @ts-ignore
         setQuestions(newArr);
     }
@@ -131,7 +125,7 @@ const Faq = React.memo(() => {
             </BtnFloat>
             {
                 !change
-                    ? questions.map((item: any) => <List answer={item.answer} id={item.id} questions={item.question}
+                    ? questions.map((item: any) => <List setPending={()=>setPending(true)} answer={item.answer} id={item.id} questions={item.question}
                                                          key={item.id}/>)
                     : <GridContextProvider onChange={onChange}>
                         <GridDropZone
@@ -142,7 +136,7 @@ const Faq = React.memo(() => {
                             style={{height: "400px"}}
                         >
                             {questions.map((item: any) => <GridItem className={css.q} key={item.id}>
-                                    <List noItem={true} noClick={true} answer={item.answer} id={item.id}
+                                    <List setPending={()=>setPending(true)} noItem={true} noClick={true} answer={item.answer} id={item.id}
                                           questions={item.question} key={item.id}/>
                                 </GridItem>
                             )}
@@ -212,6 +206,7 @@ type ListProps = {
     id: number
     noItem?: boolean
     noClick?: boolean
+    setPending: () => void
 }
 const List: React.FC<ListProps> = (props) => {
     const [visible1, setVisible1] = useState(false)
@@ -222,8 +217,11 @@ const List: React.FC<ListProps> = (props) => {
         api.deleteFaq(props.id)
             .then((res: any) => {
                     console.log(res)
+                    props.setPending()
                 },
-                (error: any) => console.error(error)
+                (error: any) => {
+                    console.error(error)
+                }
             )
     }
     const [visible, setVisible] = useState(false)
@@ -251,7 +249,7 @@ const List: React.FC<ListProps> = (props) => {
             <span>
                 {
                     props.noItem ? null :
-                        <EditDeleteComponent editing={editing} onEdit={onEdit} onModal={onModal} onDone={setFaq}/>
+                        <EditDeleteComponent noEdit={true} editing={editing} onEdit={onEdit} onModal={onModal} onDone={setFaq}/>
                 }
             </span>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>

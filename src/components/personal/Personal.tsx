@@ -34,14 +34,16 @@ const Personal: React.FC<Props> = (props) => {
         api.getDoctor().then((res: any) => {
             setDoctors(res.data)
             setPending(false)
-        }, (error: any) => console.error(error))
+        }, (error: any) => {
+            setPending(false)
+            console.error(error)
+        })
         api.getSchedule().then((res) => console.log(res))
-    }, [])
+    }, [pending])
 
     if (pending) {
         return <Pending/>
     }
-
     return (
         <>
             <TableWrapper>
@@ -67,11 +69,12 @@ const Personal: React.FC<Props> = (props) => {
                         fio={item.firstName + ' ' + item.lastName}
                         direction={item.categories}
                         email={item.username}
+                        setPending={()=>setPending(true)}
                     />)
                 }
             </TableWrapper>
             <BtnFloat>
-                <Link to={'/personal/5'}>
+                <Link to={'/personal/add'}>
                     <GreenBtn>Создать врача</GreenBtn>
                 </Link>
             </BtnFloat>
@@ -86,6 +89,7 @@ type ListProps = {
     fio: string
     direction: [any]
     email: string
+    setPending: () => void
 }
 
 
@@ -94,6 +98,7 @@ const List: React.FC<ListProps> = (props) => {
         api.delDoctor(props.id)
             .then((res: any) => {
                 console.log(res)
+                props.setPending()
             })
     }
 

@@ -83,10 +83,6 @@ const Card = (props: CardProps) => {
     const onModal = () => setVisible(!visible)
     const onDelete = () => {
         props.onDel(props.id)
-        // api.delPayments(props.id)
-        //     .then((res)=> {
-        //
-        //     })
     }
     return (
         <CardWrapper>

@@ -18,6 +18,7 @@ import CreateTimeTable from "./components/create-time-table/CreateTimeTable";
 import CreatePersonal from "./components/CreatePersonal/CreatePerssonal";
 import Payment from "./components/payment/Payment";
 import Payments from "./components/payment/Payments";
+import PaymentDetail from "./components/payment/PaymentDetail";
 
 export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) => {
     if (isAuth) {
@@ -82,10 +83,10 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         <Route exact path={'/payment/:add'}>
                             <Payment />
                         </Route>
-                        <Route exact path={'/payment/:detail/:id'}>
-                            Hello
+                        <Route exact path={'/payment/detail/:id'}>
+                            <PaymentDetail />
                         </Route>
-                        {/*<Redirect to={'/clinic'}/>*/}
+                        <Redirect to={'/clinic'}/>
                     </AdminWrapper>
                 </Switch>
             </div>

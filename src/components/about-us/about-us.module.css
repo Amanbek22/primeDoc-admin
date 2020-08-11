@@ -52,6 +52,7 @@
     display: grid;
     grid-template-columns: repeat(4, 100px);
     grid-gap: 1em;
+    margin-top: 20px;
 }
 .file{
     cursor: pointer;

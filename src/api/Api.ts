@@ -120,7 +120,7 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-    getPayments: () => http.get(`payment/`,{
+    getPayments: (id?:number) => http.get(`payment/${id ? id : ''}`,{
         headers: {
             "Authorization": "Bearer " + getToken()
         }

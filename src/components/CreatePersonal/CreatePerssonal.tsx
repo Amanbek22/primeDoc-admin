@@ -198,7 +198,7 @@ const CreatePersonal = () => {
                                                     values.degree.map((degree, index) => (
                                                         <label key={index} className={css.label}>
                                                             <span><span>*</span>Опыт работы</span>
-                                                            <Field as={Input} name={`degree.${index}.name`}/>
+                                                            <Field as={Input} placeholder={'Название'} name={`degree.${index}.name`}/>
                                                             <div className={css.dateWrapper}>
                                                                 <Field
                                                                     placeholderText={'Начало'}
@@ -215,6 +215,7 @@ const CreatePersonal = () => {
                                                                     name={`degree.${index}.end`}/>
                                                             </div>
                                                             <Field as={Input}
+                                                                   placeholder={'Название организации'}
                                                                    name={`degree.${index}.organizationName`}/>
                                                         </label>
                                                     ))
