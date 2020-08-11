@@ -9,7 +9,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 *{
-
+    font-family: 'Roboto', sans-serif !important;
     margin: 0;
     padding: 0;
 }
