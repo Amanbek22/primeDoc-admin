@@ -95,7 +95,12 @@ export default {
         }
     }),
 
-    getDoctor: () => http.get(`doctor/data/`,{
+    getDoctor: (id?:number) => http.get(`doctor/data/${id?id:''}`,{
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    getDoc: (id?:number) => http.get(`doctor/info/${id?id:''}`,{
         headers: {
             "Authorization": "Bearer " + getToken()
         }

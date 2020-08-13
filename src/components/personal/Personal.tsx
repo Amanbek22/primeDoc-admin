@@ -38,7 +38,6 @@ const Personal: React.FC<Props> = (props) => {
             setPending(false)
             console.error(error)
         })
-        api.getSchedule().then((res) => console.log(res))
     }, [pending])
 
     if (pending) {
@@ -74,7 +73,7 @@ const Personal: React.FC<Props> = (props) => {
                 }
             </TableWrapper>
             <BtnFloat>
-                <Link to={'/personal/add'}>
+                <Link to={'/personal/0/add'}>
                     <GreenBtn>Создать врача</GreenBtn>
                 </Link>
             </BtnFloat>
@@ -144,7 +143,7 @@ const List: React.FC<ListProps> = (props) => {
     return (
         <div>
             <TableList>
-                <div>{fio}</div>
+                <Link to={`/personal/${props.id}`}>{fio}</Link>
                 <div>{direction ? direction.map((item:any) => item.label + ', ') : ''}</div>
                 <div>{email}</div>
                 <Last>

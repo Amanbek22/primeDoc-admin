@@ -19,6 +19,7 @@ import CreatePersonal from "./components/CreatePersonal/CreatePerssonal";
 import Payment from "./components/payment/Payment";
 import Payments from "./components/payment/Payments";
 import PaymentDetail from "./components/payment/PaymentDetail";
+import Doctor from "./components/doctor/Doctor";
 
 export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) => {
     if (isAuth) {
@@ -63,9 +64,12 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                             <Personal/>
                         </Route>
                         <Route exact path={'/personal/:id'}>
+                            <Doctor />
+                        </Route>
+                        <Route exact path={'/personal/:id/:add'}>
                             <CreatePersonal />
                         </Route>
-                        <Route exact path={'/personal/:id/:time'}>
+                        <Route exact path={'/personal/:id/:add/:time'}>
                             <CreateTimeTable />
                         </Route>
                         <Route path={'/FAQ'}>
