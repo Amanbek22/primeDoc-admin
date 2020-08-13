@@ -3,7 +3,7 @@
     color: #00BDD0;
 }
 .timeList{
-    margin: 35px 0 70px 0;
+    margin: 20px 0 50px 0;
 }
 .addTime{
     cursor: pointer;
@@ -59,4 +59,45 @@
 }
 .selectWrapper{
     width: 350px;
+}
+
+
+/*/////////////////////////////////////////////////////////////////////*/
+/*new Time table*/
+.wrapper{
+    /*height: 68vh;*/
+}
+.weeksWrapper{
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-gap: 1em;;
+}
+.weeks{
+    border: 2px solid #00BDD0;
+    /*border-bottom: none;*/
+    overflow-y: scroll;
+    min-height: 400px;
+}
+.weeks::-webkit-scrollbar {
+    width: 0;
+}
+.week, .add{
+    border-bottom: 2px solid #00BDD0;
+    padding: 10px 0 10px 15px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    cursor: pointer;
+    /*margin: 4px 1px;*/
+}
+.active{
+    background: #00BDD0;
+    color: #FFFFFF;
+
+}
+.add{
+    padding: 10px 0;
+    text-align: center;
 }

@@ -125,6 +125,11 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
+    createSchedule: (data:any) => http.post(`schedule`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
     getPayments: (id?:number) => http.get(`payment/${id ? id : ''}`,{
         headers: {
             "Authorization": "Bearer " + getToken()

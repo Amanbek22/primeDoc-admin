@@ -34,7 +34,7 @@ const colourStyles2 = {
     // }
 };
 
-const Time = () => {
+const Time = (props) => {
     const clocks = [
         {value: '00', label: '00'},
         {value: '01', label: '01'},
@@ -60,7 +60,7 @@ const Time = () => {
         {value: '21', label: '21'},
         {value: '22', label: '22'},
         {value: '23', label: '23'},
-        ]
+    ]
     const minutes = [
         {value: '00', label: '00'},
         {value: '05', label: '05'},
@@ -80,16 +80,30 @@ const Time = () => {
             <div className={css.timeWrapper}>
                 <span>
                     <span>От</span>
-                    <Select options={clocks} placeholder={'Часы'} styles={colourStyles}/>
-                    <Select options={minutes} placeholder={'Минуты'} styles={colourStyles2}/>
+                    <Select options={clocks} placeholder={'Часы'} styles={colourStyles}
+                            value={props.startH ? {value: props.startH, label: props.startH} : null} onChange={(e) => {
+                        props.setStartH(e.label, props.days, props.index, 'fromH')
+                    }}/>
+                    <Select options={minutes} placeholder={'Минуты'} styles={colourStyles2}
+                            value={props.startM ? {value: props.startM, label: props.startM} : null} onChange={(e) => {
+                        props.setStartH(e.label, props.days, props.index, 'fromM')
+                    }}/>
                 </span>
 
                 <span>
                     <span>До</span>
-                    <Select options={clocks} placeholder={'Часы'} styles={colourStyles}/>
-                    <Select options={minutes} placeholder={'Минуты'} styles={colourStyles2}/>
+                    <Select options={clocks} placeholder={'Часы'}
+                            styles={colourStyles}
+                            value={props.endH ? {value: props.endH, label: props.endH} : null}
+                            onChange={(e) => {
+                                props.setStartH(e.label, props.days, props.index, 'toH')
+                            }}/>
+                    <Select options={minutes} placeholder={'Минуты'} styles={colourStyles2} value={props.endM ? {value: props.endM, label: props.endM} : null}
+                            onChange={(e) => {
+                                props.setStartH(e.label, props.days, props.index, 'toM')
+                            }}/>
                 </span>
-                <img className={css.del} src={del} alt="#"/>
+                <img onClick={()=>props.removeSchedule(props.days, props.index)} className={css.del} src={del} alt="#"/>
             </div>
         </>
     )
@@ -101,27 +115,33 @@ export default Time
 const colourStyles3 = {
     control: (styles) => ({
         ...styles,
-        background: '#F8F8F8',
+        background: '#00BDD0',
         width: '350px',
-        border: '1px solid rgba(0, 0, 0, 0.1)',
+        border: '1px solid #00BDD0',
         borderRadius: '5px',
         boxSizing: 'border-box',
-        padding: '3px 5px',
-        marginTop: '50px',
+        // padding: '3px 5px',
+        marginBottom: '20px',
     }),
+    singleValue: () => ({
+        color: 'white'
+    }),
+    dropdownIndicator: () => ({
+        color: 'white',
+        padding: '0 5px 0 5px'
+    }),
+    placeholder: () => ({
+        color: 'white'
+    })
     // option: (styles) => {
     //     return {...styles,width:'350px'}
     // }
 };
-export const Date = () => {
-    const days = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье']
-    const option = days.map(item => ({
-        value: item,
-        label: item
-    }))
+export const Date = (props) => {
     return (
         <div className={css.selectWrapper}>
-            <Select options={option} styles={colourStyles3} />
+            <Select options={props.options} placeholder={'дни'} value={props.val} onChange={(e) => props.setVal(e)}
+                    styles={colourStyles3}/>
             {/*<DatePicker locale={'ru'} multiple onChange={(e) => console.log(e)}/>*/}
         </div>
     )
