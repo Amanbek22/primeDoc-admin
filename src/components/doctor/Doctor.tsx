@@ -9,7 +9,7 @@ import {setHeader} from "../../state/appReducer";
 import CreateTimeTable from "../create-time-table/CreateTimeTable";
 
 type DoctorProps = {}
-const Doctor: React.FC<DoctorProps> = React.memo((props) => {
+const Doctor: React.FC<DoctorProps> = React.memo(() => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader('Подробно о враче'))
@@ -96,7 +96,7 @@ const Schedule = (props: ScheduleProps) => {
                 // setSchedule(res.data)
                 const newData = {
                     ...res.data,
-                    weeks: res.data.weeks.map((item: any, index: number) => ({
+                    weeks: res.data.weeks.map((item: any) => ({
                         days: days.map((i: any) => ({
                             list: item.weekDays.map((k: any) => {
                                 let obj:any = {
@@ -128,7 +128,7 @@ const Schedule = (props: ScheduleProps) => {
                 console.log('old Schedule', res.data)
                 console.log('new Schedule', newData)
             }, (error: any) => {
-                console.log('no schedules')
+                console.log('no schedules', error)
             })
     }, [])
     return (

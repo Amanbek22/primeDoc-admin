@@ -9,10 +9,10 @@ const getToken = () => {
     let data = JSON.parse(localStorage.getItem('userData') as string)
     return data.access_token
 }
-const getRefresh = () => {
-    let data = JSON.parse(localStorage.getItem('userData') as string)
-    return data.refresh_token
-}
+// const getRefresh = () => {
+//     let data = JSON.parse(localStorage.getItem('userData') as string)
+//     return data.refresh_token
+// }
 
 
 export default {
@@ -65,6 +65,11 @@ export default {
     }),
 
     getUser: () => http.get(`user/`, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    getClient: (page:number = 1, size:number) => http.get(`client/card?page=${page}&size=${size}`, {
         headers: {
             "Authorization": "Bearer " + getToken()
         }
