@@ -1,0 +1,16 @@
+.wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    grid-gap: 1em;
+}
+.blue{
+    display: flex;
+    align-items: flex-end;
+    margin-left: auto;
+}
+.blue>div{
+    margin: 0 10px;
+}
+.blueBtn{
+    background: #00BDD0 !important;
+}

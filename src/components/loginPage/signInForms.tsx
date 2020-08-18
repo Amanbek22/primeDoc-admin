@@ -1,34 +1,117 @@
-import React from "react";
+import React, {useState} from "react";
 import css from "./login.module.css";
 import {BtnNext, ErrorMessage, LogInput} from "./login-css";
 import {Link, useHistory} from "react-router-dom";
 import {connect} from "react-redux";
 import {authFc} from "../../state/authReducer";
-import {useAuth} from "../../hooks/auth.hook";
+import ReactCodeInput from "react-verification-code-input/dist";
+import {Form, Formik} from "formik";
+import * as Yup from 'yup';
+import deepEqual from 'lodash.isequal';
 
-const SignIn = ( props: any ) => {
-    const {login} = useAuth()
-    const log = async (password: string, log: string) => {
-        const res = await props.authFc('n1n2n3n4', 'Aman')
-        console.log(res)
-        login(res.refresh, 5)
-    }
-    const submit = (e: any) => {
-        e.preventDefault()
-        log('adgadg','sdgsdg')
-    }
+
+const validateFormik = {
+    login: Yup.string()
+        .required('Объязательное поле'),
+    password: Yup.string()
+        .min(8, 'Минимум 8 символов')
+        .required('Объязательное поле'),
+
+
+}
+
+const SignInFormik = (props: any) => {
+    const [error, setError] = useState(false)
     return (
-        <form onSubmit={submit} className={css.loginWrapper}>
-            <LogInput required type={'text'} placeholder={'Введите логин'}/>
-            <LogInput required type={'password'} placeholder={'Введите пароль'}/>
-            <div className={css.forgot}>
-                <Link to={'/forgot'}>забыли пароль?</Link>
-            </div>
-            <BtnNext>Далее</BtnNext>
-        </form>
+        <Formik
+            initialValues={{
+                login: '',
+                password: ''
+            }}
+            validationSchema={Yup.object().shape(validateFormik)}
+            onSubmit={(values, {setSubmitting}) => {
+                setSubmitting(true);
+                props.authFc(values.password, values.login)
+                    .then((res: any) => {
+                        console.log(res)
+                        setError(!res)
+                        setSubmitting(false)
+                    })
+            }}
+        >
+            {
+                ({
+                     values,
+                     touched,
+                     errors,
+                     initialValues,
+                     isSubmitting,
+                     handleChange,
+                     handleBlur,
+                 }) => {
+                    const hasChanged = !deepEqual(values, initialValues);
+                    const hasErrors = Object.keys(errors).length > 0;
+                    return <Form className={css.loginWrapper}>
+                        {
+                            error ? <div className={css.error}>Пароль или логин введен не верно.</div>
+                                : null
+                        }
+                        <div>
+                            {touched.login && errors.login && <div className={css.error}>{errors.login}</div>}
+                            <LogInput type={'text'}
+                                      value={values.login}
+                                      id="login"
+                                      name="login"
+                                      autoComplete={'false'}
+                                      onChange={(e) => {
+                                          handleChange(e)
+                                          setError(false)
+                                      }}
+                                      onBlur={handleBlur}
+                                      className={
+                                          hasChanged ? errors.login ? css.error : css.success : ('')
+                                      }
+                                      placeholder={'Введите логин'}
+                            />
+                        </div>
+                        <div>
+                            {touched.password && errors.password && <div className={css.error}>{errors.password}</div>}
+                            <LogInput type={'password'}
+                                      value={values.password}
+                                      id="password"
+                                      name="password"
+                                      autoComplete={'false'}
+                                      onChange={(e) => {
+                                          handleChange(e)
+                                          setError(false)
+                                      }}
+                                      onBlur={handleBlur}
+                                      className={
+                                          hasChanged ? errors.password ? (
+                                              css.error
+                                          ) : (
+                                              css.success
+                                          ) : (
+                                              ''
+                                          )
+                                      }
+                                      placeholder={'Введите пароль'}
+                            />
+                        </div>
+                        <div className={css.forgot}>
+                            <Link to={'/forgot'}>забыли пароль?</Link>
+                        </div>
+                        <BtnNext type="submit" disabled={!hasChanged || hasErrors || isSubmitting}>
+                            Далее
+                        </BtnNext>
+
+                    </Form>
+                }}
+        </Formik>
     )
 }
-export const SignInForm = connect(null,{authFc})(SignIn)
+
+export const SignInForm = connect(null, {authFc})(SignInFormik)
 
 export const ForgotPassword = () => {
     const history = useHistory()
@@ -41,7 +124,7 @@ export const ForgotPassword = () => {
             <ErrorMessage>
                 Восстановление пароля
             </ErrorMessage>
-            <LogInput required type={'text'} placeholder={'Введите номер телефона'}/>
+            <LogInput required type={'email'} placeholder={'Введите email'}/>
             <BtnNext>Отправить код</BtnNext>
         </form>
     )
@@ -64,12 +147,9 @@ export const EnterCode = () => {
                     на ваш номер телефона
                 </p>
                 <div className={css.codes}>
-                    <LogInput required type={'number'}/>
-                    <LogInput required type={'number'}/>
-                    <LogInput required type={'number'}/>
-                    <LogInput required type={'number'}/>
+                    <ReactCodeInput className={css.codeVerification} fields={4} onChange={(e) => console.log(e)}/>
                 </div>
-                <BtnNext >Подтвердить</BtnNext>
+                <BtnNext>Подтвердить</BtnNext>
             </div>
         </form>
     )
@@ -89,7 +169,7 @@ export const NewPassword = () => {
             </ErrorMessage>
             <LogInput required type={'password'} placeholder={'Введите новый пароль'}/>
             <LogInput required type={'password'} placeholder={'Подвердите пароль'}/>
-            <BtnNext >ПОДВЕРДИТЬ</BtnNext>
+            <BtnNext>ПОДВЕРДИТЬ</BtnNext>
         </form>
     )
 }

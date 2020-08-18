@@ -1,25 +1,39 @@
 import React, {useEffect, useState} from "react";
 import {AdminPageWrapper, CardsWrapper, FormModalWrapper, Title} from "./AdminComponents";
-import {DownloadPictureWrapper, GreenBtn, Input} from "../mainStyledComponents/MainStyledComponents";
+import {
+    CardWrapper,
+    DownloadPictureWrapper,
+    GreenBtn,
+    GreenDiv,
+    Input,
+    InputNone
+} from "../mainStyledComponents/MainStyledComponents";
 import css from './admin.module.css'
 import edit from '../../img/edit.png'
 import del from '../../img/delete.png'
 import pic from '../../img/pic.png'
 import ModalWrapper from "../modal/Modal";
 import {Link} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {setHeader} from "../../state/appReducer";
+import {connect, useDispatch} from "react-redux";
+import {editDirection, setHeader} from "../../state/appReducer";
+import {GlobalStateType} from "../../state/root-reducer";
+import api from '../../api/Api'
+import DeleteModal from "../utils/DeleteModal";
 
-
-const AdminPage = () => {
+type AdminPageProps = {
+    directions: any
+}
+const AdminPage: React.FC<AdminPageProps> = (props) => {
+    const {directions} = props
     const dispatch = useDispatch()
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(setHeader("Клиника"))
     }, [dispatch])
+    const setEdit = () => dispatch(editDirection(true))
     const [visible, setVisible] = useState(false)
-    const list = [1, 7, 2, 3, 6, 15, 74, 4]
-    const els = list.map((item) => <Card key={item}/>)
+    const els = directions.map((item: any) => <Card setEdit={setEdit} id={item.id} image={item.image} title={item.name} key={item.id}/>)
     const onModal = () => setVisible(!visible)
+
     return (
         <AdminPageWrapper>
             <Title>Направления</Title>
@@ -34,47 +48,78 @@ const AdminPage = () => {
     )
 }
 
-const Card = (props:any) => {
+type CardProps = {
+    id: number
+    title: string
+    image: string
+    setEdit: () => void
+}
+
+const Card: React.FC<CardProps> = (props) => {
+
+    const [visible, setVisible] = useState(false)
+    const onModal = () => setVisible(!visible)
+
+    const deleteDirection = () => {
+        api.delCategory(props.id)
+            .then((res: any) => console.log(res))
+    }
     return (
-        <div  className={css.cardWrapper}>
-            <Link to={'/clinic/5'} className={css.link}>
+        <CardWrapper>
+            <Link to={`/clinic/${props.id}`} className={css.link}>
                 <img
-                    src="https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"
-                    alt="#"
+
+                    src={props.image ? "data:image/jpg;base64," + props.image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
+                    alt={props.title}
                 />
                 <span className={css.title}>
-                    Терапевт
+                    {props.title}
                 </span>
                 <div className={css.blue}/>
             </Link>
             <div className={css.buttonsWrapper}>
-                <span className={css.edit}>
+                <Link to={`/clinic/${props.id}`} onClick={props.setEdit} className={css.edit}>
                     <img src={edit} alt="edit"/>
                     Редактировать
-                </span>
-                <span onClick={()=> alert('Hello world!!!')} className={css.delete}>
+                </Link>
+                <span onClick={onModal} className={css.delete}>
                     <img src={del} alt="delete"/>
                     Удалить
                 </span>
             </div>
-        </div>
+            <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
+                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.title} del={deleteDirection}/>
+            </ModalWrapper>
+        </CardWrapper>
     )
 }
 
-const AddCard = (props: any) => {
+export const AddCard = (props: any) => {
     return (
         <div onClick={props.open} className={css.addCard}>
-            <span>
-                +
-            </span>
+            <span>+</span>
         </div>
     )
 }
 
-
 const AddUserModal = (props: any) => {
-    const submit = (e:any) =>{
+    const [name, setName] = useState('')
+    const [url, setUrl] = useState('')
+    const submit = (e: any) => {
         e.preventDefault()
+        props.onModal()
+
+        const data = {
+            description: '',
+            doctors: [],
+            illnesses: [],
+            name: name,
+            image: url
+        }
+        api.setCategory(data)
+            .then((res: any) => {
+                console.log(res)
+            })
     }
     return (
         <FormModalWrapper>
@@ -84,14 +129,25 @@ const AddUserModal = (props: any) => {
             <form onSubmit={submit}>
                 <div className={css.downloadWrapper}>
                     <DownloadPictureWrapper>
-                        <img src={pic} alt="pic"/>
+                        <img src={url !== '' ? "data:image/jpg;base64," + url : pic} alt="pic"/>
                     </DownloadPictureWrapper>
-                    <GreenBtn>Загрузить фото</GreenBtn>
+                    <label>
+                        <InputNone type="file" onChange={(e: any) => {
+                            const reader = new FileReader();
+                            reader.readAsDataURL(e.target.files[0]);
+                            reader.onload = (e: any) => {
+                                const newUrl = e.target.result.split(',')
+                                setUrl(newUrl[1])
+                            }
+
+                        }}/>
+                        <GreenDiv>Загрузить фото</GreenDiv>
+                    </label>
                 </div>
                 <div className={css.name}>
                     <label>
                         Название
-                        <Input type="text" />
+                        <Input value={name} onChange={(e: any) => setName(e.target.value)} type="text"/>
                     </label>
                 </div>
                 <div className={css.save}>
@@ -102,4 +158,10 @@ const AddUserModal = (props: any) => {
     )
 }
 
-export default AdminPage
+const mapStateToProps = (state: GlobalStateType) => {
+    return {
+        directions: state.app.directions
+    }
+}
+
+export default connect(mapStateToProps, {})(AdminPage)

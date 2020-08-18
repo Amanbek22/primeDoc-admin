@@ -13,11 +13,14 @@ import Chat from "./components/chat/Chat";
 import ClinicDirection from "./components/ClinicDirection/ClinicDirection";
 import logout from './img/logout.png'
 import changePassword from './img/changePassword.png'
-import AddDoctor from "./components/add-doctor/AddDoctor";
+// import AddDoctor from "./components/add-doctor/AddDoctor";
 import CreateTimeTable from "./components/create-time-table/CreateTimeTable";
 import CreatePersonal from "./components/CreatePersonal/CreatePerssonal";
+import Payment from "./components/payment/Payment";
+import Payments from "./components/payment/Payments";
+import PaymentDetail from "./components/payment/PaymentDetail";
 
-export const useRoutes = (isAuth: boolean, header: string) => {
+export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) => {
     if (isAuth) {
         return (
             <div>
@@ -33,7 +36,7 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                                     <img src={changePassword} alt="#"/>
                                     <span>Сменить пароль</span>
                                 </div>
-                                <div>
+                                <div onClick={Logout}>
                                     <img src={logout} alt="#"/>
                                     <span>Выйти</span>
                                 </div>
@@ -43,12 +46,13 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                         <Route exact path={'/clinic'}>
                             <AdminPage/>
                         </Route>
-                        <Route exact path={'/clinic/:id/:id/:id'}>
-                            <CreateTimeTable />
-                        </Route>
-                        <Route exact path={'/clinic/:id/:id'}>
-                            <AddDoctor/>
-                        </Route>
+                        {/*<Route exact path={'/add/time/'}>*/}
+                        {/*    <CreateTimeTable />*/}
+                        {/*</Route>*/}
+                        {/*<Route exact path={'/clinic/:id/:id'}>*/}
+                        {/*    /!*<AddDoctor/>*!/*/}
+                        {/*    <CreatePersonal />*/}
+                        {/*</Route>*/}
                         <Route exact path={'/clinic/:id'}>
                             <ClinicDirection/>
                         </Route>
@@ -61,6 +65,9 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                         <Route exact path={'/personal/:id'}>
                             <CreatePersonal />
                         </Route>
+                        <Route exact path={'/personal/:id/:time'}>
+                            <CreateTimeTable />
+                        </Route>
                         <Route path={'/FAQ'}>
                             <Faq/>
                         </Route>
@@ -69,6 +76,15 @@ export const useRoutes = (isAuth: boolean, header: string) => {
                         </Route>
                         <Route path={'/chat'}>
                             <Chat/>
+                        </Route>
+                        <Route exact path={'/payment/'}>
+                            <Payments />
+                        </Route>
+                        <Route exact path={'/payment/:add'}>
+                            <Payment />
+                        </Route>
+                        <Route exact path={'/payment/detail/:id'}>
+                            <PaymentDetail />
                         </Route>
                         <Redirect to={'/clinic'}/>
                     </AdminWrapper>

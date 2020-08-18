@@ -1,5 +1,6 @@
 .wrapper{
     width: 80%;
+    display: grid;
 }
 
 .questionWrapper{
@@ -13,6 +14,9 @@
     padding-bottom: 18px;
     color: #000000;
     border-bottom: 2px solid #00BDD0;
+}
+.question>div{
+    margin-left: 40px;
 }
 .q{
     font-style: normal;
@@ -51,9 +55,18 @@
         transform: translate3d(0, 0, 0);
     }
 }
+.gridDropZone{
+    height: 400px;
+    border: 1px solid;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+.q{
+    height: auto !important;
+    display: block;
+    margin-left: 25px;
 
-
-
+}
 .formWrapper{
     display: grid;
     margin-top: 155px;

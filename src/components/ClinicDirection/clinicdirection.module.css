@@ -6,12 +6,13 @@
     grid-gap: 2em;
 }
 
-.picWrapper{
-
+.picWrapper>span{
+    height: 200px;
 }
-.picWrapper>img{
+.picWrapper>span>img{
     border-radius: 10px;
     margin-bottom: 20px;
+    max-height: 100%;
 }
 
 .descriptionWrapper{
@@ -32,7 +33,7 @@
     color: #000000;
 }
 .description{
-    display: flex;
+    /*display: flex;*/
     align-items: center;
 }
 .description>p{
