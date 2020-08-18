@@ -9,7 +9,7 @@ import Api from '../../api/Api'
 import { useParams, useHistory } from 'react-router-dom';
 
 
-class Schedule {
+export class Schedule {
     fromH: string | null
     fromM: string | null
     toH: string | null
@@ -23,7 +23,7 @@ class Schedule {
     }
 }
 
-class day {
+export class day {
     list: any
     weekDayName: string | null
 
@@ -33,7 +33,7 @@ class day {
     }
 }
 
-class week {
+export class week {
     days: any
 
     constructor() {
@@ -49,25 +49,37 @@ class week {
     }
 }
 
-const CreateTimeTable = () => {
+const CreateTimeTable = (props:any) => {
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(setHeader("Создание расписания"))
+        if(!props.data) {
+            dispatch(setHeader("Создание расписания"))
+        }
     }, [dispatch])
+    const params:any = useParams()
+    const history = useHistory()
+
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
     const option = days.map((item, index) => ({
         value: index + 1,
         label: item
     }))
-    const params:any = useParams()
-    const history = useHistory()
 
+    const [doctorId, setDoctorId] = useState(0)
     const [currentWeek, setCurrentWeek] = useState(0)
     const [step, setStep] = useState(0)
     const [val, setVal] = useState(null)
     const [weeks, setWeeks] = useState([
         new week()
     ])
+    console.log(weeks)
+    useEffect(()=>{
+        if(props.data) {
+            setWeeks([...props.data?.weeks])
+            setDoctorId(props.id)
+            console.log(props)
+        }
+    }, [props.data])
     const setTimeFromH = (e: any, days: number, listIndex: number, place: any) => {
         switch (place) {
             case 'fromH':
@@ -99,6 +111,7 @@ const CreateTimeTable = () => {
         setWeeks([...weeks, new week()])
     }
     const setData = (e: any) => {
+        console.log(e)
         setVal(e)
         setStep(e.value)
     }
@@ -107,7 +120,7 @@ const CreateTimeTable = () => {
         console.log(weeks)
         // console.log(weeks.map((item)=> console.log(item)))
         const schedule = {
-            doctorId: params.time,
+            doctorId: params.time | doctorId,
             currentWeek: 1,
             weekDuration: 1,
             weeks: weeks.map((item, index) => ({
@@ -132,12 +145,19 @@ const CreateTimeTable = () => {
                 weekOrder: index + 1
             }))
         }
-        Api.createSchedule(schedule)
-            .then((res)=>{
-                console.log(res)
-                history.push('/personal')
-            })
-        console.log(schedule)
+        if(props.data){
+            Api.changeSchedule(props.data.id, schedule)
+                .then((res)=>{
+                    console.log(res)
+                })
+        }else {
+            Api.createSchedule(schedule)
+                .then((res) => {
+                    console.log(res)
+                    history.push('/personal')
+                })
+            console.log(schedule)
+        }
     }
     return (
         <>
@@ -167,7 +187,7 @@ const CreateTimeTable = () => {
                             <Dat options={option} val={val} setVal={setData}/>
                             <Title>Интервалы</Title>
                             {!step && (
-                                <div></div>
+                                <div />
                             )}
                             {
                                 weeks[currentWeek].days.map((item: any, index: number) => {

@@ -100,7 +100,7 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-    getDoc: (id?:number) => http.get(`doctor/info/${id?id:''}`,{
+    getDoc: (id?:number) => http.get(`doctor/full/${id?id:''}`,{
         headers: {
             "Authorization": "Bearer " + getToken()
         }
@@ -120,12 +120,17 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-    getSchedule: () => http.get(`schedule/`, {
+    getSchedule: (id:number) => http.get(`schedule/doctor/${id ? id : ''}`, {
         headers: {
             "Authorization": "Bearer " + getToken()
         }
     }),
     createSchedule: (data:any) => http.post(`schedule`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    changeSchedule: (id:number, data:any) =>  http.put(`schedule/${id}`, data, {
         headers: {
             "Authorization": "Bearer " + getToken()
         }

@@ -15,6 +15,14 @@
     line-height: 24px;
     color: #000000;
 }
+.date{
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
+    margin: 15px 0 5px 0;
+}
 .categories{
     margin-top: 15px;
     font-size: 15px;

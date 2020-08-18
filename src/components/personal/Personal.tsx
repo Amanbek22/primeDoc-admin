@@ -21,7 +21,7 @@ import {GlobalStateType} from "../../state/root-reducer";
 import {getCategories} from "../../state/initial-selector";
 
 type Props = {}
-const Personal: React.FC<Props> = (props) => {
+const Personal: React.FC<Props> = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader("Персонал"))
