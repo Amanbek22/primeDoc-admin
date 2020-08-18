@@ -1,11 +1,4 @@
 
-
-.headerWrapper{
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    grid-gap: 2em;
-}
-
 .picWrapper>span{
     height: 200px;
 }

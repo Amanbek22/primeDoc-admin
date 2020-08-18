@@ -73,3 +73,17 @@
     color: #00BDD0;
     background: #FFFFFF;
 }
+.paymentText{
+    background: #F8F8F8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 5px;
+    padding: 9px;
+    font-family: 'Balsamiq Sans', cursive;
+    font-weight: 200;
+    font-size: 14px;
+    line-height: 16px;
+    color: rgba(0, 0, 0, 0.5);
+}

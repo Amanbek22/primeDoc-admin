@@ -4,7 +4,11 @@ export const AdminWrapper = styled.div`
     margin-left: 265px;
     padding: 30px 60px;
 `
-
+export const HeaderWrapper = styled.div`
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-gap: 2em;
+`
 
 export const AdminHeader = styled.div`
     display: flex;
@@ -176,7 +180,7 @@ export const TableList = styled.div`
     grid-template-columns: 1.4fr 1fr 1.3fr 1fr ;
     border-bottom: 1px solid #C4C4C4;
     
-    &>div{
+    &>div, &>a{
         padding: 15px 0 15px 10px;
         border-right: 1px solid #C4C4C4;
         font-size: 16px;

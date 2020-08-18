@@ -21,7 +21,7 @@ import {GlobalStateType} from "../../state/root-reducer";
 import {getCategories} from "../../state/initial-selector";
 
 type Props = {}
-const Personal: React.FC<Props> = (props) => {
+const Personal: React.FC<Props> = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader("Персонал"))
@@ -38,7 +38,6 @@ const Personal: React.FC<Props> = (props) => {
             setPending(false)
             console.error(error)
         })
-        api.getSchedule().then((res) => console.log(res))
     }, [pending])
 
     if (pending) {
@@ -74,7 +73,7 @@ const Personal: React.FC<Props> = (props) => {
                 }
             </TableWrapper>
             <BtnFloat>
-                <Link to={'/personal/add'}>
+                <Link to={'/personal/0/add'}>
                     <GreenBtn>Создать врача</GreenBtn>
                 </Link>
             </BtnFloat>
@@ -144,8 +143,8 @@ const List: React.FC<ListProps> = (props) => {
     return (
         <div>
             <TableList>
-                <div>{fio}</div>
-                <div>{direction ? direction.map((item:any) => item.label + ', ') : ''}</div>
+                <Link to={`/personal/${props.id}`}>{fio}</Link>
+                <div title={direction ? direction.map((item:any) => item.label + ', ') : ''}>{direction ? direction.map((item:any) => item.label + ', ') : ''}</div>
                 <div>{email}</div>
                 <Last>
                     <EditDeleteComponent editing={false} onEdit={onEditModal} onModal={onModal} onDone={setDoctor}/>

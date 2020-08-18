@@ -21,7 +21,6 @@ const AboutUs = () => {
     const [files, setFiles] = useState<any>([])
     const [file, setFile] = useState<any>(null)
     const [pending, setPending] = useState(true)
-
     useEffect(()=>{
         api.getAboutUs()
             .then((res)=>{
