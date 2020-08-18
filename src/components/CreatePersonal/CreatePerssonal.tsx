@@ -13,7 +13,7 @@ import {setHeader} from "../../state/appReducer";
 import pic from "../../img/pic.png";
 import {Field, FieldArray, Form, Formik, useField, useFormikContext} from "formik";
 import api from '../../api/Api'
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ru from 'date-fns/locale/ru';
@@ -271,7 +271,7 @@ const CreatePersonal = () => {
                                 </label>
                                 <div className={css.btnWrapper}>
                                     <GreenBtn type={'submit'} disabled={!hasChanged || hasErrors || isSubmitting}>
-                                        Зарегестрировать
+                                        Зарегистрировать
                                     </GreenBtn>
                                 </div>
                             </div>
