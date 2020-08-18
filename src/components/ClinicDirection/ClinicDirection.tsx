@@ -1,7 +1,14 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {editDirection, setHeader} from "../../state/appReducer";
-import {BtnFloat, GreenBtn, GreenDiv, Input, InputNone} from "../mainStyledComponents/MainStyledComponents";
+import {
+    BtnFloat,
+    GreenBtn,
+    GreenDiv,
+    HeaderWrapper,
+    Input,
+    InputNone
+} from "../mainStyledComponents/MainStyledComponents";
 import css from './clinicdirection.module.css'
 import addPicture from '../../img/add-pic.png'
 import Preloader from "../preloader/Preloader";
@@ -114,7 +121,7 @@ const ClinicDirection = () => {
                         }}>Сохранить</GreenBtn>
                 }
             </BtnFloat>
-            <div className={css.headerWrapper}>
+            <HeaderWrapper>
                 <div className={css.picWrapper}>
                     <span>
                     <img
@@ -147,7 +154,7 @@ const ClinicDirection = () => {
                                                title={'Что лечит'}
                                                illnesses={illness}/>
                 </div>
-            </div>
+            </HeaderWrapper>
             <div className={css.doctorsList}>
                 {
                     doctors

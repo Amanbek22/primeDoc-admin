@@ -105,10 +105,17 @@ export const AddCard = (props: any) => {
 const AddUserModal = (props: any) => {
     const [name, setName] = useState('')
     const [url, setUrl] = useState('')
+    const [dis, setDis] = useState(true)
+    useEffect(()=>{
+        if(name && url){
+            setDis(false)
+        }else{
+            setDis(true)
+        }
+    }, [name, url])
     const submit = (e: any) => {
         e.preventDefault()
         props.onModal()
-
         const data = {
             description: '',
             doctors: [],
@@ -133,13 +140,16 @@ const AddUserModal = (props: any) => {
                     </DownloadPictureWrapper>
                     <label>
                         <InputNone type="file" onChange={(e: any) => {
-                            const reader = new FileReader();
-                            reader.readAsDataURL(e.target.files[0]);
-                            reader.onload = (e: any) => {
-                                const newUrl = e.target.result.split(',')
-                                setUrl(newUrl[1])
+                            const reader = new FileReader()
+                            if(e.target.files.length) {
+                                reader.readAsDataURL(e.target.files[0]);
+                                reader.onload = (e: any) => {
+                                    const newUrl = e.target.result.split(',')
+                                    setUrl(newUrl[1])
+                                }
+                            }else{
+                                setUrl('')
                             }
-
                         }}/>
                         <GreenDiv>Загрузить фото</GreenDiv>
                     </label>
@@ -151,7 +161,7 @@ const AddUserModal = (props: any) => {
                     </label>
                 </div>
                 <div className={css.save}>
-                    <GreenBtn>Сохранить</GreenBtn>
+                    <GreenBtn disabled={dis}>Сохранить</GreenBtn>
                 </div>
             </form>
         </FormModalWrapper>

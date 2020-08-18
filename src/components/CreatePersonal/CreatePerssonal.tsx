@@ -55,6 +55,7 @@ const CreatePersonal = () => {
     const [img, setImg] = useState('')
     const [category, setCategory] = useState<any>([])
     const [options, setOptions] = useState<any>([])
+    const [time, setTime] = useState(false)
     let deg = {
         infoType: 'EXPERIENCE',
         name: '',
@@ -117,7 +118,11 @@ const CreatePersonal = () => {
                     })
                         .then((res: any) => {
                             console.log(res)
-                            history.push('/personal')
+                            if(time){
+                                history.push(`/personal/0/add/${res.data.id}`)
+                            }else{
+                                history.push('/personal')
+                            }
                         }, (error: any) => {
                             setSubmitting(false)
                             console.log(error)
@@ -288,9 +293,9 @@ const CreatePersonal = () => {
                                     </label>
                                 </div>
                                 <div className={css.blue}>
-                                    <Link to={'/personal/add/time'}>
-                                        <GreenDiv>Создать расписание</GreenDiv>
-                                    </Link>
+                                    {/*<Link to={'/personal/0/add/time'}>*/}
+                                        <GreenBtn onClick={()=>setTime(true)} disabled={!hasChanged || hasErrors || isSubmitting} >Создать расписание</GreenBtn>
+                                    {/*</Link>*/}
                                 </div>
                             </div>
                         </Form>

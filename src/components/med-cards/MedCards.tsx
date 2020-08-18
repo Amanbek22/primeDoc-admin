@@ -3,52 +3,72 @@ import css from './medCarts.module.css'
 import ModalWrapper from "../modal/Modal";
 import pic from '../../img/pic.png'
 import {TableWrapper, TableHeader, Last, TableList} from "../mainStyledComponents/MainStyledComponents";
-import { useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import Preloader from '../preloader/Preloader'
 import api from '../../api/Api'
+import Pagination from "../paggination/Paggination";
 
 const MedCarts = () => {
     const [pending, setPending] = useState(true)
     const [user, setUser] = useState([])
+    const [pagination, setPagination] = useState(0)
+    const [page, setPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
     const dispatch = useDispatch()
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(setHeader("Медицинская карта"))
     }, [dispatch])
-    useEffect(()=>{
-        api.getUser().then((res:any)=>{
-            setUser(res.data)
-            setPending(false)
-        }, (error:any)=>console.error(error))
-    }, [])
-    if(pending){
-        return <Preloader />
+    useEffect(() => {
+        // api.getUser().then((res: any) => {
+        //     setUser(res.data)
+        //     setPagination(Math.ceil(res.data.length / 5))
+        //     setPending(false)
+        // }, (error: any) => console.error(error))
+        api.getClient(page, pageSize)
+            .then((res)=>{
+                setUser(res.data.content)
+                console.log(res.data)
+                setPagination(Math.ceil(res.data.totalElements / pageSize))
+                setPending(false)
+            })
+    }, [page])
+    if (pending) {
+        return <Preloader/>
     }
     return (
-        <TableWrapper>
-            <TableHeader>
-                <div>
-                    ФИО
-                </div>
-
-                <div>
-                    Дата рождения
-                </div>
-                <div>
-                    WhatsApp номер
-                </div>
-                <Last>
-                    Фотография
-                </Last>
-            </TableHeader>
+        <>
+            <TableWrapper>
+                <TableHeader>
+                    <div>
+                        ФИО
+                    </div>
+                    <div>
+                        Дата рождения
+                    </div>
+                    <div>
+                        WhatsApp номер
+                    </div>
+                    <Last>
+                        Фотография
+                    </Last>
+                </TableHeader>
+                {
+                    user.map((item: any) => <List
+                        key={item.id}
+                        fio={`${item.firstName} ${item.lastName}`}
+                        number={item.username}
+                        date={item.birthDate}
+                        image={item.image}
+                    />)
+                }
+            </TableWrapper>
             {
-                user.map((item:any)=> <List
-                    key={item.id}
-                    fio={`${item.firstName} ${item.lastName}`}
-                    number={item.username}
-                    date={item.birthDate} />)
+                user.length
+                    ? <Pagination setPage={setPage} pageCount={pagination}/>
+                    : null
             }
-        </TableWrapper>
+        </>
     )
 }
 
@@ -56,6 +76,7 @@ type ListProps = {
     fio: string,
     date: string,
     number: string
+    image?: string
 }
 
 const List: React.FC<ListProps> = (props) => {
@@ -80,7 +101,7 @@ const List: React.FC<ListProps> = (props) => {
             </TableList>
             <ModalWrapper onModal={onModal} width={'450'} height={'420'} visible={visible}>
                 <div className={css.modalWrapper}>
-                    <img src={pic} alt="#"/>
+                    <img src={props.image ? props.image : pic} alt="#"/>
                 </div>
             </ModalWrapper>
         </div>

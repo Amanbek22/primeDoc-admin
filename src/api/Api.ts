@@ -9,10 +9,10 @@ const getToken = () => {
     let data = JSON.parse(localStorage.getItem('userData') as string)
     return data.access_token
 }
-const getRefresh = () => {
-    let data = JSON.parse(localStorage.getItem('userData') as string)
-    return data.refresh_token
-}
+// const getRefresh = () => {
+//     let data = JSON.parse(localStorage.getItem('userData') as string)
+//     return data.refresh_token
+// }
 
 
 export default {
@@ -69,6 +69,11 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
+    getClient: (page:number = 1, size:number) => http.get(`client/card?page=${page}&size=${size}`, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
     getFaq: () => http.get(`faq/`,{
         headers: {
             "Authorization": "Bearer " + getToken()
@@ -95,7 +100,12 @@ export default {
         }
     }),
 
-    getDoctor: () => http.get(`doctor/data/`,{
+    getDoctor: (id?:number) => http.get(`doctor/data/${id?id:''}`,{
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    getDoc: (id?:number) => http.get(`doctor/full/${id?id:''}`,{
         headers: {
             "Authorization": "Bearer " + getToken()
         }
@@ -115,7 +125,17 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-    getSchedule: () => http.get(`schedule/`, {
+    getSchedule: (id:number) => http.get(`schedule/doctor/${id ? id : ''}`, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    createSchedule: (data:any) => http.post(`schedule`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
+    changeSchedule: (id:number, data:any) =>  http.put(`schedule/${id}`, data, {
         headers: {
             "Authorization": "Bearer " + getToken()
         }
@@ -135,4 +155,9 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
+    putPaymentSteps: (id:number, data:any) => http.put(`payment/${id}`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    })
 }
