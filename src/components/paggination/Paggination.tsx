@@ -26,7 +26,7 @@ const Pagination: React.FC<Props> = (props) => {
                 pageRangeDisplayed={5}
                 onPageChange={(selectedItem:{selected: number})=>{
                     console.log(selectedItem)
-                    props.setPage(selectedItem.selected + 1)
+                    props.setPage(selectedItem.selected)
                 }}
                 containerClassName={css.pagination}
                 activeClassName={css.active}
