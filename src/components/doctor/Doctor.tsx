@@ -25,7 +25,6 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                 setPending(false)
                 setUser(res.data)
                 setImage(res.data.image)
-                // console.log(res.data)
             })
     }, [])
 
@@ -99,14 +98,8 @@ const Schedule = (props: ScheduleProps) => {
                     weeks: res.data.weeks.map((item: any) => ({
                         days: days.map((i: any) => ({
                             list: item.weekDays.map((k: any) => {
-                                let obj:any = {
-                                    fromH: null,
-                                    fromM: null,
-                                    toH: null,
-                                    toM: null,
-                                };
+                                let obj:any  = null;
                                 k.intervals.forEach((f: any) => {
-                                    // console.log(i === k.weekDayName)
                                     if (i === k.weekDayName) {
                                         let start = f.start.split(':')
                                         let end = f.end.split(':')

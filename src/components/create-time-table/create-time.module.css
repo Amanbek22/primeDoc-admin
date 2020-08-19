@@ -7,6 +7,7 @@
 }
 .addTime{
     cursor: pointer;
+    width: fit-content;
 }
 .timeWrapper{
     display: flex;
@@ -81,6 +82,16 @@
 .weeks::-webkit-scrollbar {
     width: 0;
 }
+.week{
+    display: flex;
+    justify-content: space-between;
+}
+.week>div{
+    cursor: pointer;
+}
+.add{
+    cursor: pointer;
+}
 .week, .add{
     border-bottom: 2px solid #00BDD0;
     padding: 10px 0 10px 15px;
@@ -89,8 +100,6 @@
     font-size: 16px;
     line-height: 19px;
     color: #000000;
-    cursor: pointer;
-    /*margin: 4px 1px;*/
 }
 .active{
     background: #00BDD0;
@@ -100,4 +109,11 @@
 .add{
     padding: 10px 0;
     text-align: center;
+}
+.imgWrapper{
+    height: 17px;
+    margin-right: 15px;
+}
+.imgWrapper>img{
+    height: 100%;
 }
