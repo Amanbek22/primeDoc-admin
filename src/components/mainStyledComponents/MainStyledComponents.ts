@@ -274,3 +274,18 @@ export const CardWrapper = styled.div`
         }
     }
 `
+
+export const WeeksWrapper = styled.div`
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-gap: 1em;
+`
+export const Weeks = styled.div`
+   border: 2px solid #00BDD0;
+    overflow-y: scroll;
+    min-height: 400px;
+    
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+`

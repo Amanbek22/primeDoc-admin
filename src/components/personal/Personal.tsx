@@ -144,7 +144,7 @@ const List: React.FC<ListProps> = (props) => {
         <div>
             <TableList>
                 <Link to={`/personal/${props.id}`}>{fio}</Link>
-                <div title={direction ? direction.map((item:any) => item.label + ', ') : ''}>{direction ? direction.map((item:any) => item.label + ', ') : ''}</div>
+                <div title={direction ? direction.map((item:any) => item.label + ', ') : ''}>{direction ? direction.map((item:any, index:number) => index+1 !== direction.length ? item.label + ', ' : item.label) : ''}</div>
                 <div>{email}</div>
                 <Last>
                     <EditDeleteComponent editing={false} onEdit={onEditModal} onModal={onModal} onDone={setDoctor}/>

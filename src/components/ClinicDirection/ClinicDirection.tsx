@@ -163,11 +163,11 @@ const ClinicDirection = () => {
                         : null
                 }
             </div>
-            <div className={css.addDoc}>
-                <Link to={'/personal/add'}>
-                    <GreenBtn>Добавить врача</GreenBtn>
-                </Link>
-            </div>
+            {/*<div className={css.addDoc}>*/}
+            {/*    <Link to={'/personal/add'}>*/}
+            {/*        <GreenBtn>Добавить врача</GreenBtn>*/}
+            {/*    </Link>*/}
+            {/*</div>*/}
         </div>
     )
 }
@@ -249,7 +249,7 @@ const Doctors = (props: DocType) => {
     return (
         <>
             <div className={css.doctorWrapper}>
-                <div className={css.ava}>
+                <Link to={`/personal/${props.id}`} className={css.ava}>
                     <div className={css.logoWrapper}>
                         {
                             props.url
@@ -265,7 +265,7 @@ const Doctors = (props: DocType) => {
                     <div className={css.name}>
                         {editing ? <input type="text" value={name} onChange={(e) => setName(e.target.value)}/> : name}
                     </div>
-                </div>
+                </Link>
                 <div>
                     <EditDeleteComponent noEdit={true}  editing={editing} onEdit={onEdit} onModal={onModal} onDone={setDoctor}/>
                 </div>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import api from '../../api/Api'
 import Preloader from "../preloader/Preloader";
-import {HeaderWrapper} from "../mainStyledComponents/MainStyledComponents";
+import {GreenBtn, HeaderWrapper, Weeks, WeeksWrapper} from "../mainStyledComponents/MainStyledComponents";
 import css from './doctor.module.css'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
@@ -25,7 +25,6 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                 setPending(false)
                 setUser(res.data)
                 setImage(res.data.image)
-                // console.log(res.data)
             })
     }, [])
 
@@ -89,6 +88,8 @@ type ScheduleProps = {
 }
 const Schedule = (props: ScheduleProps) => {
     const [schedule, setSchedule] = useState<any>(null)
+    const [oldSchedule, setOldSchedule] = useState<any>([])
+    const [edit, setEdit] = useState(false)
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     useEffect(() => {
         api.getSchedule(props.id)
@@ -99,14 +100,8 @@ const Schedule = (props: ScheduleProps) => {
                     weeks: res.data.weeks.map((item: any) => ({
                         days: days.map((i: any) => ({
                             list: item.weekDays.map((k: any) => {
-                                let obj:any = {
-                                    fromH: null,
-                                    fromM: null,
-                                    toH: null,
-                                    toM: null,
-                                };
+                                let obj: any = null;
                                 k.intervals.forEach((f: any) => {
-                                    // console.log(i === k.weekDayName)
                                     if (i === k.weekDayName) {
                                         let start = f.start.split(':')
                                         let end = f.end.split(':')
@@ -134,13 +129,75 @@ const Schedule = (props: ScheduleProps) => {
     return (
         <div>
             {
+                !edit
+                    ? <TimeTable data={schedule}/>
+                    : schedule ? <CreateTimeTable data={schedule} id={props.id}/> : null
+            }
+            <br/>
+            {
                 schedule
-                    ? <CreateTimeTable data={schedule} id={props.id}/>
-                    : null
+                    ? <GreenBtn onClick={() => setEdit(!edit)}>{!edit ? 'Изменить расписание' : 'Отменить'}</GreenBtn>
+                    : <GreenBtn>Добавить расписание</GreenBtn>
             }
         </div>
     )
 }
 
+const ArrDays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+type TimeTableProps = {
+    data: any
+}
+const TimeTable: React.FC<TimeTableProps> = (props) => {
+    console.log(props.data)
+    const [current, setCurrent] = useState(0)
+    return (
+        <>
+            {
+                props.data
+                    ? <WeeksWrapper>
+                        <Weeks>
+                            {
+                                props.data?.weeks.map((item: any, index: number) => <div
+                                    key={index}
+                                    className={current === index ? css.week + ' ' + css.active : css.week}
+                                    onClick={() => setCurrent(index)}
+                                >{index + 1} неделя</div>)
+                            }
+                        </Weeks>
+                        <Weeks>
+                            {
+                                props.data?.weeks[current].days.map((item: any, index: number) => <Days list={item.list}
+                                                                                                        key={item.weekDayName}
+                                                                                                        name={ArrDays[index]}/>)
+                            }
+                        </Weeks>
+                    </WeeksWrapper>
+                    : <div className={css.date}>Нет расписание</div>
+            }
+        </>
+    )
+}
+
+type DaysProps = {
+    name: string
+    list: any
+}
+const Days: React.FC<DaysProps> = (props) => {
+    console.log(props.list)
+    return (
+        <div className={css.days}>
+            <div className={css.day}>{props.name}</div>
+            <div className={css.schedules}>
+                {
+                    props?.list.map((item: any, index: number) => item ? <div className={css.schedule} key={index}>
+                        <span> {item.fromH}:{item.fromM} </span>
+                        |
+                        <span> {item.toH}:{item.toM} </span>
+                    </div> : null)
+                }
+            </div>
+        </div>
+    )
+}
 
 export default Doctor;
