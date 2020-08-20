@@ -65,23 +65,7 @@
 
 /*/////////////////////////////////////////////////////////////////////*/
 /*new Time table*/
-.wrapper{
-    /*height: 68vh;*/
-}
-.weeksWrapper{
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    grid-gap: 1em;;
-}
-.weeks{
-    border: 2px solid #00BDD0;
-    /*border-bottom: none;*/
-    overflow-y: scroll;
-    min-height: 400px;
-}
-.weeks::-webkit-scrollbar {
-    width: 0;
-}
+
 .week{
     display: flex;
     justify-content: space-between;
@@ -103,7 +87,7 @@
 }
 .active{
     background: #00BDD0;
-    color: #FFFFFF;
+    color: #ffffff;
 
 }
 .add{

@@ -4,7 +4,7 @@ import {setHeader} from "../../state/appReducer";
 import {Title} from "../admin/AdminComponents";
 import Time, {Date as Dat} from "./Time";
 import css from './create-time.module.css'
-import {GreenBtn} from "../mainStyledComponents/MainStyledComponents";
+import {GreenBtn, Weeks, WeeksWrapper} from "../mainStyledComponents/MainStyledComponents";
 import Api from '../../api/Api'
 import { useParams, useHistory } from 'react-router-dom';
 import del from "../../img/delete.png";
@@ -175,8 +175,8 @@ const CreateTimeTable = (props:any) => {
             <form onSubmit={submit} className={css.wrapper}>
                 <div>
                     <Title>Дни недели</Title>
-                    <div className={css.weeksWrapper}>
-                        <div className={css.weeks}>
+                    <WeeksWrapper>
+                        <Weeks>
                             {
                                 weeks.map((item, index) => <div key={index}>
                                         <Week onDel={()=>delWeek(index)} setWeek={()=>changeWeek(index)} current={currentWeek+1} index={index + 1}/>
@@ -186,7 +186,7 @@ const CreateTimeTable = (props:any) => {
                             <div className={css.add} onClick={addWeek}>
                                 + Добавить
                             </div>
-                        </div>
+                        </Weeks>
                         <div>
                             <Dat options={option} val={val} setVal={setData}/>
                             <Title>Интервалы</Title>
@@ -194,7 +194,7 @@ const CreateTimeTable = (props:any) => {
                                 <div />
                             )}
                             {
-                                weeks[currentWeek].days.map((item: any, index: number) => {
+                                weeks[currentWeek]?.days.map((item: any, index: number) => {
                                     return step === index + 1 && (
                                         <StepForm removeSchedule={removeSchedule} addSchedule={addSchedule} key={index} setTimeFromH={setTimeFromH}
                                                   days={index} listSchedules={weeks[currentWeek].days[index].list}/>
@@ -203,7 +203,7 @@ const CreateTimeTable = (props:any) => {
                             }
                             <GreenBtn>Сохранить</GreenBtn>
                         </div>
-                    </div>
+                    </WeeksWrapper>
                 </div>
             </form>
         </>
