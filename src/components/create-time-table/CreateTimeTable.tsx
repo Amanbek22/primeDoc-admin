@@ -4,9 +4,10 @@ import {setHeader} from "../../state/appReducer";
 import {Title} from "../admin/AdminComponents";
 import Time, {Date as Dat} from "./Time";
 import css from './create-time.module.css'
-import {GreenBtn} from "../mainStyledComponents/MainStyledComponents";
+import {GreenBtn, Weeks, WeeksWrapper} from "../mainStyledComponents/MainStyledComponents";
 import Api from '../../api/Api'
 import { useParams, useHistory } from 'react-router-dom';
+import del from "../../img/delete.png";
 
 
 export class Schedule {
@@ -110,6 +111,10 @@ const CreateTimeTable = (props:any) => {
     const addWeek = () => {
         setWeeks([...weeks, new week()])
     }
+    const delWeek = (index:number) => {
+        weeks.splice(index, 1)
+        setWeeks([...weeks])
+    }
     const setData = (e: any) => {
         console.log(e)
         setVal(e)
@@ -126,10 +131,10 @@ const CreateTimeTable = (props:any) => {
             weeks: weeks.map((item, index) => ({
                 weekDays: item.days.map((i: any) => {
                     const el = i.list[0]
-                    if(el.fromH && el.fromM && el.toH && el.toM) {
+                    if(el && el.fromH && el.fromM && el.toH && el.toM) {
                         return {
                             intervals: i.list.map((j: any) => {
-                                if(j.toH && j.toM && j.fromH && j.fromM){
+                                if( j && j.toH && j.toM && j.fromH && j.fromM){
                                     return {
                                         end: j.toH && j.toM ? j.toH + ':' + j.toM + ':' + '00' : '',
                                         start: j.fromH && j.fromM ? j.fromH + ':' + j.fromM + ':' + '00' : ''
@@ -159,30 +164,29 @@ const CreateTimeTable = (props:any) => {
             console.log(schedule)
         }
     }
+    const changeWeek = (index:number) => {
+        setVal(null)
+        setStep(0)
+        setCurrentWeek(index)
+    }
     return (
         <>
             {/*<Title>Расписание</Title>*/}
             <form onSubmit={submit} className={css.wrapper}>
                 <div>
                     <Title>Дни недели</Title>
-                    <div className={css.weeksWrapper}>
-                        <div className={css.weeks}>
+                    <WeeksWrapper>
+                        <Weeks>
                             {
-                                weeks.map((item, index) => <div
-                                        key={index}
-                                        onClick={() => {
-                                            setVal(null)
-                                            setStep(0)
-                                            setCurrentWeek(index)
-                                        }}>
-                                        <Week current={currentWeek+1} index={index + 1}/>
+                                weeks.map((item, index) => <div key={index}>
+                                        <Week onDel={()=>delWeek(index)} setWeek={()=>changeWeek(index)} current={currentWeek+1} index={index + 1}/>
                                     </div>
                                 )
                             }
                             <div className={css.add} onClick={addWeek}>
                                 + Добавить
                             </div>
-                        </div>
+                        </Weeks>
                         <div>
                             <Dat options={option} val={val} setVal={setData}/>
                             <Title>Интервалы</Title>
@@ -190,7 +194,7 @@ const CreateTimeTable = (props:any) => {
                                 <div />
                             )}
                             {
-                                weeks[currentWeek].days.map((item: any, index: number) => {
+                                weeks[currentWeek]?.days.map((item: any, index: number) => {
                                     return step === index + 1 && (
                                         <StepForm removeSchedule={removeSchedule} addSchedule={addSchedule} key={index} setTimeFromH={setTimeFromH}
                                                   days={index} listSchedules={weeks[currentWeek].days[index].list}/>
@@ -199,7 +203,7 @@ const CreateTimeTable = (props:any) => {
                             }
                             <GreenBtn>Сохранить</GreenBtn>
                         </div>
-                    </div>
+                    </WeeksWrapper>
                 </div>
             </form>
         </>
@@ -209,11 +213,17 @@ const CreateTimeTable = (props:any) => {
 type WeekProps = {
     index: number
     current: number
+    setWeek: any
+    onDel: any
 }
 const Week = (props: WeekProps) => {
     return (
         <div className={props.current === props.index ? css.active + ' ' + css.week : css.week}>
-            {props.index} неделя
+            <div onClick={props.setWeek}>{props.index} неделя</div>
+            <div className={css.imgWrapper}>
+                <img onClick={props.onDel} className={css.del} src={del}
+                     alt="#"/>
+            </div>
         </div>
     )
 }

@@ -41,3 +41,44 @@
 .text{
     width: 450px;
 }
+
+/*/////////////////////////////////////////////////////////*/
+/*Time table*/
+
+.week{
+    border-bottom: 2px solid #00BDD0;
+    padding: 10px 0 10px 15px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    cursor: pointer;
+}
+.days{
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    border-bottom: 2px solid #00BDD0;
+    min-height: 40px;
+}
+.day{
+    margin: auto 15px;
+    border-right: 2px solid #00BDD0;
+    padding: 5px 0;
+}
+.schedules{
+    margin: auto 0;
+    padding: 5px 5px;
+    display: flex;
+}
+.active{
+    background: #00BDD0;
+    color: #FFFFFF;
+}
+.schedule{
+    background: #00BDD0;
+    color: #FFFFFF;
+    padding: 4px 10px;
+    border-radius: 5px;
+    margin: 0 10px;
+}

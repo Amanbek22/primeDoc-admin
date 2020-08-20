@@ -7,8 +7,11 @@ const SET_DIRECTIONS = "app/SET_DIRECTIONS"
 const SET_USERS = "app/SET_USERS"
 const DIRECTION_EDIT = "app/DIRECTION_EDIT"
 const SET_ILLNESS = "app/SET_ILLNESS"
+const ADD_DIRECTION = "app/ADD_DIRECTION"
+const REMOVE_DIRECTION = "app/REMOVE_DIRECTION"
 
 const initialState = {
+    pending: true,
     initialise: false,
     header: 'Клиника',
     directions: [],
@@ -30,6 +33,19 @@ export const appReducer = (state = initialState, action: any): InitialStateType 
                 ...state,
                 directionEdit: action.edit
             }
+        case ADD_DIRECTION:
+            return {
+                ...state,
+                // @ts-ignore
+                directions: [...state.directions, action.data]
+            }
+        case REMOVE_DIRECTION:
+            let arr = state.directions
+            arr.splice(action.index, 1)
+            return {
+                ...state,
+                directions: [...arr]
+            }
         case SET_ILLNESS:
             return {
                 ...state,
@@ -43,7 +59,8 @@ export const appReducer = (state = initialState, action: any): InitialStateType 
         case SET_DIRECTIONS:
             return {
                 ...state,
-                directions: action.payload
+                directions: action.payload,
+                pending: false
             }
         case SET_USERS:
             return {
@@ -82,6 +99,18 @@ export const editDirection = (edit:boolean) => {
     return {
         type: DIRECTION_EDIT,
         edit
+    }
+}
+export const addDirection = (data:any) => {
+    return {
+        type: ADD_DIRECTION,
+        data
+    }
+}
+export const removeDirection = (index:number) => {
+    return {
+        type: REMOVE_DIRECTION,
+        index
     }
 }
 

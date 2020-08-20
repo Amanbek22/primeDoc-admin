@@ -13,7 +13,7 @@ const MedCarts = () => {
     const [pending, setPending] = useState(true)
     const [user, setUser] = useState([])
     const [pagination, setPagination] = useState(0)
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(10)
     const dispatch = useDispatch()
     useEffect(() => {
@@ -29,7 +29,7 @@ const MedCarts = () => {
             .then((res)=>{
                 setUser(res.data.content)
                 console.log(res.data)
-                setPagination(Math.ceil(res.data.totalElements / pageSize))
+                setPagination(res.data.totalPages)
                 setPending(false)
             })
     }, [page])
