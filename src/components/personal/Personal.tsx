@@ -65,7 +65,9 @@ const Personal: React.FC<Props> = () => {
                     doctors.map((item: any) => <List
                         id={item.id}
                         key={item.id}
-                        fio={item.firstName + ' ' + item.lastName}
+                        firstName={item.firstName}
+                        lastName={item.lastName}
+                        patronymic={item.patronymic}
                         direction={item.categories}
                         email={item.username}
                         setPending={()=>setPending(true)}
@@ -85,9 +87,11 @@ export default Personal
 
 type ListProps = {
     id: number
-    fio: string
+    firstName: string
     direction: [any]
     email: string
+    lastName: string
+    patronymic: string
     setPending: () => void
 }
 
@@ -106,7 +110,9 @@ const List: React.FC<ListProps> = (props) => {
     const onModal = () => setVisible(!visible)
     const onEditModal = () => setEditVisible(!editVisible)
 
-    const [fio, setFio] = useState(props.fio)
+    const [fio, setFio] = useState(props.firstName)
+    const [lastName, setLastName] = useState(props.lastName)
+    const [patronymic, setPatronymic] = useState(props.patronymic)
     const [direction, setDirection] = useState<any>([])
     const [email, setEmail] = useState(props.email)
     const [options, setOptions] = useState<any>([])
@@ -128,13 +134,12 @@ const List: React.FC<ListProps> = (props) => {
 
     const setDoctor = (e:any) => {
         e.preventDefault()
-        let newFio = fio.split(' ')
         api.editDoctor(props.id, {
             categories: direction.map((item:any) => item.value),
             username: email,
-            firstName: newFio[0],
-            lastName: newFio[1] ? newFio[1] : '',
-            patronymic: newFio[2] ? newFio[2] : ''
+            firstName: fio,
+            lastName: lastName,
+            patronymic: patronymic
         })
             .then((res:any)=> console.log(res))
         onEditModal()
@@ -143,17 +148,19 @@ const List: React.FC<ListProps> = (props) => {
     return (
         <div>
             <TableList>
-                <Link to={`/personal/${props.id}`}>{fio}</Link>
+                <Link to={`/personal/${props.id}`}>{fio + ' ' + lastName + ' ' + patronymic}</Link>
                 <div title={direction ? direction.map((item:any) => item.label + ', ') : ''}>{direction ? direction.map((item:any, index:number) => index+1 !== direction.length ? item.label + ', ' : item.label) : ''}</div>
                 <div>{email}</div>
                 <Last>
                     <EditDeleteComponent editing={false} onEdit={onEditModal} onModal={onModal} onDone={setDoctor}/>
                 </Last>
             </TableList>
-            <ModalWrapper onModal={onEditModal} visible={editVisible} width={"450"} height={"400"}
+            <ModalWrapper onModal={onEditModal} visible={editVisible} width={"450"} height={"520"}
                           onClickAway={onEditModal}>
                 <form onSubmit={setDoctor} className={css.editWrapper}>
                     <Input required onChange={(e) => setFio(e.target.value)} type="text" value={fio}/>
+                    <Input required onChange={(e) => setLastName(e.target.value)} type="text" value={lastName}/>
+                    <Input required onChange={(e) => setPatronymic(e.target.value)} type="text" value={patronymic}/>
                     <Select isMulti options={options} placeholder={'Направление'}  onChange={(e) => setDirection(e)} value={direction}/>
                     {/*<Input onChange={(e) => setDirection(e.target.value)} type="text" value={direction}/>*/}
                     <Input onChange={(e) => setEmail(e.target.value)} type="text" value={email}/>
@@ -161,7 +168,7 @@ const List: React.FC<ListProps> = (props) => {
                 </form>
             </ModalWrapper>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
-                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={props.fio}
+                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={fio + ' ' + lastName + ' ' + patronymic}
                              del={deleteDoctor}/>
             </ModalWrapper>
         </div>

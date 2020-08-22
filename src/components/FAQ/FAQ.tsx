@@ -20,15 +20,15 @@ import EditDeleteComponent from "../utils/EditDelete";
 const validate = (values: any) => {
     const errors: any = {};
     if (!values.question) {
-        errors.question = 'Required';
+        errors.question = 'Обязательное поле';
     } else if (values.question.length <= 0) {
-        errors.question = 'Required'
+        errors.question = 'Обязательное поле'
     }
 
     if (!values.answer) {
-        errors.answer = 'Required';
+        errors.answer = 'Обязательное поле';
     } else if (values.answer.length <= 0) {
-        errors.answer = 'Required'
+        errors.answer = 'Обязательное поле'
     }
 
     return errors;
@@ -87,7 +87,7 @@ const Faq = React.memo(() => {
         }
     })
 
-    function onChange(sourceId: any,sourceIndex:any, targetIndex: any,) {
+    function onChange(sourceId: any, sourceIndex: any, targetIndex: any,) {
         const nextState = swap(questions, sourceIndex, targetIndex);
         const newArr = nextState.map((item: any, index: number) => {
             return {
@@ -100,13 +100,13 @@ const Faq = React.memo(() => {
     }
 
     const changeSubmit = () => {
-        let newArr = questions.map((item:any) => ({
+        let newArr = questions.map((item: any) => ({
             id: item.id,
             order: item.order
         }))
-        newArr.sort((a:any, b:any) => a.id - b.id )
+        newArr.sort((a: any, b: any) => a.id - b.id)
         api.orderFaq(newArr)
-            .then((res)=>console.log(res))
+            .then((res) => console.log(res))
     }
     if (pending) {
         return <Preloader/>
@@ -125,7 +125,8 @@ const Faq = React.memo(() => {
             </BtnFloat>
             {
                 !change
-                    ? questions.map((item: any) => <List setPending={()=>setPending(true)} answer={item.answer} id={item.id} questions={item.question}
+                    ? questions.map((item: any) => <List setPending={() => setPending(true)} answer={item.answer}
+                                                         id={item.id} questions={item.question}
                                                          key={item.id}/>)
                     : <GridContextProvider onChange={onChange}>
                         <GridDropZone
@@ -136,7 +137,8 @@ const Faq = React.memo(() => {
                             style={{height: "400px"}}
                         >
                             {questions.map((item: any) => <GridItem className={css.q} key={item.id}>
-                                    <List setPending={()=>setPending(true)} noItem={true} noClick={true} answer={item.answer} id={item.id}
+                                    <List setPending={() => setPending(true)} noItem={true} noClick={true} answer={item.answer}
+                                          id={item.id}
                                           questions={item.question} key={item.id}/>
                                 </GridItem>
                             )}
@@ -152,16 +154,20 @@ const Faq = React.memo(() => {
                         ? <form onSubmit={formik.handleSubmit}>
                         <span className={css.formWrapper}>
                             <label>
-                                Вопрос
+                                <span>
+                                    <span>Вопрос</span>
+                                    <span className={css.error}>{formik.errors.question ? <>{formik.errors.question}</> : null}</span>
+                                </span>
                                 <Input name={'question'} onBlur={formik.handleBlur} value={formik.values.question}
                                        onChange={formik.handleChange}/>
-                                {formik.errors.question ? <div>{formik.errors.question}</div> : null}
                             </label>
                             <label>
-                                Ответ
+                                <span>
+                                    <span>Ответ</span>
+                                    <span className={css.error}>{formik.errors.answer ? <>{formik.errors.answer}</> : null}</span>
+                                </span>
                                 <Input name={'answer'} onBlur={formik.handleBlur} value={formik.values.answer}
                                        onChange={formik.handleChange}/>
-                                {formik.errors.answer ? <div>{formik.errors.answer}</div> : null}
                             </label>
                         </span>
                             <BtnFloat>
@@ -249,7 +255,8 @@ const List: React.FC<ListProps> = (props) => {
             <span>
                 {
                     props.noItem ? null :
-                        <EditDeleteComponent noEdit={true} editing={editing} onEdit={onEdit} onModal={onModal} onDone={setFaq}/>
+                        <EditDeleteComponent noEdit={true} editing={editing} onEdit={onEdit} onModal={onModal}
+                                             onDone={setFaq}/>
                 }
             </span>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>

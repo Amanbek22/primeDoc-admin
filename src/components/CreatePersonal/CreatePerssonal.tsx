@@ -56,8 +56,18 @@ const CreatePersonal = () => {
     const [category, setCategory] = useState<any>([])
     const [options, setOptions] = useState<any>([])
     const [time, setTime] = useState(false)
+    const degreeOption = [
+        {
+            value: 'EXPERIENCE',
+            label: 'EXPERIENCE'
+        },
+        {
+            value: 'REGALIA',
+            label: 'REGALIA'
+        }
+    ]
     let deg = {
-        infoType: 'EXPERIENCE',
+        infoType: '',
         name: '',
         organizationName: '',
         start: '',
@@ -90,7 +100,7 @@ const CreatePersonal = () => {
                     organizationName: '',
                     degree: [
                         {
-                            infoType: 'EXPERIENCE',
+                            infoType: '',
                             name: '',
                             organizationName: '',
                             start: '',
@@ -184,6 +194,7 @@ const CreatePersonal = () => {
                                         </span>
                                     </span>
                                     <Select
+                                        noOptionsMessage={()=>'Загрузка...'}
                                         onBlur={handleBlur}
                                         isMulti
                                         styles={selectStyles}
@@ -203,6 +214,12 @@ const CreatePersonal = () => {
                                                     values.degree.map((degree, index) => (
                                                         <label key={index} className={css.label}>
                                                             <span><span>*</span>Опыт работы</span>
+                                                            <Select
+                                                                options={degreeOption}
+                                                                styles={selectStyles}
+                                                                onChange={(e:any) => values.degree[index].infoType = e.value  }
+                                                                placeholder={''}
+                                                            />
                                                             <Field as={Input} placeholder={'Название'} name={`degree.${index}.name`}/>
                                                             <div className={css.dateWrapper}>
                                                                 <Field
