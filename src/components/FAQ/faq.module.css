@@ -72,3 +72,10 @@
     margin-top: 155px;
     width: 400px;
 }
+.formWrapper>label>span{
+    display: flex;
+    justify-content: space-between;
+}
+.error{
+    color: #FF5069;
+}

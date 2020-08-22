@@ -52,10 +52,10 @@ export const authFc = (password: string, log: string) => async (dispatch: any,) 
                     isAuth: true
                 }))
                 localStorage.setItem(storageName, JSON.stringify({
-                    access_token: res.data.token,
-                    refresh_token: res.data.token,
-                    access_life: res.data.expirationTime,
-                    refresh_life: res.data.expirationTime
+                    access_token: res.data.accessToken,
+                    refresh_token: res.data.refreshToken,
+                    access_life: res.data.tokenExpirationTime,
+                    refresh_life: res.data.tokenExpirationTime // have to change tokenExpirationTime to tokenExpirationTime
                 }))
                 dispatch(getDirections())
                 dispatch(getIllness())
@@ -78,7 +78,7 @@ export const setDataRefresh = () => async (dispatch: any) => {
         access_token: res.data.access,
         refresh_token: refresh_token,
         access_life: access_life,
-        refresh_life: refresh_life
+        refresh_life: access_life // have to change access_life to refresh_life
     }))
     dispatch(signIn({
         isAuth: true
