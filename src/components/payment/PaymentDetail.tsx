@@ -13,11 +13,14 @@ import {
 import pic from "../../img/pic.png";
 import {useFormik} from "formik";
 import Preloader from "../preloader/Preloader";
-import EditDeleteComponent from "../utils/EditDelete";
-import Select from "react-select";
-import ModalWrapper from "../modal/Modal";
+import {checkToken} from "../../state/authReducer";
+import {useDispatch} from "react-redux";
 
 const PaymentDetail = () => {
+    const dispatch = useDispatch()
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const params: any = useParams()
     const [pending, setPending] = useState(true)
     const [data, setData] = useState()
@@ -28,8 +31,8 @@ const PaymentDetail = () => {
     const onModal = () => setVisible(!visible)
 
     useEffect(() => {
-        api.getPayments(params.id)
-            .then((res) => {
+        requestCheck(()=>api.getPayments(params.id))
+            .then((res:any) => {
                 setPending(false)
                 console.log(res.data)
                 setData(res.data)
@@ -69,8 +72,8 @@ const PaymentDetail = () => {
                 nextSteps: values.last,
                 paymentSteps: arr
             }
-            api.putPaymentSteps(params.id, d)
-                .then((res)=>{
+            requestCheck(()=>api.putPaymentSteps(params.id, d))
+                .then((res:any)=>{
                     // history.push('/payment')
                     setEdit(false)
                     setPending(true)

@@ -15,6 +15,7 @@ import {
 } from "../mainStyledComponents/MainStyledComponents";
 import pic from "../../img/pic.png";
 import {useHistory} from 'react-router-dom'
+import {checkToken} from "../../state/authReducer";
 
 const Payment = () => {
     const history = useHistory()
@@ -23,6 +24,9 @@ const Payment = () => {
     useEffect(() => {
         dispatch(setHeader("Способы оплаты"))
     }, [dispatch])
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const [img, setImg] = useState('')
 
     const formik = useFormik({
@@ -56,7 +60,7 @@ const Payment = () => {
                 nextSteps: values.last,
                 paymentSteps: arr
             }
-            api.createPayment(data)
+            requestCheck(()=>api.createPayment(data))
                 .then((res)=>{
                     history.push('/payment')
                 })
