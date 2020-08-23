@@ -34,7 +34,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
     }, [dispatch])
     const setEdit = () => dispatch(editDirection(true))
     const [visible, setVisible] = useState(false)
-    const els = directions.map((item: any, index: number) => <Card index={index} setEdit={setEdit} id={item.id} image={item.image} title={item.name} key={item.id}/>)
+    const els = directions?.map((item: any, index: number) => <Card index={index} setEdit={setEdit} id={item.id} image={item.image} title={item.name} key={item.id}/>)
     const onModal = () => setVisible(!visible)
 
     if(props.pending){

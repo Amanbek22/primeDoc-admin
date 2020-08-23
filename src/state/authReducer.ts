@@ -91,10 +91,10 @@ export const setDataRefresh = () => async (dispatch: any) => {
 export const checkToken = (req: any) =>  async (dispatch: any) => {
     let token = JSON.parse(localStorage.getItem('userData') as string);
     const now = new Date()
-    // console.log('checking', req)
-    if ( token && new Date(token?.access_life).toUTCString() > now.toUTCString()) {
+    // console.log(new Date(token.refresh_life) > now )
+    if ( token && new Date(token?.access_life) > now) {
         return  await req()
-    } else if ( token && new Date(token.refresh_life).toUTCString() > now.toUTCString()) {
+    } else if ( token && new Date(token.refresh_life) > now) {
         // alert('refresh is bigger')
         console.log('refresh is bigger')
         await dispatch(setDataRefresh())
