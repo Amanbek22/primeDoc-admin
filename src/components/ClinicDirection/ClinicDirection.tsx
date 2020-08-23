@@ -21,12 +21,18 @@ import {GlobalStateType} from "../../state/root-reducer";
 import {getIllnesses} from '../../state/initial-selector'
 import Select from "react-select";
 import {selectStyles} from "../utils/customSelect";
+import {checkToken} from "../../state/authReducer";
 
 const ClinicDirection = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader(data.name))
     }, [dispatch])
+
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
+
     const edit = useSelector((state: GlobalStateType) => state.app.directionEdit)
     const params: { id: string } = useParams()
 
@@ -66,8 +72,8 @@ const ClinicDirection = () => {
             illnesses: newArr
         }
         console.log(data)
-        api.putCategory(params.id, data)
-            .then((res) => {
+        requestCheck(()=>api.putCategory(params.id, data))
+            .then((res:any) => {
                 console.log(res.data)
             })
     }
@@ -75,7 +81,7 @@ const ClinicDirection = () => {
         dispatch(editDirection(false))
     }, [])
     useEffect(() => {
-        api.getCategory(params.id)
+        requestCheck(()=>api.getCategory(params.id))
             .then((res: any) => {
                 console.log(res)
                 dispatch(setHeader(res.data.name))
@@ -231,8 +237,12 @@ type DocType = {
     url?: string
 }
 const Doctors = (props: DocType) => {
+    const dispatch = useDispatch()
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const deleteDoctor = () => {
-        api.delDoctor(props.id)
+        requestCheck(()=>api.delDoctor(props.id))
             .then((res: any) => {
                 console.log(res)
             })

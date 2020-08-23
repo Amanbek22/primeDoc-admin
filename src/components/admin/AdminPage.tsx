@@ -20,6 +20,7 @@ import {GlobalStateType} from "../../state/root-reducer";
 import api from '../../api/Api'
 import DeleteModal from "../utils/DeleteModal";
 import Preloader from "../preloader/Preloader";
+import {checkToken} from "../../state/authReducer";
 
 type AdminPageProps = {
     directions: any,
@@ -33,7 +34,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
     }, [dispatch])
     const setEdit = () => dispatch(editDirection(true))
     const [visible, setVisible] = useState(false)
-    const els = directions.map((item: any, index: number) => <Card index={index} setEdit={setEdit} id={item.id} image={item.image} title={item.name} key={item.id}/>)
+    const els = directions?.map((item: any, index: number) => <Card index={index} setEdit={setEdit} id={item.id} image={item.image} title={item.name} key={item.id}/>)
     const onModal = () => setVisible(!visible)
 
     if(props.pending){
@@ -65,9 +66,11 @@ const Card: React.FC<CardProps> = (props) => {
     const dispatch = useDispatch()
     const [visible, setVisible] = useState(false)
     const onModal = () => setVisible(!visible)
-
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const deleteDirection = () => {
-        api.delCategory(props.id)
+        requestCheck(()=>api.delCategory(props.id))
             .then((res: any) => {
                 dispatch(removeDirection(props.index))
             })
@@ -112,6 +115,9 @@ export const AddCard = (props: any) => {
 
 const AddUserModal = (props: any) => {
     const dispatch = useDispatch()
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const [name, setName] = useState('')
     const [url, setUrl] = useState('')
     const [dis, setDis] = useState(true)
@@ -132,7 +138,7 @@ const AddUserModal = (props: any) => {
             name: name,
             image: url
         }
-        api.setCategory(data)
+        requestCheck(()=>api.setCategory(data))
             .then((res: any) => {
                 dispatch(addDirection(res.data))
                 setUrl('')

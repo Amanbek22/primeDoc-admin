@@ -12,6 +12,7 @@ import {AddCard} from "../admin/AdminPage";
 import Preloader from "../preloader/Preloader";
 import DeleteModal from "../utils/DeleteModal";
 import ModalWrapper from "../modal/Modal";
+import {checkToken} from "../../state/authReducer";
 
 
 const Payments = () => {
@@ -19,6 +20,9 @@ const Payments = () => {
     useEffect(() => {
         dispatch(setHeader("Способы оплаты"))
     }, [dispatch])
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const history = useHistory()
 
     //state
@@ -26,8 +30,8 @@ const Payments = () => {
     const [payments, setPayments] = useState([])
 
     useEffect(() => {
-        api.getPayments()
-            .then((res) => {
+        requestCheck(api.getPayments)
+            .then((res:any) => {
                 // console.log(res)
                 setPayments(res.data)
                 setPending(false)
@@ -37,10 +41,10 @@ const Payments = () => {
 
     const onDelete = (id: number) => {
         setPending(true)
-        api.delPayments(id)
+        requestCheck(()=>api.delPayments(id))
             .then((res) => {
-                    api.getPayments()
-                        .then((res) => {
+                    requestCheck(api.getPayments)
+                        .then((res:any) => {
                             // console.log(res)
                             setPayments(res.data)
                             setPending(false)

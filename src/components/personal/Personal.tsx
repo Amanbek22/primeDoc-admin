@@ -19,6 +19,7 @@ import css from './personal.module.css'
 import Select from "react-select";
 import {GlobalStateType} from "../../state/root-reducer";
 import {getCategories} from "../../state/initial-selector";
+import {checkToken} from "../../state/authReducer";
 
 type Props = {}
 const Personal: React.FC<Props> = () => {
@@ -26,12 +27,14 @@ const Personal: React.FC<Props> = () => {
     useEffect(() => {
         dispatch(setHeader("Персонал"))
     }, [dispatch])
-
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const [doctors, setDoctors] = useState([])
     const [pending, setPending] = useState(true)
 
     useEffect(() => {
-        api.getDoctor().then((res: any) => {
+        requestCheck(api.getDoctor).then((res: any) => {
             setDoctors(res.data)
             setPending(false)
         }, (error: any) => {
@@ -97,8 +100,12 @@ type ListProps = {
 
 
 const List: React.FC<ListProps> = (props) => {
+    const dispatch = useDispatch()
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const deleteDoctor = () => {
-        api.delDoctor(props.id)
+        requestCheck(()=>api.delDoctor(props.id))
             .then((res: any) => {
                 console.log(res)
                 props.setPending()
@@ -134,13 +141,13 @@ const List: React.FC<ListProps> = (props) => {
 
     const setDoctor = (e:any) => {
         e.preventDefault()
-        api.editDoctor(props.id, {
+        requestCheck(()=>api.editDoctor(props.id, {
             categories: direction.map((item:any) => item.value),
             username: email,
             firstName: fio,
             lastName: lastName,
             patronymic: patronymic
-        })
+        }))
             .then((res:any)=> console.log(res))
         onEditModal()
     }

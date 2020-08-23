@@ -7,6 +7,7 @@ import css from './doctor.module.css'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import CreateTimeTable from "../create-time-table/CreateTimeTable";
+import {checkToken} from "../../state/authReducer";
 
 type DoctorProps = {}
 const Doctor: React.FC<DoctorProps> = React.memo(() => {
@@ -14,14 +15,17 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
     useEffect(() => {
         dispatch(setHeader('Подробно о враче'))
     }, [dispatch])
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const params: any = useParams()
     const [pending, setPending] = useState(true)
     const [user, setUser] = useState<any>(null)
     const [image, setImage] = useState<string | null>(null)
 
     useEffect(() => {
-        api.getDoc(params.id)
-            .then((res) => {
+        requestCheck(()=>api.getDoc(params.id))
+            .then((res:any) => {
                 setPending(false)
                 setUser(res.data)
                 setImage(res.data.image)
@@ -87,13 +91,17 @@ type ScheduleProps = {
     id: number
 }
 const Schedule = (props: ScheduleProps) => {
+    const dispatch = useDispatch()
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const [schedule, setSchedule] = useState<any>(null)
     const [oldSchedule, setOldSchedule] = useState<any>([])
     const [edit, setEdit] = useState(false)
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     useEffect(() => {
-        api.getSchedule(props.id)
-            .then((res) => {
+        requestCheck(()=>api.getSchedule(props.id))
+            .then((res:any) => {
                 // setSchedule(res.data)
                 const newData = {
                     ...res.data,

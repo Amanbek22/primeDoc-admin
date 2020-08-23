@@ -15,6 +15,7 @@ import {
 import DeleteModal from "../utils/DeleteModal";
 import ModalWrapper from "../modal/Modal";
 import EditDeleteComponent from "../utils/EditDelete";
+import {checkToken} from "../../state/authReducer";
 
 
 const validate = (values: any) => {
@@ -44,7 +45,9 @@ const Faq = React.memo(() => {
     useEffect(() => {
         dispatch(setHeader("FAQ"))
     }, [dispatch])
-
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
 
     function compare(a: any, b: any) {
         const bandA = a.order
@@ -59,7 +62,7 @@ const Faq = React.memo(() => {
     }
 
     useEffect(() => {
-        api.getFaq().then((res: any) => {
+        requestCheck(api.getFaq).then((res: any) => {
             const data = res.data.sort(compare)
             setQuestions(data)
             setPending(false)
@@ -74,9 +77,9 @@ const Faq = React.memo(() => {
         },
         validate,
         onSubmit: async (values: any) => {
-            api.createFaq(values)
+            requestCheck(()=>api.createFaq(values))
                 .then((res: any) => {
-                    api.getFaq().then((res: any) => {
+                    requestCheck(api.getFaq).then((res: any) => {
                         const data = res.data.sort(compare)
                         setQuestions(data)
                         setVisible(false)
@@ -105,7 +108,7 @@ const Faq = React.memo(() => {
             order: item.order
         }))
         newArr.sort((a: any, b: any) => a.id - b.id)
-        api.orderFaq(newArr)
+        requestCheck(()=>api.orderFaq(newArr))
             .then((res) => console.log(res))
     }
     if (pending) {
@@ -219,8 +222,12 @@ const List: React.FC<ListProps> = (props) => {
     const innerRef = useOuterClick((e: any) => {
         setVisible(false)
     });
+    const dispatch = useDispatch()
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const onDelete = () => {
-        api.deleteFaq(props.id)
+        requestCheck(()=>api.deleteFaq(props.id))
             .then((res: any) => {
                     console.log(res)
                     props.setPending()

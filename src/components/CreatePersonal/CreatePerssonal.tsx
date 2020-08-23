@@ -23,6 +23,7 @@ import {GlobalStateType} from "../../state/root-reducer";
 import {getCategories} from "../../state/initial-selector";
 import * as Yup from "yup";
 import deepEqual from "lodash.isequal";
+import {checkToken} from "../../state/authReducer";
 
 registerLocale('ru', ru)
 
@@ -49,6 +50,9 @@ const CreatePersonal = () => {
     useEffect(() => {
         dispatch(setHeader("Создание врача"))
     }, [dispatch])
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const history = useHistory()
 
     const categories = useSelector((state: GlobalStateType) => getCategories(state))
@@ -112,7 +116,7 @@ const CreatePersonal = () => {
                 validationSchema={Yup.object().shape(validateFormik)}
                 onSubmit={(values, {setSubmitting}) => {
                     setSubmitting(true);
-                    api.setDoctor({
+                    requestCheck(()=>api.setDoctor({
                         bio: values.aboutDoctor,
                         birthDate: null,
                         categories: category.map((item: any) => item.value),
@@ -125,7 +129,7 @@ const CreatePersonal = () => {
                         position: null,
                         schedules: null,
                         username: values.login
-                    })
+                    }))
                         .then((res: any) => {
                             console.log(res)
                             if(time){
