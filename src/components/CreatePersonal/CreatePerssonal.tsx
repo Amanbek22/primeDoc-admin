@@ -63,11 +63,11 @@ const CreatePersonal = () => {
     const degreeOption = [
         {
             value: 'EXPERIENCE',
-            label: 'EXPERIENCE'
+            label: 'Опыт работы'
         },
         {
             value: 'REGALIA',
-            label: 'REGALIA'
+            label: 'Образование'
         }
     ]
     let deg = {
@@ -217,7 +217,7 @@ const CreatePersonal = () => {
                                                 {values.degree && values.degree.length > 0 ? (
                                                     values.degree.map((degree, index) => (
                                                         <label key={index} className={css.label}>
-                                                            <span><span>*</span>Опыт работы</span>
+                                                            <span><span>*</span>Регалии</span>
                                                             <Select
                                                                 options={degreeOption}
                                                                 styles={selectStyles}
