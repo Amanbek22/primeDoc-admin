@@ -16,7 +16,7 @@ import {Link, useParams} from "react-router-dom";
 import api from '../../api/Api'
 import DeleteModal from "../utils/DeleteModal";
 import ModalWrapper from "../modal/Modal";
-import EditDeleteComponent from "../utils/EditDelete";
+// import EditDeleteComponent from "../utils/EditDelete";
 import {GlobalStateType} from "../../state/root-reducer";
 import {getIllnesses} from '../../state/initial-selector'
 import Select from "react-select";
@@ -45,9 +45,10 @@ const ClinicDirection = () => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [image, setImage] = useState('')
+    const [img, setImg] = useState('')
     const [illness, setIllness] = useState<any>([])
     const [options, setOptions] = useState<any>([])
-
+    console.log(image)
     const nameChange = (e: any) => setName(e.target.value)
     const descriptionChange = (e: any) => setDescription(e.target.value)
     const illnessesChange = (e: any) => setIllness(e)
@@ -68,14 +69,23 @@ const ClinicDirection = () => {
         let data = {
             description: description,
             name: name,
-            image: image,
+            // image: image,
             illnesses: newArr
         }
+        const newData = new FormData()
+        if(img) newData.append('imageFile', img)
+
         console.log(data)
         requestCheck(()=>api.putCategory(params.id, data))
             .then((res:any) => {
                 console.log(res.data)
             })
+        if(img) {
+            requestCheck(() => api.putCategoryImage(params.id, newData))
+                .then((res: any) => {
+                    console.log(res.data)
+                })
+        }
     }
     const setEdit = useCallback(() => {
         dispatch(editDirection(false))
@@ -132,7 +142,7 @@ const ClinicDirection = () => {
                     <span>
                     <img
                         width={'100%'}
-                        src={image ? "data:image/jpg;base64," + image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
+                        src={image ? image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
                         alt="#"
                     />
                     </span>
@@ -145,8 +155,9 @@ const ClinicDirection = () => {
                                     reader.readAsDataURL(e.target.files[0]);
                                     reader.onload = (e: any) => {
                                         const newData = e.target.result.split(',')
-                                        setImage(newData[1])
+                                        setImage(e.target.result)
                                     }
+                                    setImg(e.target.files[0])
                                 }} type={'file'}/>
                                 <GreenDiv>Добавить фото</GreenDiv>
                             </label>
@@ -277,7 +288,7 @@ const Doctors = (props: DocType) => {
                     </div>
                 </Link>
                 <div>
-                    <EditDeleteComponent noEdit={true}  editing={editing} onEdit={onEdit} onModal={onModal} onDone={setDoctor}/>
+                    {/*<EditDeleteComponent noEdit={true}  editing={editing} onEdit={onEdit} onModal={onModal} onDone={setDoctor}/>*/}
                 </div>
             </div>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>

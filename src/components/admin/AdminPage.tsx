@@ -80,7 +80,7 @@ const Card: React.FC<CardProps> = (props) => {
             <Link to={`/clinic/${props.id}`} className={css.link}>
                 <img
 
-                    src={props.image ? "data:image/jpg;base64," + props.image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
+                    src={props.image ?  props.image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
                     alt={props.title}
                 />
                 <span className={css.title}>
@@ -120,6 +120,7 @@ const AddUserModal = (props: any) => {
     }
     const [name, setName] = useState('')
     const [url, setUrl] = useState('')
+    const [img, setImg] = useState<any>(null)
     const [dis, setDis] = useState(true)
     useEffect(()=>{
         if(name && url){
@@ -131,14 +132,18 @@ const AddUserModal = (props: any) => {
     const submit = (e: any) => {
         e.preventDefault()
         props.onModal()
-        const data = {
-            description: '',
-            doctors: [],
-            illnesses: [],
-            name: name,
-            image: url
-        }
-        requestCheck(()=>api.setCategory(data))
+        // const data = {
+        //     description: '',
+        //     doctors: [],
+        //     illnesses: [],
+        //     name: name,
+        //     image: url
+        // }
+        const newData = new FormData()
+        newData.append('description', '')
+        newData.append('name', name)
+        if(img) newData.append('imageFile', img)
+        requestCheck(()=>api.setCategory(newData))
             .then((res: any) => {
                 dispatch(addDirection(res.data))
                 setUrl('')
@@ -157,6 +162,7 @@ const AddUserModal = (props: any) => {
                     </DownloadPictureWrapper>
                     <label>
                         <InputNone type="file" onChange={(e: any) => {
+                            setImg(e.target.files[0])
                             const reader = new FileReader()
                             if(e.target.files.length) {
                                 reader.readAsDataURL(e.target.files[0]);

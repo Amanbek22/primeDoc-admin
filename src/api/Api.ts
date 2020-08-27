@@ -58,7 +58,11 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-
+    putCategoryImage: (id:number|string, data:any) => http.put(`category/image/${id}`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
     getUser: () => http.get(`user/`, {
         headers: {
             "Authorization": "Bearer " + getToken()

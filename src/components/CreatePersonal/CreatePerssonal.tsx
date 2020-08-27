@@ -253,7 +253,7 @@ const CreatePersonal = () => {
                                                         }
                                                     >
                                                         {/* show this when user has removed all friends from the list */}
-                                                        Добавить опыт работы
+                                                        Добавить регплии
                                                     </button>
                                                 )}
                                                 <button
