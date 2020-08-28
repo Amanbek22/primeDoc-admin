@@ -265,7 +265,7 @@ const Doctors = (props: DocType) => {
     const onModal = () => setVisible(!visible)
     const setDoctor = () => {
         onEdit()
-        alert(name)
+        // alert(name)
     }
     return (
         <>
@@ -281,7 +281,7 @@ const Doctors = (props: DocType) => {
                                        src="https://jardin.ee/wp-content/uploads/2014/08/No-profile-LinkedIn.jpg"
                                        alt="#"/>
                         }
-                        <img src={addPicture} alt="+" className={css.addPicture} onClick={() => alert('Add Picture')}/>
+                        <img src={addPicture} alt="+" className={css.addPicture} onClick={() => {}}/>
                     </div>
                     <div className={css.name}>
                         {editing ? <input type="text" value={name} onChange={(e) => setName(e.target.value)}/> : name}

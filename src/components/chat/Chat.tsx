@@ -1,16 +1,24 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import css from './chat.module.css'
 import video from '../../img/video.png'
 import send from '../../img/send.png'
 
-
-const Chat = () => {
+type ChatProps = {
+    users: [any]
+    messages: any
+    onUserChoose: any
+    onSubmit: (text: string) => void
+    user: any
+}
+const Chat: React.FC<ChatProps> = (props) => {
+    // console.log(props)
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader("Чат"))
     }, [dispatch])
+    const [name, setName] = useState('')
     useEffect(() => {
         document.getElementsByTagName('body')[0].classList.add(css.bodyBg)
         return () => document.getElementsByTagName('body')[0].classList.remove(css.bodyBg)
@@ -22,105 +30,125 @@ const Chat = () => {
                     <input className={css.search} type="text" placeholder={'Найти сотрудника'}/>
                 </div>
                 <div className={css.users}>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
-                    <User/>
+                    {
+                        props.users.map((item: any, index) => <User active={props.user} key={item.sid} sid={item.sid} data={item} index={index}
+                                             onC={props.onUserChoose}/>)
+                    }
                     <div className={css.all}>
                         <span>Загрузить все</span>
                     </div>
                 </div>
             </div>
-            <MessageBlock/>
+            <MessageBlock user={props.user} messages={props.messages} onSubmit={props.onSubmit}/>
         </div>
     )
 }
 
-
-const User = () => {
+type UserProps = {
+    onC: any
+    sid: string
+    index: number
+    data: any
+    active: any
+}
+const User: React.FC<UserProps> = (props) => {
+    const [name, setName] = useState('')
+    console.log(props.active?.id === props.sid)
+    props.data.getMembers().then((member:any) => {
+        member.map(async (u: any) => {
+            let user = await u.getUser()
+            if (user.identity !== '1:[ADMIN]') {
+                // console.log(user.friendlyName)
+                setName(user.friendlyName)
+            }
+        })
+    })
     return (
-        <div className={css.user
-            // css.activeUser
-        }>
+        <div className={ props.active?.id !== props.sid ? css.user : css.user + ' ' + css.activeUser
+        }
+             onClick={() => props.onC(props.sid, props.index)}
+        >
             <div className={css.avaWrapper}>
-                <img src="https://data.whicdn.com/images/332611241/original.jpg" alt="logo"/>
+                <img src="https://mediator.kg/wp-content/themes/twentynineteen/images/avatar-no-photo.png" alt="logo"/>
             </div>
             <div>
-                <div className={css.name}>Асанова Алия</div>
-                <div className={css.lastMessage}>Здравствуйте!</div>
-            </div>
-            <div className={css.count}>
-                1
-            </div>
-        </div>
-    )
-}
-
-const MessageBlock = () => {
-    return (
-        <div className={css.chat}>
-            <div className={css.chat__header}>
-                <div className={css.header__name}>Асанова Алия</div>
-                <div>
-                    <img src={video} alt="video"/>
+                <div className={css.name}>{name}</div>
+                <div className={css.lastMessage}>
+                    {/*Здравствуйте!*/}
                 </div>
             </div>
-            <div className={css.messages}>
-                <Message/>
-                <MyMessage/>
-                <Message/>
-                <MyMessage/>
-                <Message/>
-                <MyMessage/>
-                <Message/>
-                <MyMessage/>
-                <Message/>
-                <MyMessage/>
-                <Message/>
-                <MyMessage/>
-
-            </div>
-            <div className={css.input__wrapper}>
-                <input type="text" className={css.search} placeholder={'Введите сообщение...'}/>
-                <button type="submit" className={css.send}>
-                    <img src={send} alt="send"/>
-                </button>
-            </div>
+            {/*<div className={css.count}>*/}
+            {/*    1*/}
+            {/*</div>*/}
         </div>
     )
 }
 
-const MyMessage = () => {
+type MessageProps = {
+    messages: any
+    onSubmit: (text: string) => void
+    user: any
+}
+const MessageBlock: React.FC<MessageProps> = (props) => {
+    const [inp, setInp] = useState('')
+    const submit = (e: any) => {
+        e.preventDefault()
+        props.onSubmit(inp)
+        setInp('')
+    }
+    return (
+        <div className={css.chat}>
+            {
+                props.user
+                    ? <>
+                        <div className={css.chat__header}>
+                            <div className={css.header__name}>{props.user?.name}</div>
+                            <div>
+                                <img src={video} alt="video"/>
+                            </div>
+                        </div>
+                        <div className={css.messages}>
+                            {
+                                props.messages.map((item: any) => {
+                                    console.log(item)
+                                    if(item.author.id === '1:[ADMIN]') {
+                                        return <MyMessage text={item.text} key={item.text}/>
+                                    }else{
+                                        return  <Message key={item.text} user={props.user} text={item.text} />
+                                    }
+                                })
+                            }
+                            {/*<Message/>*/}
+                            {/*<MyMessage/>*/}
+                        </div>
+                        <form onSubmit={submit} className={css.input__wrapper}>
+                            <input value={inp} onChange={(e) => setInp(e.target.value)} type="text" className={css.search}
+                                   placeholder={'Введите сообщение...'}/>
+                            <button type="submit" className={css.send}>
+                                <img src={send} alt="send"/>
+                            </button>
+                        </form>
+                    </>
+                    : <div className={css.noChat}>Выберите чат для переписки</div>
+            }
+        </div>
+    )
+}
+
+
+type MyMessageProps = {
+    text: string
+    user?: any
+}
+const MyMessage: React.FC<MyMessageProps> = ({text, ...props}) => {
     return (
         <div>
-            <span className={css.my__message}>
-                Hello!!!
-                Hello!!!
-                Hello!!!
-                Hello!!!
-                Hello!!!
-                Hello!!!
-                Hello!!!
-            </span>
+            <span className={css.my__message}>{text}</span>
         </div>
     )
 }
 
-const Message = () => {
+const Message:React.FC<MyMessageProps> = (props) => {
     return (
         <div className={css.message__wrapper}>
             <div>
@@ -128,15 +156,14 @@ const Message = () => {
                     <img src="https://data.whicdn.com/images/332611241/original.jpg" alt="logo"/>
                 </div>
                 <div className={css.message__name}>
-                    Асанова Алия
+                    {props.user.name}
                 </div>
             </div>
             <div>
                 <span/>
                 <div>
                             <span className={css.message}>
-                                Здравствуйте!
-                                Здравствуйте!
+                                {props.text}
                             </span>
                 </div>
             </div>
