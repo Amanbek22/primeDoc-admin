@@ -55,7 +55,8 @@ export const authFc = (password: string, log: string) => async (dispatch: any,) 
                     access_token: res.data.accessToken,
                     refresh_token: res.data.refreshToken,
                     access_life: res.data.tokenExpirationTime,
-                    refresh_life: res.data.refreshExpirationTime
+                    refresh_life: res.data.refreshExpirationTime,
+                    chatToken: res.data.chatToken
                 }))
                 dispatch(getDirections())
                 dispatch(getIllness())
@@ -71,16 +72,18 @@ export const authFc = (password: string, log: string) => async (dispatch: any,) 
 
 export const setDataRefresh = () => async (dispatch: any) => {
     const userData = JSON.parse(localStorage.getItem('userData') as string)
+
     const res = await api.refreshToken({
+        username: 'primecdoctor@gmail.com',
         accessToken: userData.access_token,
-        refreshToken: userData.refresh_token,
-        username: 'primecdoctor@gmail.com'
+        refreshToken: userData.refresh_token
     });
     localStorage.setItem(storageName, JSON.stringify({
         access_token: res.data.accessToken,
         refresh_token: res.data.refreshToken,
         access_life: res.data.tokenExpirationTime,
-        refresh_life: res.data.refreshExpirationTime
+        refresh_life: res.data.refreshExpirationTime,
+        chatToken: res.data.chatToken
     }))
     dispatch(signIn({
         isAuth: true
@@ -94,7 +97,7 @@ export const checkToken = (req: any) =>  async (dispatch: any) => {
     // console.log(new Date(token.refresh_life) > now )
     if ( token && new Date(token?.access_life) > now) {
         return  await req()
-    } else if ( token && new Date(token.refresh_life) > now) {
+    } else if ( token && new Date(token?.refresh_life) > now) {
         // alert('refresh is bigger')
         console.log('refresh is bigger')
         await dispatch(setDataRefresh())
