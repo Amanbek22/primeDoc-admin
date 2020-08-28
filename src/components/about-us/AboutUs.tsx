@@ -8,6 +8,7 @@ import EditDeleteComponent from "../utils/EditDelete";
 import {useFormik} from "formik";
 import ModalWrapper from "../modal/Modal";
 import Preloader from "../preloader/Preloader";
+import {checkToken} from "../../state/authReducer";
 
 
 
@@ -21,13 +22,16 @@ const AboutUs = () => {
     const [files, setFiles] = useState<any>([])
     const [file, setFile] = useState<any>(null)
     const [pending, setPending] = useState(true)
+    const getAboutUs = async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     useEffect(()=>{
-        api.getAboutUs()
-            .then((res)=>{
+        getAboutUs(api.getAboutUs)
+            .then((res:any)=>{
                 setData(res.data)
             })
-        api.getDocs()
-            .then((res)=>{
+        getAboutUs(api.getDocs)
+            .then((res:any)=>{
                 setFiles(res.data)
                 setPending(false)
             })
@@ -36,8 +40,8 @@ const AboutUs = () => {
         setPending(true)
         const f = new FormData()
         f.append('file',file)
-        api.docsUpload(f)
-            .then((res)=>{
+        getAboutUs(()=>api.docsUpload(f))
+            .then((res:any)=>{
                 console.log(res)
                 setFile(null)
             })
@@ -57,24 +61,6 @@ const AboutUs = () => {
                         header={item.header}
                         paragraph={item.paragraph} />)
                 }
-                {/*<div className={css.contact}>Контакты</div>*/}
-                {/*<div>*/}
-                {/*    <div className={css.header}>Адрес в Бишкеке:</div>*/}
-                {/*    <span>г.Бишкек ул.Сыдыкова 113, пер. ул.Тоголок-Молдо</span>*/}
-                {/*</div>*/}
-                {/*<div>*/}
-                {/*    <div className={css.header}>Контактные данные:</div>*/}
-                {/*    <div>*/}
-                {/*    <span>+996 501 116 622</span><br/>*/}
-                {/*    <span>+996 551 152 200</span>*/}
-                {/*    </div>*/}
-                {/*    <span className={css.editWrapper}>*/}
-                {/*        <EditDelete>*/}
-                {/*            <img src={edit} alt="edit"/>*/}
-                {/*            <img src={del} alt="delete"/>*/}
-                {/*        </EditDelete>*/}
-                {/*    </span>*/}
-                {/*</div>*/}
                 <div className={css.files}>
                     {
                         files.map((item:any)=><File key={item.id} id={item.id} code={item.code} name={item.fileName} />)
@@ -141,6 +127,10 @@ type PartProps = {
 const Part = (props:PartProps) => {
     const [edit, setEdit] = useState(false)
     const onEdit = () => setEdit(!edit)
+    const dispatch = useDispatch()
+    const request = async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const formik = useFormik({
         initialValues: {
             paragraph: props.paragraph,
@@ -148,12 +138,12 @@ const Part = (props:PartProps) => {
         },
         // validate,
         onSubmit: (values) => {
-            api.setAboutUs(props.id,{
+            request(()=>api.setAboutUs(props.id,{
                 header: values.header,
                 id: props.id,
                 order: props.order,
                 paragraph: values.paragraph
-            }).then((res)=>console.log(res))
+            })).then((res)=>console.log(res))
             onEdit()
         },
     });

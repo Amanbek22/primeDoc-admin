@@ -9,15 +9,10 @@ const getToken = () => {
     let data = JSON.parse(localStorage.getItem('userData') as string)
     return data.access_token
 }
-// const getRefresh = () => {
-//     let data = JSON.parse(localStorage.getItem('userData') as string)
-//     return data.refresh_token
-// }
-
 
 export default {
     signIn: (data: any) => http.post("auth", data),
-    refreshToken: () => http.post("auth"),
+    refreshToken: (data:any) => http.post("refresh", data),
     getIllness: (id?:string) => http.get(`illness/${id ? id : ''}`, {
         headers: {
             "Authorization": "Bearer " + getToken()
@@ -63,7 +58,11 @@ export default {
             "Authorization": "Bearer " + getToken()
         }
     }),
-
+    putCategoryImage: (id:number|string, data:any) => http.put(`category/image/${id}`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    }),
     getUser: () => http.get(`user/`, {
         headers: {
             "Authorization": "Bearer " + getToken()

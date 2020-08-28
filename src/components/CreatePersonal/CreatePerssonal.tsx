@@ -23,6 +23,7 @@ import {GlobalStateType} from "../../state/root-reducer";
 import {getCategories} from "../../state/initial-selector";
 import * as Yup from "yup";
 import deepEqual from "lodash.isequal";
+import {checkToken} from "../../state/authReducer";
 
 registerLocale('ru', ru)
 
@@ -49,6 +50,9 @@ const CreatePersonal = () => {
     useEffect(() => {
         dispatch(setHeader("Создание врача"))
     }, [dispatch])
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const history = useHistory()
 
     const categories = useSelector((state: GlobalStateType) => getCategories(state))
@@ -56,8 +60,18 @@ const CreatePersonal = () => {
     const [category, setCategory] = useState<any>([])
     const [options, setOptions] = useState<any>([])
     const [time, setTime] = useState(false)
+    const degreeOption = [
+        {
+            value: 'EXPERIENCE',
+            label: 'Опыт работы'
+        },
+        {
+            value: 'REGALIA',
+            label: 'Образование'
+        }
+    ]
     let deg = {
-        infoType: 'EXPERIENCE',
+        infoType: '',
         name: '',
         organizationName: '',
         start: '',
@@ -90,7 +104,7 @@ const CreatePersonal = () => {
                     organizationName: '',
                     degree: [
                         {
-                            infoType: 'EXPERIENCE',
+                            infoType: '',
                             name: '',
                             organizationName: '',
                             start: '',
@@ -102,7 +116,7 @@ const CreatePersonal = () => {
                 validationSchema={Yup.object().shape(validateFormik)}
                 onSubmit={(values, {setSubmitting}) => {
                     setSubmitting(true);
-                    api.setDoctor({
+                    requestCheck(()=>api.setDoctor({
                         bio: values.aboutDoctor,
                         birthDate: null,
                         categories: category.map((item: any) => item.value),
@@ -115,7 +129,7 @@ const CreatePersonal = () => {
                         position: null,
                         schedules: null,
                         username: values.login
-                    })
+                    }))
                         .then((res: any) => {
                             console.log(res)
                             if(time){
@@ -184,6 +198,7 @@ const CreatePersonal = () => {
                                         </span>
                                     </span>
                                     <Select
+                                        noOptionsMessage={()=>'Загрузка...'}
                                         onBlur={handleBlur}
                                         isMulti
                                         styles={selectStyles}
@@ -202,7 +217,13 @@ const CreatePersonal = () => {
                                                 {values.degree && values.degree.length > 0 ? (
                                                     values.degree.map((degree, index) => (
                                                         <label key={index} className={css.label}>
-                                                            <span><span>*</span>Опыт работы</span>
+                                                            <span><span>*</span>Регалии</span>
+                                                            <Select
+                                                                options={degreeOption}
+                                                                styles={selectStyles}
+                                                                onChange={(e:any) => values.degree[index].infoType = e.value  }
+                                                                placeholder={''}
+                                                            />
                                                             <Field as={Input} placeholder={'Название'} name={`degree.${index}.name`}/>
                                                             <div className={css.dateWrapper}>
                                                                 <Field
@@ -232,7 +253,7 @@ const CreatePersonal = () => {
                                                         }
                                                     >
                                                         {/* show this when user has removed all friends from the list */}
-                                                        Добавить опыт работы
+                                                        Добавить регплии
                                                     </button>
                                                 )}
                                                 <button

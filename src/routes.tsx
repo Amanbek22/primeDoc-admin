@@ -9,7 +9,6 @@ import MedCarts from "./components/med-cards/MedCards";
 import Faq from "./components/FAQ/FAQ";
 import Personal from "./components/personal/Personal";
 import AboutUs from "./components/about-us/AboutUs";
-import Chat from "./components/chat/Chat";
 import ClinicDirection from "./components/ClinicDirection/ClinicDirection";
 import logout from './img/logout.png'
 import changePassword from './img/changePassword.png'
@@ -19,6 +18,7 @@ import Payment from "./components/payment/Payment";
 import Payments from "./components/payment/Payments";
 import PaymentDetail from "./components/payment/PaymentDetail";
 import Doctor from "./components/doctor/Doctor";
+import ChatApp from "./components/chat/chatContainer";
 
 export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) => {
     if (isAuth) {
@@ -71,7 +71,7 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                             <AboutUs/>
                         </Route>
                         <Route path={'/chat'}>
-                            <Chat/>
+                            <ChatApp/>
                         </Route>
                         <Route exact path={'/payment/'}>
                             <Payments />

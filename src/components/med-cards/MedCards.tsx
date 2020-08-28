@@ -8,25 +8,30 @@ import {setHeader} from "../../state/appReducer";
 import Preloader from '../preloader/Preloader'
 import api from '../../api/Api'
 import Pagination from "../paggination/Paggination";
+import {checkToken} from "../../state/authReducer";
 
 const MedCarts = () => {
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(setHeader("Медицинская карта"))
+    }, [dispatch])
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
+
     const [pending, setPending] = useState(true)
     const [user, setUser] = useState([])
     const [pagination, setPagination] = useState(0)
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(10)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(setHeader("Медицинская карта"))
-    }, [dispatch])
     useEffect(() => {
         // api.getUser().then((res: any) => {
         //     setUser(res.data)
         //     setPagination(Math.ceil(res.data.length / 5))
         //     setPending(false)
         // }, (error: any) => console.error(error))
-        api.getClient(page, pageSize)
-            .then((res)=>{
+        requestCheck(()=>api.getClient(page, pageSize))
+            .then((res:any)=>{
                 setUser(res.data.content)
                 console.log(res.data)
                 setPagination(res.data.totalPages)

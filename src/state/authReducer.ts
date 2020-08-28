@@ -52,10 +52,11 @@ export const authFc = (password: string, log: string) => async (dispatch: any,) 
                     isAuth: true
                 }))
                 localStorage.setItem(storageName, JSON.stringify({
-                    access_token: res.data.token,
-                    refresh_token: res.data.token,
-                    access_life: res.data.expirationTime,
-                    refresh_life: res.data.expirationTime
+                    access_token: res.data.accessToken,
+                    refresh_token: res.data.refreshToken,
+                    access_life: res.data.tokenExpirationTime,
+                    refresh_life: res.data.refreshExpirationTime,
+                    chatToken: res.data.chatToken
                 }))
                 dispatch(getDirections())
                 dispatch(getIllness())
@@ -70,15 +71,19 @@ export const authFc = (password: string, log: string) => async (dispatch: any,) 
 }
 
 export const setDataRefresh = () => async (dispatch: any) => {
-    const res = await api.refreshToken();
-    const access_life = res.data.expirationTime
     const userData = JSON.parse(localStorage.getItem('userData') as string)
-    const { refresh_token,  refresh_life} = userData;
-    localStorage.setItem('userData', JSON.stringify({
-        access_token: res.data.access,
-        refresh_token: refresh_token,
-        access_life: access_life,
-        refresh_life: refresh_life
+
+    const res = await api.refreshToken({
+        username: 'primecdoctor@gmail.com',
+        accessToken: userData.access_token,
+        refreshToken: userData.refresh_token
+    });
+    localStorage.setItem(storageName, JSON.stringify({
+        access_token: res.data.accessToken,
+        refresh_token: res.data.refreshToken,
+        access_life: res.data.tokenExpirationTime,
+        refresh_life: res.data.refreshExpirationTime,
+        chatToken: res.data.chatToken
     }))
     dispatch(signIn({
         isAuth: true
@@ -89,13 +94,18 @@ export const setDataRefresh = () => async (dispatch: any) => {
 export const checkToken = (req: any) =>  async (dispatch: any) => {
     let token = JSON.parse(localStorage.getItem('userData') as string);
     const now = new Date()
-    if ( token && new Date(token.access_life) > now) {
-        return  await req
-    } else if ( token && new Date(token.refresh_life) > now) {
+    // console.log(new Date(token.refresh_life) > now )
+    if ( token && new Date(token?.access_life) > now) {
+        return  await req()
+    } else if ( token && new Date(token?.refresh_life) > now) {
+        // alert('refresh is bigger')
         console.log('refresh is bigger')
         await dispatch(setDataRefresh())
-        return  await req
+        return  await req()
     } else {
+        dispatch(signIn({
+            isAuth: false
+        }))
         return new Error('Something went wrong')
     }
 }

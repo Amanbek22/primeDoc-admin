@@ -20,6 +20,7 @@ import {GlobalStateType} from "../../state/root-reducer";
 import api from '../../api/Api'
 import DeleteModal from "../utils/DeleteModal";
 import Preloader from "../preloader/Preloader";
+import {checkToken} from "../../state/authReducer";
 
 type AdminPageProps = {
     directions: any,
@@ -33,7 +34,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
     }, [dispatch])
     const setEdit = () => dispatch(editDirection(true))
     const [visible, setVisible] = useState(false)
-    const els = directions.map((item: any, index: number) => <Card index={index} setEdit={setEdit} id={item.id} image={item.image} title={item.name} key={item.id}/>)
+    const els = directions?.map((item: any, index: number) => <Card index={index} setEdit={setEdit} id={item.id} image={item.image} title={item.name} key={item.id}/>)
     const onModal = () => setVisible(!visible)
 
     if(props.pending){
@@ -65,9 +66,11 @@ const Card: React.FC<CardProps> = (props) => {
     const dispatch = useDispatch()
     const [visible, setVisible] = useState(false)
     const onModal = () => setVisible(!visible)
-
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const deleteDirection = () => {
-        api.delCategory(props.id)
+        requestCheck(()=>api.delCategory(props.id))
             .then((res: any) => {
                 dispatch(removeDirection(props.index))
             })
@@ -77,7 +80,7 @@ const Card: React.FC<CardProps> = (props) => {
             <Link to={`/clinic/${props.id}`} className={css.link}>
                 <img
 
-                    src={props.image ? "data:image/jpg;base64," + props.image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
+                    src={props.image ?  props.image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
                     alt={props.title}
                 />
                 <span className={css.title}>
@@ -112,8 +115,12 @@ export const AddCard = (props: any) => {
 
 const AddUserModal = (props: any) => {
     const dispatch = useDispatch()
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const [name, setName] = useState('')
     const [url, setUrl] = useState('')
+    const [img, setImg] = useState<any>(null)
     const [dis, setDis] = useState(true)
     useEffect(()=>{
         if(name && url){
@@ -125,14 +132,18 @@ const AddUserModal = (props: any) => {
     const submit = (e: any) => {
         e.preventDefault()
         props.onModal()
-        const data = {
-            description: '',
-            doctors: [],
-            illnesses: [],
-            name: name,
-            image: url
-        }
-        api.setCategory(data)
+        // const data = {
+        //     description: '',
+        //     doctors: [],
+        //     illnesses: [],
+        //     name: name,
+        //     image: url
+        // }
+        const newData = new FormData()
+        newData.append('description', '')
+        newData.append('name', name)
+        if(img) newData.append('imageFile', img)
+        requestCheck(()=>api.setCategory(newData))
             .then((res: any) => {
                 dispatch(addDirection(res.data))
                 setUrl('')
@@ -151,6 +162,7 @@ const AddUserModal = (props: any) => {
                     </DownloadPictureWrapper>
                     <label>
                         <InputNone type="file" onChange={(e: any) => {
+                            setImg(e.target.files[0])
                             const reader = new FileReader()
                             if(e.target.files.length) {
                                 reader.readAsDataURL(e.target.files[0]);

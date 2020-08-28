@@ -146,7 +146,7 @@ export const setIllnesses = (data:any) => {
 
 
 export const getDirections = () => async (dispatch: any) => {
-    dispatch(checkToken(api.getCategory()))
+    dispatch(checkToken(api.getCategory))
         .then((res: any) => {
                 dispatch(setDirections(res.data))
             },
@@ -156,7 +156,7 @@ export const getDirections = () => async (dispatch: any) => {
         )
 }
 export const getIllness = () => async (dispatch: any) => {
-    dispatch(checkToken(api.getIllness()))
+    dispatch(checkToken(api.getIllness))
         .then((res:any)=> {
             dispatch(setIllnesses(res.data))
         },

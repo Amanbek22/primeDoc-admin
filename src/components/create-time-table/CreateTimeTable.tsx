@@ -8,6 +8,7 @@ import {GreenBtn, Weeks, WeeksWrapper} from "../mainStyledComponents/MainStyledC
 import Api from '../../api/Api'
 import { useParams, useHistory } from 'react-router-dom';
 import del from "../../img/delete.png";
+import {checkToken} from "../../state/authReducer";
 
 
 export class Schedule {
@@ -57,6 +58,9 @@ const CreateTimeTable = (props:any) => {
             dispatch(setHeader("Создание расписания"))
         }
     }, [dispatch])
+    const requestCheck =  async (req:any) => {
+        return dispatch(checkToken(req))
+    }
     const params:any = useParams()
     const history = useHistory()
 
@@ -151,12 +155,12 @@ const CreateTimeTable = (props:any) => {
             }))
         }
         if(props.data){
-            Api.changeSchedule(props.data.id, schedule)
+            requestCheck(()=>Api.changeSchedule(props.data.id, schedule))
                 .then((res)=>{
                     console.log(res)
                 })
         }else {
-            Api.createSchedule(schedule)
+            requestCheck(()=>Api.createSchedule(schedule))
                 .then((res) => {
                     console.log(res)
                     history.push('/personal')
