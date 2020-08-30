@@ -110,7 +110,7 @@ const MessageBlock: React.FC<MessageProps> = (props) => {
                         <div className={css.chat__header}>
                             <div className={css.header__name}>{props.user?.name}</div>
                             <div>
-                                <img src={video} alt="video"/>
+                                {/*<img src={video} alt="video"/>*/}
                             </div>
                         </div>
                         <div className={css.messages}>
@@ -128,11 +128,11 @@ const MessageBlock: React.FC<MessageProps> = (props) => {
                             {/*<MyMessage/>*/}
                         </div>
                         <form onSubmit={submit} className={css.input__wrapper}>
-                            <label>
-                                <input type="file" onChange={(e)=> {
-                                    setImg(e?.target?.files)
-                                }}/>
-                            </label>
+                            {/*<label>*/}
+                            {/*    <input type="file" onChange={(e)=> {*/}
+                            {/*        setImg(e?.target?.files)*/}
+                            {/*    }}/>*/}
+                            {/*</label>*/}
                             <input value={inp} onChange={(e) => setInp(e.target.value)} type="text" className={css.search}
                                    placeholder={'Введите сообщение...'}/>
                             <button type="submit" className={css.send}>
