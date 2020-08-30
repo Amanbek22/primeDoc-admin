@@ -118,9 +118,9 @@ const MessageBlock: React.FC<MessageProps> = (props) => {
                                 props.messages.map((item: any) => {
                                     console.log(item)
                                     if(item.author.id === '1:[ADMIN]') {
-                                        return <MyMessage text={item} key={new Date().getTime()}/>
+                                        return <MyMessage text={item} key={Math.random()}/>
                                     }else{
-                                        return  <Message key={new Date().getTime()} user={props.user} text={item.text} />
+                                        return  <Message key={item.text} user={props.user} text={item.text} />
                                     }
                                 })
                             }
