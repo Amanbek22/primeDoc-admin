@@ -111,14 +111,17 @@ class ChatApp extends Component {
     }
 
     twilioMessageToKendoMessage(message) {
+        console.log(message)
         return {
             text: message.body,
             author: {id: message.author, name: message.author},
-            timestamp: message.timestamp
+            timestamp: message.timestamp,
+            media: message.media
         };
     }
 
     messagesLoaded(messagePage) {
+        console.log(messagePage)
         this.setState({
             messages: messagePage.items.map(this.twilioMessageToKendoMessage)
         });
@@ -133,9 +136,16 @@ class ChatApp extends Component {
         }));
     }
 
-    sendMessage(event) {
-        // console.log(event)
-        this.channel.sendMessage(event);
+    sendMessage(text) {
+        console.log(this.channel)
+        if(typeof text === 'string'){
+            this.channel.sendMessage(text)
+        }else {
+            this.channel.sendMessage({
+                contentType: 'image/png',
+                media: text
+            });
+        }
         this.setState({message: ''})
     }
 

@@ -53,7 +53,7 @@ type UserProps = {
 }
 const User: React.FC<UserProps> = (props) => {
     const [name, setName] = useState('')
-    console.log(props.active?.id === props.sid)
+    // console.log(props.active?.id === props.sid)
     props.data.getMembers().then((member:any) => {
         member.map(async (u: any) => {
             let user = await u.getUser()
@@ -91,9 +91,15 @@ type MessageProps = {
 }
 const MessageBlock: React.FC<MessageProps> = (props) => {
     const [inp, setInp] = useState('')
+    const [img, setImg] = useState<any>(null)
+    console.log(props.messages)
     const submit = (e: any) => {
         e.preventDefault()
-        props.onSubmit(inp)
+        if(!img){
+            props.onSubmit(inp)
+        }else{
+            props.onSubmit(img[0])
+        }
         setInp('')
     }
     return (
@@ -112,9 +118,9 @@ const MessageBlock: React.FC<MessageProps> = (props) => {
                                 props.messages.map((item: any) => {
                                     console.log(item)
                                     if(item.author.id === '1:[ADMIN]') {
-                                        return <MyMessage text={item.text} key={item.text}/>
+                                        return <MyMessage text={item} key={new Date().getTime()}/>
                                     }else{
-                                        return  <Message key={item.text} user={props.user} text={item.text} />
+                                        return  <Message key={new Date().getTime()} user={props.user} text={item.text} />
                                     }
                                 })
                             }
@@ -122,6 +128,11 @@ const MessageBlock: React.FC<MessageProps> = (props) => {
                             {/*<MyMessage/>*/}
                         </div>
                         <form onSubmit={submit} className={css.input__wrapper}>
+                            <label>
+                                <input type="file" onChange={(e)=> {
+                                    setImg(e?.target?.files)
+                                }}/>
+                            </label>
                             <input value={inp} onChange={(e) => setInp(e.target.value)} type="text" className={css.search}
                                    placeholder={'Введите сообщение...'}/>
                             <button type="submit" className={css.send}>
@@ -137,13 +148,16 @@ const MessageBlock: React.FC<MessageProps> = (props) => {
 
 
 type MyMessageProps = {
-    text: string
+    text: any
     user?: any
 }
 const MyMessage: React.FC<MyMessageProps> = ({text, ...props}) => {
     return (
         <div>
-            <span className={css.my__message}>{text}</span>
+            {
+                text?.media ? <img src={text.media?.getContentTemporaryUrl()} alt="#"/> : null
+            }
+            <span className={css.my__message}>{text?.text}</span>
         </div>
     )
 }
