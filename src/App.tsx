@@ -23,10 +23,10 @@ const App = (props:any) => {
     }
     useEffect( () => {
         initialiseApp()
-        window.addEventListener('unhandledrejection', allPromiseRejection)
-        return () => {
-            window.removeEventListener('unhandledrejection', allPromiseRejection)
-        }
+        // window.addEventListener('unhandledrejection', allPromiseRejection)
+        // return () => {
+        //     window.removeEventListener('unhandledrejection', allPromiseRejection)
+        // }
     }, [initialiseApp])
     setTimeout(()=>{
         setPend(false)
