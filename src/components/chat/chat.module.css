@@ -168,16 +168,35 @@
     border-radius: 50%;
     padding: 5px;
     height: 38px;
-    width: 38px;
+    width: 38px !important;
     text-align: center;
     display: flex;
     align-items: center;
     margin: auto;
+    cursor: pointer;
 }
 .send>img{
     margin: auto;
     width: 70%;
     height: 70%;
+}
+.plus>img{
+    margin: auto;
+    width: 70%;
+    height: 70%;
+}
+.plus{
+    background: #00BDD0;
+    border: none;
+    border-radius: 50%;
+    padding: 5px;
+    height: 28px;
+    width: 28px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin: auto;
+    cursor: pointer;
 }
 .message__wrapper>div{
     display: grid;
@@ -222,4 +241,8 @@
 .noChat{
     text-align: center;
     margin: 20px 0;
+}
+.messageImg{
+    width: 150px;
+    height: auto;
 }
