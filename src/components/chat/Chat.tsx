@@ -4,6 +4,8 @@ import {setHeader} from "../../state/appReducer";
 import css from './chat.module.css'
 import plus from '../../img/Mask.png'
 import send from '../../img/send.png'
+import ModalWrapper from "../modal/Modal";
+import {GreenBtn, GreenDiv} from "../mainStyledComponents/MainStyledComponents";
 
 type ChatProps = {
     users: [any]
@@ -138,6 +140,13 @@ const MessageBlock: React.FC<MessageProps> = (props) => {
 const SendForm = (props: any) => {
     const [inp, setInp] = useState('')
     const [img, setImg] = useState<any>(null)
+    const [image, setImage] = useState('')
+    const [model, setModel] = useState(false)
+
+    const onModal = () => setModel(!model)
+    const onModalAway = () => {
+        imgChange(null)
+    }
     const submit = (e: any) => {
         e.preventDefault()
         if (!img) {
@@ -148,24 +157,57 @@ const SendForm = (props: any) => {
         setInp('')
         setImg(null)
     }
+    const imgChange = (e: any) => {
+        // setModel(!model)
+
+        setImg(e ? e?.target?.files : null)
+    }
     return (
         <form onSubmit={submit} className={css.input__wrapper}>
             <label>
-                <input accept={'Image/*'} style={{display: 'none'}} type="file" onChange={(e) => {
-                    setImg(e?.target?.files)
+                <input accept={'Image/*'} style={{display: 'none'}} type="file" onChange={(e: any) => {
+                    const reader = new FileReader();
+                    if (e?.target?.files.length) {
+                        reader.readAsDataURL(e.target.files[0])
+                    } else {
+                        setImg('')
+                    }
+                    reader.onload = (e: any) => {
+                        const newUrl = e.target.result.split(',')
+                        setImage(newUrl[1])
+                    }
+                    imgChange(e)
                 }}/>
                 <span className={css.plus}>
                     <img src={plus} alt="+"/>
                 </span>
             </label>
             <input value={inp} onChange={(e) => {
-                e.preventDefault()
                 setInp(e.target.value)
             }} type="text" className={css.search}
                    placeholder={'Введите сообщение...'}/>
             <button type="submit" className={css.send}>
                 <img src={send} alt="send"/>
             </button>
+            <ModalWrapper
+                onModal={onModal}
+                visible={!!img}
+                width={"450"}
+                height={"450"}
+                onClickAway={onModalAway}
+            >
+                <div className={css.imgWrapper}>
+                    <img src={"data:image/jpg;base64," + image} alt="#"/>
+                </div>
+                <div className={css.btnsWrapper}>
+                    <GreenDiv onClick={onModalAway} background={'red'}>
+                        Отменить
+                    </GreenDiv>
+                    <GreenBtn>
+                        Отправить
+                    </GreenBtn>
+                </div>
+            </ModalWrapper>
         </form>
     )
 }
@@ -177,13 +219,13 @@ type MyMessageProps = {
     user?: any
 }
 const MyMessage: React.FC<MyMessageProps> = ({text, ...props}) => {
-    console.log(props.media)
+    // console.log(props.media)
     const [img, setImg] = useState('')
     useEffect(() => {
         if (props.media) {
             // alert('hello')
             props.media?.then((uri: any) => {
-                console.log(uri)
+                // console.log(uri)
                 if (uri !== img) {
                     setImg(uri)
                 }

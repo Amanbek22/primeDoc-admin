@@ -246,3 +246,16 @@
     width: 150px;
     height: auto;
 }
+.imgWrapper{
+    width: 350px;
+    margin: 60px auto;
+}
+.imgWrapper>img{
+    width: 100%;
+}
+.btnsWrapper{
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
