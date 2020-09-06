@@ -79,3 +79,9 @@
 .error{
     color: #FF5069;
 }
+.btnWrapper{
+    display: flex;
+}
+.cancel{
+    margin: 0 10px 0 0;
+}
