@@ -123,7 +123,8 @@
 }
 .messages{
     /*height: 65vh;*/
-    display: grid;
+    display: flex;
+    flex-direction: column;
     overflow-y: scroll;
     position: absolute;
     top: 76px;
