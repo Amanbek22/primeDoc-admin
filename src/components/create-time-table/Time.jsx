@@ -77,7 +77,7 @@ const minutes = [
 const Time = (props) => {
     const [clock1, setClock1] = useState([...clocks])
     const [clock2, setClock2] = useState([...clocks])
-    console.log(clock2)
+
     const ClockChange = (e) => {
         props.setStartH(e.label, props.days, props.index, 'fromH')
         let newArr = clocks.map(item => e.value === item.value ? {
@@ -176,7 +176,6 @@ export const Date = (props) => {
         <div className={css.selectWrapper}>
             <Select isSearchable={false} options={props.options} placeholder={'дни'} value={props.val} onChange={(e) => props.setVal(e)}
                     styles={colourStyles3}/>
-            {/*<DatePicker locale={'ru'} multiple onChange={(e) => console.log(e)}/>*/}
         </div>
     )
 }

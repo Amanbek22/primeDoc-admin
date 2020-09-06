@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import css from './chat.module.css'
-import video from '../../img/video.png'
+import plus from '../../img/Mask.png'
 import send from '../../img/send.png'
+import ModalWrapper from "../modal/Modal";
+import {GreenBtn, GreenDiv} from "../mainStyledComponents/MainStyledComponents";
 
 type ChatProps = {
     users: [any]
@@ -31,8 +33,9 @@ const Chat: React.FC<ChatProps> = (props) => {
                 </div>
                 <div className={css.users}>
                     {
-                        props.users.map((item: any, index) => <User active={props.user} key={item.sid} sid={item.sid} data={item} index={index}
-                                             onC={props.onUserChoose}/>)
+                        props.users.map((item: any, index) => <User active={props.user} key={item.sid} sid={item.sid}
+                                                                    data={item} index={index}
+                                                                    onC={props.onUserChoose}/>)
                     }
                     <div className={css.all}>
                         <span>Загрузить все</span>
@@ -54,7 +57,7 @@ type UserProps = {
 const User: React.FC<UserProps> = (props) => {
     const [name, setName] = useState('')
     // console.log(props.active?.id === props.sid)
-    props.data.getMembers().then((member:any) => {
+    props.data.getMembers().then((member: any) => {
         member.map(async (u: any) => {
             let user = await u.getUser()
             if (user.identity !== '1:[ADMIN]') {
@@ -64,7 +67,7 @@ const User: React.FC<UserProps> = (props) => {
         })
     })
     return (
-        <div className={ props.active?.id !== props.sid ? css.user : css.user + ' ' + css.activeUser
+        <div className={props.active?.id !== props.sid ? css.user : css.user + ' ' + css.activeUser
         }
              onClick={() => props.onC(props.sid, props.index)}
         >
@@ -90,18 +93,16 @@ type MessageProps = {
     user: any
 }
 const MessageBlock: React.FC<MessageProps> = (props) => {
-    const [inp, setInp] = useState('')
-    const [img, setImg] = useState<any>(null)
-    console.log(props.messages)
-    const submit = (e: any) => {
-        e.preventDefault()
-        if(!img){
-            props.onSubmit(inp)
-        }else{
-            props.onSubmit(img[0])
-        }
-        setInp('')
+
+    const messageId: any = useRef(null)
+    const scrollToBottom = () => {
+        const scrollHeight = messageId?.current?.scrollHeight;
+        const height = messageId?.current?.clientHeight;
+        if (messageId.current) messageId.current.scrollTop = scrollHeight - height
     }
+    useEffect(() => {
+        scrollToBottom()
+    })
     return (
         <div className={css.chat}>
             {
@@ -113,56 +114,137 @@ const MessageBlock: React.FC<MessageProps> = (props) => {
                                 {/*<img src={video} alt="video"/>*/}
                             </div>
                         </div>
-                        <div className={css.messages}>
+                        <div ref={messageId} className={css.messages}>
                             {
                                 props.messages.map((item: any) => {
-                                    console.log(item)
-                                    if(item.author.id === '1:[ADMIN]') {
-                                        return <MyMessage text={item} key={Math.random()}/>
-                                    }else{
-                                        return  <Message key={item.text} user={props.user} text={item.text} />
+                                    if (item.author.id === '1:[ADMIN]') {
+                                        return <MyMessage text={item.text}
+                                                          media={item?.media?.getContentTemporaryUrl().then((uri: string) => uri)}
+                                                          key={Math.random()}/>
+                                    } else {
+                                        return <Message key={item.text} user={props.user} media={item.media}
+                                                        text={item.text}/>
                                     }
                                 })
                             }
                             {/*<Message/>*/}
                             {/*<MyMessage/>*/}
                         </div>
-                        <form onSubmit={submit} className={css.input__wrapper}>
-                            {/*<label>*/}
-                            {/*    <input type="file" onChange={(e)=> {*/}
-                            {/*        setImg(e?.target?.files)*/}
-                            {/*    }}/>*/}
-                            {/*</label>*/}
-                            <input value={inp} onChange={(e) => setInp(e.target.value)} type="text" className={css.search}
-                                   placeholder={'Введите сообщение...'}/>
-                            <button type="submit" className={css.send}>
-                                <img src={send} alt="send"/>
-                            </button>
-                        </form>
+                        <SendForm onSubmit={props.onSubmit}/>
                     </>
                     : <div className={css.noChat}>Выберите чат для переписки</div>
             }
         </div>
     )
 }
+const SendForm = (props: any) => {
+    const [inp, setInp] = useState('')
+    const [img, setImg] = useState<any>(null)
+    const [image, setImage] = useState('')
+    const [model, setModel] = useState(false)
+
+    const onModal = () => setModel(!model)
+    const onModalAway = () => {
+        imgChange(null)
+    }
+    const submit = (e: any) => {
+        e.preventDefault()
+        if (!img) {
+            props.onSubmit(inp)
+        } else {
+            props.onSubmit(img[0])
+        }
+        setInp('')
+        setImg(null)
+    }
+    const imgChange = (e: any) => {
+        // setModel(!model)
+
+        setImg(e ? e?.target?.files : null)
+    }
+    return (
+        <form onSubmit={submit} className={css.input__wrapper}>
+            <label>
+                <input accept={'Image/*'} style={{display: 'none'}} type="file" onChange={(e: any) => {
+                    const reader = new FileReader();
+                    if (e?.target?.files.length) {
+                        reader.readAsDataURL(e.target.files[0])
+                    } else {
+                        setImg('')
+                    }
+                    reader.onload = (e: any) => {
+                        const newUrl = e.target.result.split(',')
+                        setImage(newUrl[1])
+                    }
+                    imgChange(e)
+                }}/>
+                <span className={css.plus}>
+                    <img src={plus} alt="+"/>
+                </span>
+            </label>
+            <input value={inp} onChange={(e) => {
+                setInp(e.target.value)
+            }} type="text" className={css.search}
+                   placeholder={'Введите сообщение...'}/>
+            <button type="submit" className={css.send}>
+                <img src={send} alt="send"/>
+            </button>
+            <ModalWrapper
+                onModal={onModal}
+                visible={!!img}
+                width={"450"}
+                height={"450"}
+                onClickAway={onModalAway}
+            >
+                <div className={css.imgWrapper}>
+                    <img src={"data:image/jpg;base64," + image} alt="#"/>
+                </div>
+                <div className={css.btnsWrapper}>
+                    <GreenDiv onClick={onModalAway} background={'red'}>
+                        Отменить
+                    </GreenDiv>
+                    <GreenBtn>
+                        Отправить
+                    </GreenBtn>
+                </div>
+            </ModalWrapper>
+        </form>
+    )
+}
 
 
 type MyMessageProps = {
     text: any
+    media: any
     user?: any
 }
 const MyMessage: React.FC<MyMessageProps> = ({text, ...props}) => {
+    // console.log(props.media)
+    const [img, setImg] = useState('')
+    useEffect(() => {
+        if (props.media) {
+            // alert('hello')
+            props.media?.then((uri: any) => {
+                // console.log(uri)
+                if (uri !== img) {
+                    setImg(uri)
+                }
+            })
+        }
+    }, [props.media, img])
     return (
         <div>
-            {
-                text?.media ? <img src={text.media?.getContentTemporaryUrl()} alt="#"/> : null
-            }
-            <span className={css.my__message}>{text?.text}</span>
+            <span className={css.my__message}>
+                {
+                    img ? <img className={css.messageImg} src={img} alt="#"/> : null
+                }
+                {text}
+            </span>
         </div>
     )
 }
 
-const Message:React.FC<MyMessageProps> = (props) => {
+const Message: React.FC<MyMessageProps> = (props) => {
     return (
         <div className={css.message__wrapper}>
             <div>

@@ -32,10 +32,10 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                                 {header}
                             </span>
                             <div>
-                                <div>
-                                    <img src={changePassword} alt="#"/>
-                                    <span>Сменить пароль</span>
-                                </div>
+                                {/*<div>*/}
+                                {/*    <img src={changePassword} alt="#"/>*/}
+                                {/*    <span>Сменить пароль</span>*/}
+                                {/*</div>*/}
                                 <div onClick={Logout}>
                                     <img src={logout} alt="#"/>
                                     <span>Выйти</span>

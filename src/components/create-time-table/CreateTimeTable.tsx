@@ -77,12 +77,10 @@ const CreateTimeTable = (props:any) => {
     const [weeks, setWeeks] = useState([
         new week()
     ])
-    console.log(weeks)
     useEffect(()=>{
         if(props.data) {
             setWeeks([...props.data?.weeks])
             setDoctorId(props.id)
-            console.log(props)
         }
     }, [props.data])
     const setTimeFromH = (e: any, days: number, listIndex: number, place: any) => {
@@ -120,21 +118,18 @@ const CreateTimeTable = (props:any) => {
         setWeeks([...weeks])
     }
     const setData = (e: any) => {
-        console.log(e)
         setVal(e)
         setStep(e.value)
     }
-    const submit = (e: any) => {
+    const submit = async (e: any) => {
         e.preventDefault()
-        console.log(weeks)
-        // console.log(weeks.map((item)=> console.log(item)))
         const schedule = {
             doctorId: params.time | doctorId,
             currentWeek: 1,
             weekDuration: 1,
             weeks: weeks.map((item, index) => ({
-                weekDays: item.days.map((i: any) => {
-                    const el = i.list[0]
+                weekDays: item.days.map((i: any, index:number) => {
+                    const el = i.list[index]
                     if(el && el.fromH && el.fromM && el.toH && el.toM) {
                         return {
                             intervals: i.list.map((j: any) => {
@@ -154,6 +149,15 @@ const CreateTimeTable = (props:any) => {
                 weekOrder: index + 1
             }))
         }
+        await schedule.weeks.map((item:any, weekIndex)=>item.weekDays.map((i:any, dayIndex: number) => i?.intervals.map((intervals:any, index:number) => {
+            if(!intervals){
+                let filtered = schedule.weeks[weekIndex].weekDays[dayIndex].intervals.filter((el:any)=>{
+                    return el != null;
+                })
+                schedule.weeks[weekIndex].weekDays[dayIndex].intervals = [...filtered]
+                // console.log(schedule.weeks[weekIndex].weekDays[dayIndex].intervals)
+            }
+        })))
         if(props.data){
             requestCheck(()=>Api.changeSchedule(props.data.id, schedule))
                 .then((res)=>{
@@ -162,10 +166,8 @@ const CreateTimeTable = (props:any) => {
         }else {
             requestCheck(()=>Api.createSchedule(schedule))
                 .then((res) => {
-                    console.log(res)
                     history.push('/personal')
                 })
-            console.log(schedule)
         }
     }
     const changeWeek = (index:number) => {

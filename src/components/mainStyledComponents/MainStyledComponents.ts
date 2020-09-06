@@ -88,8 +88,8 @@ export const ModalBtnWrapper = styled.div`
     align-items: center;
     justify-content: center;
 `
-export const GreenDiv = styled.div`
-    background: #20CF54;
+export const GreenDiv:any = styled.div`
+    background: ${(props:any)=> props.background ? props.background : "#20CF54"};
     border-radius: 10px;
     width: 200px;
     margin: auto;

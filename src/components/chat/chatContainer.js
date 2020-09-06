@@ -111,7 +111,7 @@ class ChatApp extends Component {
     }
 
     twilioMessageToKendoMessage(message) {
-        console.log(message)
+        // console.log(message)
         return {
             text: message.body,
             author: {id: message.author, name: message.author},

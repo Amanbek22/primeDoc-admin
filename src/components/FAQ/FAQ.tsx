@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
-import {BtnFloat, GreenBtn, Input} from "../mainStyledComponents/MainStyledComponents";
+import {BtnFloat, GreenBtn, GreenDiv, Input} from "../mainStyledComponents/MainStyledComponents";
 import css from './faq.module.css'
 import api from "../../api/Api";
 import Preloader from "../preloader/Preloader";
@@ -45,7 +45,7 @@ const Faq = React.memo(() => {
     useEffect(() => {
         dispatch(setHeader("FAQ"))
     }, [dispatch])
-    const requestCheck =  async (req:any) => {
+    const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
     }
 
@@ -77,7 +77,7 @@ const Faq = React.memo(() => {
         },
         validate,
         onSubmit: async (values: any) => {
-            requestCheck(()=>api.createFaq(values))
+            requestCheck(() => api.createFaq(values))
                 .then((res: any) => {
                     requestCheck(api.getFaq).then((res: any) => {
                         const data = res.data.sort(compare)
@@ -108,14 +108,20 @@ const Faq = React.memo(() => {
             order: item.order
         }))
         newArr.sort((a: any, b: any) => a.id - b.id)
-        requestCheck(()=>api.orderFaq(newArr))
+        requestCheck(() => api.orderFaq(newArr))
             .then((res) => console.log(res))
+    }
+    const wrapper: any = useRef(null)
+    const scrollToBottom = () => {
+        const scrollHeight = wrapper?.current?.scrollHeight;
+        const height = wrapper?.current?.clientHeight;
+        if (wrapper.current) wrapper.current.scrollTop = scrollHeight - height
     }
     if (pending) {
         return <Preloader/>
     }
     return (
-        <div className={css.wrapper}>
+        <div ref={wrapper} className={css.wrapper}>
             <BtnFloat>
                 {
                     change
@@ -148,9 +154,6 @@ const Faq = React.memo(() => {
                         </GridDropZone>
                     </GridContextProvider>
             }
-            <BtnFloat>
-                <GreenBtn onClick={() => setVisible(!visible)}>Добавить вопрос</GreenBtn>
-            </BtnFloat>
             <div>
                 {
                     visible
@@ -159,7 +162,8 @@ const Faq = React.memo(() => {
                             <label>
                                 <span>
                                     <span>Вопрос</span>
-                                    <span className={css.error}>{formik.errors.question ? <>{formik.errors.question}</> : null}</span>
+                                    <span
+                                        className={css.error}>{formik.errors.question ? <>{formik.errors.question}</> : null}</span>
                                 </span>
                                 <Input name={'question'} onBlur={formik.handleBlur} value={formik.values.question}
                                        onChange={formik.handleChange}/>
@@ -167,17 +171,29 @@ const Faq = React.memo(() => {
                             <label>
                                 <span>
                                     <span>Ответ</span>
-                                    <span className={css.error}>{formik.errors.answer ? <>{formik.errors.answer}</> : null}</span>
+                                    <span
+                                        className={css.error}>{formik.errors.answer ? <>{formik.errors.answer}</> : null}</span>
                                 </span>
                                 <Input name={'answer'} onBlur={formik.handleBlur} value={formik.values.answer}
                                        onChange={formik.handleChange}/>
                             </label>
                         </span>
-                            <BtnFloat>
-                                <GreenBtn>Сохранить</GreenBtn>
-                            </BtnFloat>
+                            <div className={css.btnWrapper}>
+                            <span className={css.cancel}>
+                                <BtnFloat onClick={()=>setVisible(!visible)}>
+                                    <GreenDiv background={'#fe4242'}>Cancel</GreenDiv>
+                                </BtnFloat>
+                            </span>
+                                <BtnFloat>
+                                    <GreenBtn>Сохранить</GreenBtn>
+                                </BtnFloat>
+                            </div>
                         </form>
-                        : null
+                        : <BtnFloat>
+                            <GreenBtn onClick={() => {
+                                setVisible(!visible)
+                            }}>Добавить вопрос</GreenBtn>
+                        </BtnFloat>
                 }
             </div>
         </div>
@@ -223,11 +239,11 @@ const List: React.FC<ListProps> = (props) => {
         setVisible(false)
     });
     const dispatch = useDispatch()
-    const requestCheck =  async (req:any) => {
+    const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
     }
     const onDelete = () => {
-        requestCheck(()=>api.deleteFaq(props.id))
+        requestCheck(() => api.deleteFaq(props.id))
             .then((res: any) => {
                     console.log(res)
                     props.setPending()

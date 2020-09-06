@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, useHistory} from 'react-router-dom';
 import api from '../../api/Api'
 import Preloader from "../preloader/Preloader";
 import {GreenBtn, HeaderWrapper, Weeks, WeeksWrapper} from "../mainStyledComponents/MainStyledComponents";
@@ -60,9 +60,9 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                     <p className={css.categories}>{
                         user?.username
                     }</p>
-                    <p className={css.categories}>
-                        Стаж 25 лет
-                    </p>
+                    {/*<p className={css.categories}>*/}
+                    {/*    Стаж 25 лет*/}
+                    {/*</p>*/}
                 </div>
             </HeaderWrapper>
             <div>
@@ -73,7 +73,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                 <div className={css.title}>Образование</div>
                 {
                     user?.information.map((item: any, index: number) => <div key={index}>
-                        <div className={css.date}>{item.start + ' - ' + item?.end}</div>
+                        <div className={css.date}>{item.end ? item?.start + ' - ' + item?.end : item.start + ' - ' + 'по настоящее время'}</div>
                         <p className={css.text}>{item.name}</p>
                         <p className={css.text}>{item.organizationName}</p>
                     </div>)
@@ -92,6 +92,8 @@ type ScheduleProps = {
 }
 const Schedule = (props: ScheduleProps) => {
     const dispatch = useDispatch()
+    const params:any = useParams()
+    const history = useHistory()
     const requestCheck =  async (req:any) => {
         return dispatch(checkToken(req))
     }
@@ -128,8 +130,6 @@ const Schedule = (props: ScheduleProps) => {
                     }))
                 }
                 setSchedule(newData)
-                console.log('old Schedule', res.data)
-                console.log('new Schedule', newData)
             }, (error: any) => {
                 console.log('no schedules', error)
             })
@@ -145,7 +145,7 @@ const Schedule = (props: ScheduleProps) => {
             {
                 schedule
                     ? <GreenBtn onClick={() => setEdit(!edit)}>{!edit ? 'Изменить расписание' : 'Отменить'}</GreenBtn>
-                    : <GreenBtn>Добавить расписание</GreenBtn>
+                    : <GreenBtn onClick={()=>history.push(`/personal/0/add/${params?.id}`)}>Добавить расписание</GreenBtn>
             }
         </div>
     )
@@ -156,7 +156,6 @@ type TimeTableProps = {
     data: any
 }
 const TimeTable: React.FC<TimeTableProps> = (props) => {
-    console.log(props.data)
     const [current, setCurrent] = useState(0)
     return (
         <>
@@ -191,7 +190,6 @@ type DaysProps = {
     list: any
 }
 const Days: React.FC<DaysProps> = (props) => {
-    console.log(props.list)
     return (
         <div className={css.days}>
             <div className={css.day}>{props.name}</div>
