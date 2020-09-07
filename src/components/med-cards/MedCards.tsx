@@ -104,7 +104,7 @@ const List: React.FC<ListProps> = (props) => {
                     Посмотреть фото
                 </Last>
             </TableList>
-            <ModalWrapper onModal={onModal} width={'450'} height={'420'} visible={visible}>
+            <ModalWrapper onModal={onModal} onClickAway={onModal} width={'450'} height={'420'} visible={visible}>
                 <div className={css.modalWrapper}>
                     <img src={props.image ? props.image : pic} alt="#"/>
                 </div>
