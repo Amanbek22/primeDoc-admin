@@ -73,7 +73,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                 <div className={css.title}>Образование</div>
                 {
                     user?.information.map((item: any, index: number) => <div key={index}>
-                        <div className={css.date}>{item.end ? item?.start + ' - ' + item?.end : item.start}</div>
+                        <div className={css.date}>{item.end ? item?.start + ' - ' + item?.end : item.start + ' - ' + 'по настоящее время'}</div>
                         <p className={css.text}>{item.name}</p>
                         <p className={css.text}>{item.organizationName}</p>
                     </div>)
