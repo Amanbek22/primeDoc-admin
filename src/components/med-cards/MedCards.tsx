@@ -61,7 +61,7 @@ const MedCarts = () => {
                 {
                     user.map((item: any) => <List
                         key={item.id}
-                        fio={`${item.firstName} ${item.lastName}`}
+                        fio={`${item.firstName} ${item.lastName} ${item.patronymic}`}
                         number={item.username}
                         date={item.birthDate}
                         image={item.image}
