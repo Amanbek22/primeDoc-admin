@@ -40,7 +40,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
             <HeaderWrapper>
                 <span className={css.logo}>
                     <img
-                        src={image ? "data:image/jpg;base64," + image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
+                        src={image ? image : "https://mediator.kg/wp-content/themes/twentynineteen/images/avatar-no-photo.png"}
                         alt={user?.firstName}/>
                 </span>
                 <div>

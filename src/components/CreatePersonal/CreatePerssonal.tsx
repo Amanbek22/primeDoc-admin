@@ -57,6 +57,7 @@ const CreatePersonal = () => {
 
     const categories = useSelector((state: GlobalStateType) => getCategories(state))
     const [img, setImg] = useState('')
+    const [image, setImage] = useState('')
     const [category, setCategory] = useState<any>([])
     const [options, setOptions] = useState<any>([])
     const [time, setTime] = useState(false)
@@ -116,12 +117,11 @@ const CreatePersonal = () => {
                 validationSchema={Yup.object().shape(validateFormik)}
                 onSubmit={(values, {setSubmitting}) => {
                     setSubmitting(true);
-                    requestCheck(()=>api.setDoctor({
+                    let data:any = {
                         bio: values.aboutDoctor,
                         birthDate: null,
                         categories: category.map((item: any) => item.value),
                         firstName: values.name,
-                        image: img,
                         information: values.degree,
                         lastName: values.surname,
                         password: values.password1,
@@ -129,7 +129,22 @@ const CreatePersonal = () => {
                         position: null,
                         schedules: null,
                         username: values.login
-                    }))
+                    }
+                    const formData = new FormData()
+                    formData.append('doctor', JSON.stringify(data))
+                    formData.append('imageFile', image)
+                    // for(let key in data){
+                    //     if(key === 'information'){
+                    //         data[key].forEach((item:any, index:number)=>{
+                    //             for(let subKey in data[key][index]){
+                    //                 formData.append(`${key}[${index}].${subKey}`, data[key][index][subKey])
+                    //             }
+                    //         })
+                    //     }else{
+                    //         formData.append(key, data[key])
+                    //     }
+                    // }
+                    requestCheck(()=>api.setDoctor(formData))
                         .then((res: any) => {
                             console.log(res)
                             if(time){
@@ -306,6 +321,7 @@ const CreatePersonal = () => {
                                                 const newUrl = e.target.result.split(',')
                                                 setImg(newUrl[1])
                                             }
+                                            setImage(e.target.files[0])
                                         }} type={'file'}/>
                                         <DownloadPictureWrapper>
                                             <img src={img ? "data:image/jpg;base64," + img : pic} alt="pic"/>

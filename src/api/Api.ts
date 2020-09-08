@@ -158,5 +158,10 @@ export default {
         headers: {
             "Authorization": "Bearer " + getToken()
         }
+    }),
+    putPaymentImage: (id:number, data:any) => http.put(`payment/image/${id}`, data, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
     })
 }

@@ -29,6 +29,7 @@ const Payment = () => {
         return dispatch(checkToken(req))
     }
     const [img, setImg] = useState('')
+    const [image, setImage] = useState('')
     const initialValues = {
         step0: '',
         steps: [
@@ -52,17 +53,21 @@ const Payment = () => {
             nextSteps: values.last,
             paymentSteps: newArr
         }
-        requestCheck(()=>api.createPayment(data))
+        const formData = new FormData()
+        formData.append('imageFile', image)
+        formData.append('name', values.step0)
+        formData.append('nextSteps', values.last)
+        for(let key in newArr){
+            formData.append(`paymentSteps[${key}].text`, newArr[key].text)
+            formData.append(`paymentSteps[${key}].number`, newArr[key].number)
+        }
+        requestCheck(()=>api.createPayment(formData))
             .then((res)=>{
                 history.push('/payment')
             })
-        console.log(data)
     }
     return (
         <div>
-            <Title>
-                Данные врача
-            </Title>
             <Formik initialValues={initialValues} onSubmit={submit}>
                 {
                     ({
@@ -133,6 +138,7 @@ const Payment = () => {
                                                 const newUrl = e.target.result.split(',')
                                                 setImg(newUrl[1])
                                             }
+                                            setImage(e.target.files[0])
                                         }} type={'file'}/>
                                         <DownloadPictureWrapper>
                                             <img src={img ? "data:image/jpg;base64," + img : pic} alt="pic"/>

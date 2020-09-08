@@ -176,7 +176,7 @@ const ClinicDirection = () => {
                 {
                     doctors
                         ? doctors.map((item: any) => <Doctors id={item.id} key={item.id} name={item.firstName + ' ' + item.lastName}
-                                                        url={`data:image/jpg;base64,${item.image}`}/>)
+                                                        url={item.image}/>)
                         : null
                 }
             </div>
@@ -275,7 +275,7 @@ const Doctors = (props: DocType) => {
                         {
                             props.url
                                 ? <img height={'auto'} width={'100%'}
-                                       src={props.url}
+                                       src={props?.url ? props.url : 'https://icon-library.com/images/no-profile-pic-icon/no-profile-pic-icon-27.jpg'}
                                        alt="doc"/>
                                 : <img height={'auto'} width={'100%'}
                                        src="https://jardin.ee/wp-content/uploads/2014/08/No-profile-LinkedIn.jpg"
