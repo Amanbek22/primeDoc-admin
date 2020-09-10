@@ -131,19 +131,9 @@ const CreatePersonal = () => {
                         username: values.login
                     }
                     const formData = new FormData()
-                    formData.append('doctor', JSON.stringify(data))
+
+                    formData.append('doctor', new Blob([JSON.stringify(data)], { type: 'application/json'}))
                     formData.append('imageFile', image)
-                    // for(let key in data){
-                    //     if(key === 'information'){
-                    //         data[key].forEach((item:any, index:number)=>{
-                    //             for(let subKey in data[key][index]){
-                    //                 formData.append(`${key}[${index}].${subKey}`, data[key][index][subKey])
-                    //             }
-                    //         })
-                    //     }else{
-                    //         formData.append(key, data[key])
-                    //     }
-                    // }
                     requestCheck(()=>api.setDoctor(formData))
                         .then((res: any) => {
                             console.log(res)
