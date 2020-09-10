@@ -116,7 +116,7 @@ export default {
     }),
     setDoctor: (data:any) => http.post(`doctor`,data,{
         headers: {
-            "Authorization": "Bearer " + getToken()
+            "Authorization": "Bearer " + getToken(),
         }
     }),
     editDoctor: (id:number,data:any) => http.put(`doctor/${id}`, data, {

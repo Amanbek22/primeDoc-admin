@@ -19,6 +19,7 @@ import Payments from "./components/payment/Payments";
 import PaymentDetail from "./components/payment/PaymentDetail";
 import Doctor from "./components/doctor/Doctor";
 import ChatApp from "./components/chat/chatContainer";
+import Reservation from "./components/reservation/Reservation";
 
 export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) => {
     if (isAuth) {
@@ -81,6 +82,9 @@ export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) =>
                         </Route>
                         <Route exact path={'/payment/detail/:id'}>
                             <PaymentDetail />
+                        </Route>
+                        <Route exact path={'/reservation/'}>
+                            <Reservation />
                         </Route>
                         {/*<Redirect to={'/clinic'}/>*/}
                     </AdminWrapper>
