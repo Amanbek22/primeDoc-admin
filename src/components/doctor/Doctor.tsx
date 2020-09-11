@@ -51,7 +51,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                     </div>
                     <p className={css.categories}>
                         {
-                            user?.categories.map((item: any, index: number) => {
+                            user?.categories?.map((item: any, index: number) => {
                                 return <span
                                     key={item.id}>{item.name}{index === user.categories.length - 1 ? null : ', '}</span>
                             })

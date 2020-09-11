@@ -10,12 +10,17 @@ import {
 } from "../mainStyledComponents/MainStyledComponents";
 import done from '../../img/done.png'
 import reject from '../../img/reject.png'
+import {getReservation} from "./reservationReducer";
 
 const Reservation = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader("Бронь"))
     }, [dispatch])
+    useEffect(()=>{
+        console.log('4')
+        dispatch(getReservation())
+    }, [])
     return (
         <>
             <TableWrapper>
@@ -25,9 +30,6 @@ const Reservation = () => {
                     </div>
                     <div>
                         Номер телефона
-                    </div>
-                    <div>
-                        Направление
                     </div>
                     <div>
                         Дата брони
@@ -45,7 +47,6 @@ const Reservation = () => {
                 <List
                     fio={'Asylbekov Amanbek'}
                     number={'0708626798'}
-                    category={'ЛОР'}
                     date={'10.09.2020'}
                     from={'15:30'}
                     to={'16:30'}
@@ -60,7 +61,7 @@ const Reservation = () => {
 type ListProps = {
     fio: string
     number: number | string
-    category: string
+    // category: string
     date: string
     from: string
     to: string
@@ -73,7 +74,6 @@ const List: React.FC<ListProps> = (props) => {
             <ReservationList>
                 <div title={props.fio}>{props.fio}</div>
                 <div>{props.number}</div>
-                <div>{props.category}</div>
                 <div>{props.date}</div>
                 <div>{props.from}</div>
                 <div>{props.to}</div>

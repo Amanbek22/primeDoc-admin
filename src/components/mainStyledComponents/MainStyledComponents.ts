@@ -176,7 +176,7 @@ export const TableHeader = styled.div`
 `
 export const ReservationHeader = styled.div`
     display: grid;
-    grid-template-columns: 1fr 0.7fr 0.6fr 0.6fr 80px 80px 0.7fr;
+    grid-template-columns: 1fr 0.7fr  0.6fr 80px 80px 0.7fr;
     background: #00BDD0;
     text-align: center;
     
@@ -190,7 +190,7 @@ export const ReservationHeader = styled.div`
 `
 export const ReservationList = styled.div`
     display: grid;
-    grid-template-columns: 1fr 0.7fr 0.6fr 0.6fr 80px 80px 0.35fr 0.35fr;
+    grid-template-columns: 1fr 0.7fr  0.6fr 80px 80px 0.35fr 0.35fr;
     border-bottom: 1px solid #C4C4C4;
     &>div, &>a{
         padding: 15px 0 15px 10px;

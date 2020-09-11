@@ -163,5 +163,10 @@ export default {
         headers: {
             "Authorization": "Bearer " + getToken()
         }
+    }),
+    getReservation: () => http.get(`reservation/`, {
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
     })
 }
