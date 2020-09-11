@@ -30,7 +30,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                 setUser(res.data)
                 setImage(res.data.image)
             })
-    }, [])
+    }, [pending])
 
     if (pending) {
         return <Preloader/>
@@ -81,7 +81,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
             </div>
             <div>
                 <div className={css.title}>Расписание</div>
-                <Schedule id={params.id}/>
+                <Schedule setPending={() => setPending(!pending)} id={params.id}/>
             </div>
         </div>
     );
@@ -89,6 +89,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
 
 type ScheduleProps = {
     id: number
+    setPending: () => void
 }
 const Schedule = (props: ScheduleProps) => {
     const dispatch = useDispatch()
@@ -139,7 +140,7 @@ const Schedule = (props: ScheduleProps) => {
             {
                 !edit
                     ? <TimeTable data={schedule}/>
-                    : schedule ? <CreateTimeTable data={schedule} id={props.id}/> : null
+                    : schedule ? <CreateTimeTable setPending={props.setPending} data={schedule} id={props.id}/> : null
             }
             <br/>
             {

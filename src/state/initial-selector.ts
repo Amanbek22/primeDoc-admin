@@ -11,3 +11,5 @@ export const getIllnesses = (state: GlobalStateType) => state.app.illnesses
 
 
 export const getCategories = (state: GlobalStateType) => state.app.directions
+
+

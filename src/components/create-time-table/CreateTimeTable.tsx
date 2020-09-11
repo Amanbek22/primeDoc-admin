@@ -6,7 +6,7 @@ import Time, {Date as Dat} from "./Time";
 import css from './create-time.module.css'
 import {GreenBtn, Weeks, WeeksWrapper} from "../mainStyledComponents/MainStyledComponents";
 import Api from '../../api/Api'
-import { useParams, useHistory } from 'react-router-dom';
+import {useParams, useHistory} from 'react-router-dom';
 import del from "../../img/delete.png";
 import {checkToken} from "../../state/authReducer";
 
@@ -51,17 +51,17 @@ export class week {
     }
 }
 
-const CreateTimeTable = (props:any) => {
+const CreateTimeTable = (props: any) => {
     const dispatch = useDispatch()
     useEffect(() => {
-        if(!props.data) {
+        if (!props.data) {
             dispatch(setHeader("Создание расписания"))
         }
     }, [dispatch])
-    const requestCheck =  async (req:any) => {
+    const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
     }
-    const params:any = useParams()
+    const params: any = useParams()
     const history = useHistory()
 
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
@@ -77,8 +77,8 @@ const CreateTimeTable = (props:any) => {
     const [weeks, setWeeks] = useState([
         new week()
     ])
-    useEffect(()=>{
-        if(props.data) {
+    useEffect(() => {
+        if (props.data) {
             setWeeks([...props.data?.weeks])
             setDoctorId(props.id)
         }
@@ -106,14 +106,14 @@ const CreateTimeTable = (props:any) => {
         weeks[currentWeek].days[days].list = [...weeks[currentWeek].days[days].list, new Schedule()]
         setWeeks([...weeks])
     }
-    const removeSchedule = (days:number, i:number) => {
+    const removeSchedule = (days: number, i: number) => {
         weeks[currentWeek].days[days].list.splice(i, 1)
         setWeeks([...weeks])
     }
     const addWeek = () => {
         setWeeks([...weeks, new week()])
     }
-    const delWeek = (index:number) => {
+    const delWeek = (index: number) => {
         weeks.splice(index, 1)
         setWeeks([...weeks])
     }
@@ -128,12 +128,12 @@ const CreateTimeTable = (props:any) => {
             currentWeek: 1,
             weekDuration: 1,
             weeks: weeks.map((item, index) => ({
-                weekDays: item.days.map((i: any, index:number) => {
+                weekDays: item.days.map((i: any, index: number) => {
                     const el = i.list[index]
-                    if(el && el.fromH && el.fromM && el.toH && el.toM) {
+                    if (el && el.fromH && el.fromM && el.toH && el.toM) {
                         return {
                             intervals: i.list.map((j: any) => {
-                                if( j && j.toH && j.toM && j.fromH && j.fromM){
+                                if (j && j.toH && j.toM && j.fromH && j.fromM) {
                                     return {
                                         end: j.toH && j.toM ? j.toH + ':' + j.toM + ':' + '00' : '',
                                         start: j.fromH && j.fromM ? j.fromH + ':' + j.fromM + ':' + '00' : ''
@@ -149,28 +149,32 @@ const CreateTimeTable = (props:any) => {
                 weekOrder: index + 1
             }))
         }
-        await schedule.weeks.map((item:any, weekIndex)=>item.weekDays.map((i:any, dayIndex: number) => i?.intervals.map((intervals:any, index:number) => {
-            if(!intervals){
-                let filtered = schedule.weeks[weekIndex].weekDays[dayIndex].intervals.filter((el:any)=>{
+        await schedule.weeks.map((item: any, weekIndex) => item.weekDays.map((i: any, dayIndex: number) => i?.intervals.map((intervals: any, index: number) => {
+            if (!intervals) {
+                let filtered = schedule.weeks[weekIndex].weekDays[dayIndex].intervals.filter((el: any) => {
                     return el != null;
                 })
                 schedule.weeks[weekIndex].weekDays[dayIndex].intervals = [...filtered]
                 // console.log(schedule.weeks[weekIndex].weekDays[dayIndex].intervals)
             }
         })))
-        if(props.data){
-            requestCheck(()=>Api.changeSchedule(props.data.id, schedule))
-                .then((res)=>{
-                    console.log(res)
+        if (props.data) {
+            requestCheck(() => Api.deleteSchedule(props.data.id))
+                .then((res) => {
+                    requestCheck(() => Api.createSchedule(schedule))
+                        .then((res) => {
+                            console.log(res)
+                            props.setPending()
+                        })
                 })
-        }else {
-            requestCheck(()=>Api.createSchedule(schedule))
+        } else {
+            requestCheck(() => Api.createSchedule(schedule))
                 .then((res) => {
                     history.push('/personal')
                 })
         }
     }
-    const changeWeek = (index:number) => {
+    const changeWeek = (index: number) => {
         setVal(null)
         setStep(0)
         setCurrentWeek(index)
@@ -185,7 +189,8 @@ const CreateTimeTable = (props:any) => {
                         <Weeks>
                             {
                                 weeks.map((item, index) => <div key={index}>
-                                        <Week onDel={()=>delWeek(index)} setWeek={()=>changeWeek(index)} current={currentWeek+1} index={index + 1}/>
+                                        <Week onDel={() => delWeek(index)} setWeek={() => changeWeek(index)}
+                                              current={currentWeek + 1} index={index + 1}/>
                                     </div>
                                 )
                             }
@@ -197,12 +202,13 @@ const CreateTimeTable = (props:any) => {
                             <Dat options={option} val={val} setVal={setData}/>
                             <Title>Интервалы</Title>
                             {!step && (
-                                <div />
+                                <div/>
                             )}
                             {
                                 weeks[currentWeek]?.days.map((item: any, index: number) => {
                                     return step === index + 1 && (
-                                        <StepForm removeSchedule={removeSchedule} addSchedule={addSchedule} key={index} setTimeFromH={setTimeFromH}
+                                        <StepForm removeSchedule={removeSchedule} addSchedule={addSchedule} key={index}
+                                                  setTimeFromH={setTimeFromH}
                                                   days={index} listSchedules={weeks[currentWeek].days[index].list}/>
                                     )
                                 })
