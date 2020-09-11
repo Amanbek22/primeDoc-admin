@@ -25,9 +25,10 @@ const PaymentDetail = () => {
     const params: any = useParams()
     const [pending, setPending] = useState(true)
     const [data, setData] = useState()
-    const [img, setImg] = useState(null)
+    const [img, setImg] = useState('')
     const [visible, setVisible] = useState(false)
     const [edit, setEdit] = useState(false)
+    const [image, setImage] = useState('')
 
     const onModal = () => setVisible(!visible)
 
@@ -54,11 +55,16 @@ const PaymentDetail = () => {
             number: index
         }))
         const data = {
-            logo: img,
             name: values.step0,
             nextSteps: values.last,
             paymentSteps: newArr
         }
+        const formData = new FormData()
+        formData.append('imageFile', image)
+        requestCheck(()=>api.putPaymentImage(params.id, formData))
+            .then((res)=>{
+                console.log(res)
+            })
         requestCheck(()=>api.putPaymentSteps(params.id, data))
             .then((res)=>{
                 // history.push('/payment')
@@ -100,6 +106,7 @@ const PaymentDetail = () => {
                                                         const newUrl = e.target.result.split(',')
                                                         setImg(newUrl[1])
                                                     }
+                                                    setImage(e.target.files[0])
                                                 }} type={'file'}/>
                                                 <DownloadPictureWrapper>
                                                     <img src={img ? "data:image/jpg;base64," + img : pic} alt="pic"/>
@@ -157,7 +164,7 @@ const PaymentDetail = () => {
                         : <div className={css.form}>
                             <label className={css.upload}>
                                 <DownloadPictureWrapper>
-                                    <img src={img ? "data:image/jpg;base64," + img : pic} alt="#"/>
+                                    <img src={img ? img : pic} alt="#"/>
                                 </DownloadPictureWrapper>
                             </label>
                             <label className={css.label}>

@@ -3,10 +3,12 @@ import thunk from 'redux-thunk'
 
 import {auth} from "./authReducer";
 import {appReducer} from "./appReducer";
+import {reservation} from "../components/reservation/reservationReducer";
 
 export const reducers = combineReducers({
     auth: auth,
-    app: appReducer
+    app: appReducer,
+    reservation: reservation
 })
 
 type RootReducerType = typeof reducers;

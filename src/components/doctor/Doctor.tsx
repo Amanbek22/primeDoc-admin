@@ -30,7 +30,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                 setUser(res.data)
                 setImage(res.data.image)
             })
-    }, [])
+    }, [pending])
 
     if (pending) {
         return <Preloader/>
@@ -40,7 +40,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
             <HeaderWrapper>
                 <span className={css.logo}>
                     <img
-                        src={image ? "data:image/jpg;base64," + image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
+                        src={image ? image : "https://mediator.kg/wp-content/themes/twentynineteen/images/avatar-no-photo.png"}
                         alt={user?.firstName}/>
                 </span>
                 <div>
@@ -51,7 +51,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                     </div>
                     <p className={css.categories}>
                         {
-                            user?.categories.map((item: any, index: number) => {
+                            user?.categories?.map((item: any, index: number) => {
                                 return <span
                                     key={item.id}>{item.name}{index === user.categories.length - 1 ? null : ', '}</span>
                             })
@@ -81,7 +81,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
             </div>
             <div>
                 <div className={css.title}>Расписание</div>
-                <Schedule id={params.id}/>
+                <Schedule setPending={() => setPending(!pending)} id={params.id}/>
             </div>
         </div>
     );
@@ -89,6 +89,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
 
 type ScheduleProps = {
     id: number
+    setPending: () => void
 }
 const Schedule = (props: ScheduleProps) => {
     const dispatch = useDispatch()
@@ -139,7 +140,7 @@ const Schedule = (props: ScheduleProps) => {
             {
                 !edit
                     ? <TimeTable data={schedule}/>
-                    : schedule ? <CreateTimeTable data={schedule} id={props.id}/> : null
+                    : schedule ? <CreateTimeTable setPending={props.setPending} data={schedule} id={props.id}/> : null
             }
             <br/>
             {
