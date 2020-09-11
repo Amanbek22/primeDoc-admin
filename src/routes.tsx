@@ -11,7 +11,7 @@ import Personal from "./components/personal/Personal";
 import AboutUs from "./components/about-us/AboutUs";
 import ClinicDirection from "./components/ClinicDirection/ClinicDirection";
 import logout from './img/logout.png'
-import changePassword from './img/changePassword.png'
+// import changePassword from './img/changePassword.png'
 import CreateTimeTable from "./components/create-time-table/CreateTimeTable";
 import CreatePersonal from "./components/CreatePersonal/CreatePerssonal";
 import Payment from "./components/payment/Payment";

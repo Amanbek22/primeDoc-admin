@@ -29,9 +29,9 @@ const setData = (data:AxiosResponse) => {
         data
     }
 }
-export const getReservation = () => (dispatch:any) => {
-    dispatch(checkToken(api.getReservation))
+export const getReservation = (page:number) => async (dispatch:any) => {
+    await dispatch(checkToken(()=> api.getReservation(page)))
         .then((res: AxiosResponse)=>{
-            dispatch(setData(res.data))
+            dispatch(setData(res.data.content))
         })
 }

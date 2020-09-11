@@ -18,9 +18,9 @@ const App = (props:any) => {
     }
     const [pend, setPend] = useState(true)
     const routs = useRoutes(props.isAuth, props.header, Logout)
-    const allPromiseRejection = (promiseRejectionEvent: any) =>{
-        alert(promiseRejectionEvent)
-    }
+    // const allPromiseRejection = (promiseRejectionEvent: any) =>{
+    //     alert(promiseRejectionEvent)
+    // }
     useEffect( () => {
         initialiseApp()
         // window.addEventListener('unhandledrejection', allPromiseRejection)

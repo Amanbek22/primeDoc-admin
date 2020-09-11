@@ -52,5 +52,5 @@ export default {
     putPaymentImage: (id:number, data:any) => http.put(`payment/image/${id}`, data, config()),
     getReservation: (page:number = 0) => http.get(`reservation/info?page=${page}`, config()),
     delReservation: (id:number) => http.delete(`reservation/${id}`, config()),
-    approve: (id:number) => http.put(`reservation/approve/${id}`, null, config())
+    approve: (id:number) => http.put(`reservation/approve/${id}`, {}, config())
 }
