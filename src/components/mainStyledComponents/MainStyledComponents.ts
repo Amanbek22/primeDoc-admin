@@ -174,7 +174,34 @@ export const TableHeader = styled.div`
         line-height: 21px;
     }
 `
-
+export const ReservationHeader = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 0.7fr  0.6fr 80px 80px 0.7fr;
+    background: #00BDD0;
+    text-align: center;
+    
+    &>div{
+        padding: 15px 0;
+        color: #FFFFFF;
+        border-right: 1px solid #C4C4C4;
+        font-size: 16px;
+        line-height: 21px;
+    }
+`
+export const ReservationList = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 0.7fr  0.6fr 80px 80px 0.35fr 0.35fr;
+    border-bottom: 1px solid #C4C4C4;
+    &>div, &>a{
+        padding: 15px 0 15px 10px;
+        border-right: 1px solid #C4C4C4;
+        font-size: 16px;
+        line-height: 21px;
+        white-space: nowrap; /* Запрещаем перенос строк */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+`
 export const TableList = styled.div`
     display: grid;
     grid-template-columns: 1.4fr 1fr 1.3fr 1fr ;
@@ -190,14 +217,22 @@ export const TableList = styled.div`
         text-overflow: ellipsis;
     }
 `
-
-
 export const Last = styled.div`
     text-align: center;
     border-right: none !important;
     
     &>span{
         justify-content: center;
+    }
+    &>img{
+        cursor: pointer;
+    }
+`
+export const Center = styled.div`
+    text-align: center;
+    
+    &>img{
+        cursor: pointer;
     }
 `
 

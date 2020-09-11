@@ -92,7 +92,7 @@ const Card = (props: CardProps) => {
         <CardWrapper>
             <Link to={`/payment/detail/${props.id}`}>
                 <img
-                    src={props.image ? "data:image/jpg;base64," + props.image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
+                    src={props.image ? props.image : "https://image.freepik.com/free-photo/front-view-doctor-with-medical-mask-posing-with-crossed-arms_23-2148445082.jpg"}
                     alt={props.title}
                 />
                 <span className={css.title}>

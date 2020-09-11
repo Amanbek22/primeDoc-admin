@@ -33,7 +33,6 @@ const MedCarts = () => {
         requestCheck(()=>api.getClient(page, pageSize))
             .then((res:any)=>{
                 setUser(res.data.content)
-                console.log(res.data)
                 setPagination(res.data.totalPages)
                 setPending(false)
             })

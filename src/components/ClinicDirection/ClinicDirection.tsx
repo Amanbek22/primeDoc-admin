@@ -46,31 +46,19 @@ const ClinicDirection = () => {
     const [description, setDescription] = useState('')
     const [image, setImage] = useState('')
     const [img, setImg] = useState('')
-    const [illness, setIllness] = useState<any>([])
+    const [illness, setIllness] = useState<any>('')
     const [options, setOptions] = useState<any>([])
     console.log(image)
     const nameChange = (e: any) => setName(e.target.value)
     const descriptionChange = (e: any) => setDescription(e.target.value)
-    const illnessesChange = (e: any) => setIllness(e)
+    const illnessesChange = (e: any) => setIllness(e.target.value)
 
     const changeCategory = () => {
-        let arr: any = []
-        illness.forEach((item: any) => arr.push(...illnessesArr.filter((i: any) => item.value === i.id ? {
-            id: i.id,
-            name: i.name,
-            description: i.description
-        } : null)))
-
-        let newArr = arr.map((i: any) => ({
-            id: i.id,
-            name: i.name,
-            description: i.description
-        }))
         let data = {
             description: description,
             name: name,
             // image: image,
-            illnesses: newArr
+            illness: illness
         }
         const newData = new FormData()
         if(img) newData.append('imageFile', img)
@@ -100,24 +88,9 @@ const ClinicDirection = () => {
                 setDoctors(res.data.doctors)
                 setName(res.data.name)
                 setDescription(res.data.description)
-                // setIllnesses([...res.data.illnesses])
+                setIllness(res.data.illness)
                 setPending(false)
-
-                let arr: any = []
-                if(res.data.illnesses) {
-                    res.data.illnesses.forEach((item: any) => arr.push(...options.filter((i: { value: number, label: string }) => item.id === i.value ? i : null)))
-                }
-                setIllness(arr)
-
             })
-        let options = illnessesArr.map((item: any) => {
-            return {
-                value: item.id,
-                label: item.name
-            }
-        })
-        setOptions(options)
-
         return setEdit
     }, [])
     if (pending) {
@@ -167,16 +140,18 @@ const ClinicDirection = () => {
                     <DescriptionElement setText={nameChange} editing={edit} title={'Название'} text={name}/>
                     <DescriptionElement setText={descriptionChange} editing={edit} title={'Описание'}
                                         text={description}/>
-                    <DescriptionIllnessElement options={options} setText={illnessesChange} editing={edit}
-                                               title={'Что лечит'}
-                                               illnesses={illness}/>
+                    <DescriptionElement setText={illnessesChange} editing={edit} title={'Что лечит'}
+                                        text={illness}/>
+                    {/*<DescriptionIllnessElement options={options} setText={illnessesChange} editing={edit}*/}
+                    {/*                           title={'Что лечит'}*/}
+                    {/*                           illnesses={illness}/>*/}
                 </div>
             </HeaderWrapper>
             <div className={css.doctorsList}>
                 {
                     doctors
                         ? doctors.map((item: any) => <Doctors id={item.id} key={item.id} name={item.firstName + ' ' + item.lastName}
-                                                        url={`data:image/jpg;base64,${item.image}`}/>)
+                                                        url={item.image}/>)
                         : null
                 }
             </div>
@@ -275,7 +250,7 @@ const Doctors = (props: DocType) => {
                         {
                             props.url
                                 ? <img height={'auto'} width={'100%'}
-                                       src={props.url}
+                                       src={props?.url ? props.url : 'https://icon-library.com/images/no-profile-pic-icon/no-profile-pic-icon-27.jpg'}
                                        alt="doc"/>
                                 : <img height={'auto'} width={'100%'}
                                        src="https://jardin.ee/wp-content/uploads/2014/08/No-profile-LinkedIn.jpg"

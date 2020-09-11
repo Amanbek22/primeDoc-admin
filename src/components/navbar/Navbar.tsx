@@ -79,6 +79,10 @@ const NavBar = (props: any) => {
                     <img src={payment} alt="#"/>
                     Способы оплаты
                 </NavLink>
+                <NavLink to={'/reservation'} activeClassName={'activeLink'}>
+                    <img src={payment} alt="#"/>
+                    Бронь
+                </NavLink>
                 <span className={css.spans}/>
             </LinksWrapper>
         </Navbar>

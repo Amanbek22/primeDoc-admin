@@ -172,7 +172,7 @@ export const initialiseApp = () => async (dispatch: any) => {
             dispatch(signIn({
                 isAuth: true
             }))
-            dispatch(getIllness())
+            // dispatch(getIllness())
             dispatch(getDirections())
             dispatch(initialise(false))
         } else {
