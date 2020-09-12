@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import {
@@ -21,56 +21,60 @@ const Reservation = () => {
     useEffect(() => {
         dispatch(setHeader("Бронь"))
     }, [dispatch])
-    const reservations = useSelector((state:GlobalStateType) => state.reservation.data)
-    const [page, setPage] = useState(0)
-    const [pagination, setPagination] = useState(0)
-    useEffect(()=>{
-        dispatch(getReservation(page))
+    const reservations = useSelector((state: GlobalStateType) => state.reservation)
+    const setPage = (page: number) => {
+        dispatch(setPage(page))
+    }
+    useEffect(() => {
+        dispatch(getReservation(reservations.page))
     }, [])
     return (
         <>
-            <TableWrapper>
-                <ReservationHeader>
-                    <div>
-                        ФИО
-                    </div>
-                    <div>
-                        Номер телефона
-                    </div>
-                    <div>
-                        Дата брони
-                    </div>
-                    <div>
-                        C
-                    </div>
-                    <div>
-                        По
-                    </div>
-                    <Last>
-                        Действия
-                    </Last>
-                </ReservationHeader>
-                {
-                    reservations?.map((item:any)=>{
-                        return <List
-                            key={item.id}
-                            fio={item?.firstname + ' ' + item?.lastname + ' ' + item?.patronymic}
-                            number={item.phone}
-                            date={item.date}
-                            from={item.start}
-                            to={item.end}
-                            id={item.id}
-                        />
-                    })
-                }
-            </TableWrapper>
-            <br/>
-            <br/>
-            {/*{*/}
-            {/*    reservations.length*/}
-            {/*        ? <Pagination setPage={setPage} pageCount={pagination}/>*/}
-            {/*        : null*/}
-            {/*}*/}
+            {
+                reservations.data.length ? <> <TableWrapper>
+                        <ReservationHeader>
+                            <div>
+                                ФИО
+                            </div>
+                            <div>
+                                Номер телефона
+                            </div>
+                            <div>
+                                Дата брони
+                            </div>
+                            <div>
+                                C
+                            </div>
+                            <div>
+                                По
+                            </div>
+                            <Last>
+                                Действия
+                            </Last>
+                        </ReservationHeader>
+                        {
+                            reservations?.data.map((item: any) => {
+                                return <List
+                                    key={item.id}
+                                    fio={item?.firstname + ' ' + item?.lastname + ' ' + item?.patronymic}
+                                    number={item.phone}
+                                    date={item.date}
+                                    from={item.start}
+                                    to={item.end}
+                                    id={item.id}
+                                />
+                            })
+                        }
+                    </TableWrapper>
+                        <br/>
+                        {
+                            reservations.data.length
+                                ? <Pagination setPage={setPage} pageCount={reservations.pagination}/>
+                                : null
+                        }
+                    </>
+                    : <Center>Нет брони.</Center>
+            }
         </>
     )
 }
@@ -87,17 +91,17 @@ type ListProps = {
 const List: React.FC<ListProps> = (props) => {
     const dispatch = useDispatch()
     let date = new Date(props?.date)
-    const requestCheck =  async (req:any) => {
+    const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
     }
     const approve = () => {
-        requestCheck(()=> api.approve(props.id))
+        requestCheck(() => api.approve(props.id))
             .then((res) => {
                 console.log(res)
             })
     }
     const deleteReservation = () => {
-        requestCheck(()=> api.delReservation(props.id))
+        requestCheck(() => api.delReservation(props.id))
             .then((res) => {
                 console.log(res)
             })
