@@ -25,7 +25,6 @@ const Pagination: React.FC<Props> = (props) => {
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
                 onPageChange={(selectedItem:{selected: number})=>{
-                    console.log(selectedItem)
                     props.setPage(selectedItem.selected)
                 }}
                 containerClassName={css.pagination}

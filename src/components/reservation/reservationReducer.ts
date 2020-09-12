@@ -3,9 +3,12 @@ import api from '../../api/Api'
 import {AxiosResponse} from "axios";
 
 const INITIALIZE = "reservation/INITIALIZE"
+const SET_PAGE = "reservation/SET_PAGE"
 
 const initialState = {
-    data: []
+    data: [],
+    page: 0,
+    pagination: 0
 }
 type InitialStateType = typeof initialState
 
@@ -14,7 +17,13 @@ export const reservation = (state = initialState, action: any): InitialStateType
         case INITIALIZE:
             return {
                 ...state,
-                data: action.data
+                data: action.data.content,
+                pagination: action.data.totalPages
+            }
+        case SET_PAGE:
+            return  {
+                ...state,
+                page: action.page
             }
         default:
             return {
@@ -22,16 +31,22 @@ export const reservation = (state = initialState, action: any): InitialStateType
             }
     }
 }
-
+const setPage = (page: number) => {
+    return {
+        type: SET_PAGE,
+        page
+    }
+}
 const setData = (data:AxiosResponse) => {
     return {
         type: INITIALIZE,
-        data
+        data: data.data,
     }
 }
 export const getReservation = (page:number) => async (dispatch:any) => {
     await dispatch(checkToken(()=> api.getReservation(page)))
         .then((res: AxiosResponse)=>{
-            dispatch(setData(res.data.content))
+            console.log(res.data)
+            dispatch(setData(res))
         })
 }
