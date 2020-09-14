@@ -150,7 +150,9 @@ class ChatApp extends Component {
     }
 
     componentWillUnmount() {
-        this.client.shutdown();
+        if(this.client){
+            this.client.shutdown();
+        }
     }
 
     render() {
