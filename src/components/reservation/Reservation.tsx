@@ -29,7 +29,7 @@ const Reservation = () => {
     }
     useEffect(() => {
         dispatch(getReservation(reservations.page))
-    }, [pending])
+    }, [reservations.pending])
     if(reservations.pending) return <Preloader />
     return (
         <>
