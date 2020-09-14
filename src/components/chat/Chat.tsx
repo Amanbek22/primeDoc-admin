@@ -56,7 +56,6 @@ type UserProps = {
 }
 const User: React.FC<UserProps> = (props) => {
     const [name, setName] = useState('')
-    // console.log(props.active?.id === props.sid)
     props.data.getMembers().then((member: any) => {
         member.map(async (u: any) => {
             let user = await u.getUser()

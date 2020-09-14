@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import {
@@ -10,11 +10,12 @@ import {
 } from "../mainStyledComponents/MainStyledComponents";
 import done from '../../img/done.png'
 import reject from '../../img/reject.png'
-import {getReservation} from "./reservationReducer";
+import {getReservation, setPageAC, setPending} from "./reservationReducer";
 import {GlobalStateType} from "../../state/root-reducer";
 import {checkToken} from "../../state/authReducer";
 import api from '../../api/Api'
 import Pagination from "../paggination/Paggination";
+import Preloader from "../preloader/Preloader";
 
 const Reservation = () => {
     const dispatch = useDispatch()
@@ -22,12 +23,14 @@ const Reservation = () => {
         dispatch(setHeader("Бронь"))
     }, [dispatch])
     const reservations = useSelector((state: GlobalStateType) => state.reservation)
+
     const setPage = (page: number) => {
-        dispatch(setPage(page))
+        dispatch(setPageAC(page))
     }
     useEffect(() => {
         dispatch(getReservation(reservations.page))
-    }, [])
+    }, [pending])
+    if(reservations.pending) return <Preloader />
     return (
         <>
             {
@@ -98,12 +101,14 @@ const List: React.FC<ListProps> = (props) => {
         requestCheck(() => api.approve(props.id))
             .then((res) => {
                 console.log(res)
+                dispatch(setPending(true))
             })
     }
     const deleteReservation = () => {
         requestCheck(() => api.delReservation(props.id))
             .then((res) => {
                 console.log(res)
+                dispatch(setPending(true))
             })
     }
     return (

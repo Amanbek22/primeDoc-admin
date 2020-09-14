@@ -133,7 +133,7 @@ const CreatePersonal = () => {
                     const formData = new FormData()
 
                     formData.append('doctor', new Blob([JSON.stringify(data)], { type: 'application/json'}))
-                    formData.append('imageFile', image)
+                    if(image) formData.append('imageFile', image)
                     requestCheck(()=>api.setDoctor(formData))
                         .then((res: any) => {
                             console.log(res)
