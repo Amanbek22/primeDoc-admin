@@ -135,7 +135,7 @@ const List: React.FC<ListProps> = (props) => {
 
     useEffect(()=>{
         let arr:any = []
-        props.direction.forEach((item:any) =>arr.push(...options.filter((i:any) => +item.id === +i.value ? item : null )))
+        props?.direction?.forEach((item:any) =>arr.push(...options.filter((i:any) => +item.id === +i.value ? item : null )))
         setDirection(arr)
     }, [props.direction, options])
 

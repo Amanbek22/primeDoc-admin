@@ -15,7 +15,7 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
     useEffect(() => {
         dispatch(setHeader('Подробно о враче'))
     }, [dispatch])
-    const requestCheck =  async (req:any) => {
+    const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
     }
     const params: any = useParams()
@@ -24,8 +24,8 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
     const [image, setImage] = useState<string | null>(null)
 
     useEffect(() => {
-        requestCheck(()=>api.getDoc(params.id))
-            .then((res:any) => {
+        requestCheck(() => api.getDoc(params.id))
+            .then((res: any) => {
                 setPending(false)
                 setUser(res.data)
                 setImage(res.data.image)
@@ -73,7 +73,8 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
                 <div className={css.title}>Образование</div>
                 {
                     user?.information.map((item: any, index: number) => <div key={index}>
-                        <div className={css.date}>{item.end ? item?.start + ' - ' + item?.end : item.start + ' - ' + 'по настоящее время'}</div>
+                        <div
+                            className={css.date}>{item.end ? item?.start + ' - ' + item?.end : item.start + ' - ' + 'по настоящее время'}</div>
                         <p className={css.text}>{item.name}</p>
                         <p className={css.text}>{item.organizationName}</p>
                     </div>)
@@ -93,9 +94,9 @@ type ScheduleProps = {
 }
 const Schedule = (props: ScheduleProps) => {
     const dispatch = useDispatch()
-    const params:any = useParams()
+    const params: any = useParams()
     const history = useHistory()
-    const requestCheck =  async (req:any) => {
+    const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
     }
     const [schedule, setSchedule] = useState<any>(null)
@@ -103,31 +104,32 @@ const Schedule = (props: ScheduleProps) => {
     const [edit, setEdit] = useState(false)
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     useEffect(() => {
-        requestCheck(()=>api.getSchedule(props.id))
-            .then((res:any) => {
+        requestCheck(() => api.getSchedule(props.id))
+            .then((res: any) => {
                 // setSchedule(res.data)
-                const newData = {
+                const newData: any = {
                     ...res.data,
                     weeks: res.data.weeks.map((item: any) => ({
-                        days: days.map((i: any) => ({
-                            list: item.weekDays.map((k: any) => {
-                                let obj: any = null;
-                                k.intervals.forEach((f: any) => {
+                        days: days.map((i: any) => {
+                            let day:any = {
+                                list: [],
+                                weekDayName: i
+                            }
+                            item.weekDays.forEach((k: any) => k.intervals.forEach((f: any) => {
                                     if (i === k.weekDayName) {
                                         let start = f.start.split(':')
                                         let end = f.end.split(':')
-                                        obj = {
+                                        day.list.push({
                                             fromH: start[0],
                                             fromM: start[1],
                                             toH: end[0],
                                             toM: end[1],
-                                        }
+                                        })
                                     }
                                 })
-                                return obj
-                            }),
-                            weekDayName: i
-                        }))
+                            )
+                            return day
+                        })
                     }))
                 }
                 setSchedule(newData)
@@ -146,7 +148,8 @@ const Schedule = (props: ScheduleProps) => {
             {
                 schedule
                     ? <GreenBtn onClick={() => setEdit(!edit)}>{!edit ? 'Изменить расписание' : 'Отменить'}</GreenBtn>
-                    : <GreenBtn onClick={()=>history.push(`/personal/0/add/${params?.id}`)}>Добавить расписание</GreenBtn>
+                    : <GreenBtn onClick={() => history.push(`/personal/0/add/${params?.id}`)}>Добавить
+                        расписание</GreenBtn>
             }
         </div>
     )
@@ -196,7 +199,8 @@ const Days: React.FC<DaysProps> = (props) => {
             <div className={css.day}>{props.name}</div>
             <div className={css.schedules}>
                 {
-                    props?.list.map((item: any, index: number) => item ? <div className={css.schedule} key={index}>
+                    props?.list.map((item: any, index: number) => item ? <div className={css.schedule}
+                                                                              key={index}>
                         <span> {item.fromH}:{item.fromM} </span>
                         |
                         <span> {item.toH}:{item.toM} </span>
