@@ -8,6 +8,7 @@ import ReactCodeInput from "react-verification-code-input/dist";
 import {Form, Formik} from "formik";
 import * as Yup from 'yup';
 import deepEqual from 'lodash.isequal';
+import {signInFirebase} from "../../firebase";
 
 
 const validateFormik = {
@@ -36,6 +37,10 @@ const SignInFormik = (props: any) => {
                     .then((res: any) => {
                         setError(!res)
                         setSubmitting(false)
+                        signInFirebase(values.login, values.password)
+                            .then((response) => {
+                                console.log(response)
+                            })
                         if(res) {
                             history.push('/clinic')
                         }

@@ -268,7 +268,7 @@ const CreatePersonal = () => {
                                                         arrayHelpers.push(deg)
                                                     }
                                                 >
-                                                    +Добавить опыт работы
+                                                    +Добавить опыт регалии
                                                 </button>
                                             </div>
                                         );
