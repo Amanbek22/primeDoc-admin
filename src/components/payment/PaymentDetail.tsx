@@ -36,7 +36,6 @@ const PaymentDetail = () => {
         requestCheck(()=>api.getPayments(params.id))
             .then((res:any) => {
                 setPending(false)
-                console.log(res.data)
                 setData(res.data)
                 setImg(res.data.logo)
             })
@@ -70,9 +69,7 @@ const PaymentDetail = () => {
                 // history.push('/payment')
                 setEdit(false)
                 setPending(true)
-                console.log(res)
             })
-        console.log(data)
     }
 
     if (pending) {

@@ -61,16 +61,11 @@ class ChatApp extends Component {
                 // })
                 this.setState({users: user})
                 this.setState({isLoading: false});
-                // let a = user[0]?.getUserDescriptors().then((user)=>console.log(user))
             })
-
-        // this.client.getChannelBySid('general2').then((res)=>console.log(res))
-
     }
 
     getChanel(client, sid, index) {
         this.client = client;
-        let a = this.state.users[index]
         this.client
             .getChannelByUniqueName(sid)
             .then(channel => {
@@ -150,7 +145,9 @@ class ChatApp extends Component {
     }
 
     componentWillUnmount() {
-        this.client.shutdown();
+        if(this.client){
+            this.client.shutdown();
+        }
     }
 
     render() {

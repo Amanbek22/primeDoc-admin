@@ -33,7 +33,7 @@ const Chat: React.FC<ChatProps> = (props) => {
                 </div>
                 <div className={css.users}>
                     {
-                        props.users.map((item: any, index) => <User active={props.user} key={item.sid} sid={item.sid}
+                        props.users.map((item: any, index) => <User active={props.user} key={item.clientId} sid={item.sid}
                                                                     data={item} index={index}
                                                                     onC={props.onUserChoose}/>)
                     }
@@ -55,17 +55,17 @@ type UserProps = {
     active: any
 }
 const User: React.FC<UserProps> = (props) => {
+    console.log(props)
     const [name, setName] = useState('')
-    // console.log(props.active?.id === props.sid)
-    props.data.getMembers().then((member: any) => {
-        member.map(async (u: any) => {
-            let user = await u.getUser()
-            if (user.identity !== '1:[ADMIN]') {
-                // console.log(user.friendlyName)
-                setName(user.friendlyName)
-            }
-        })
-    })
+    // props.data.getMembers().then((member: any) => {
+    //     member.map(async (u: any) => {
+    //         let user = await u.getUser()
+    //         if (user.identity !== '1:[ADMIN]') {
+    //             // console.log(user.friendlyName)
+    //             setName(user.friendlyName)
+    //         }
+    //     })
+    // })
     return (
         <div className={props.active?.id !== props.sid ? css.user : css.user + ' ' + css.activeUser
         }
@@ -75,9 +75,9 @@ const User: React.FC<UserProps> = (props) => {
                 <img src="https://mediator.kg/wp-content/themes/twentynineteen/images/avatar-no-photo.png" alt="logo"/>
             </div>
             <div>
-                <div className={css.name}>{name}</div>
+                <div className={css.name}>{props.data?.clientId}</div>
                 <div className={css.lastMessage}>
-                    {/*Здравствуйте!*/}
+                    {props.data?.lastMessage}
                 </div>
             </div>
             {/*<div className={css.count}>*/}
