@@ -59,7 +59,7 @@ export const authFc = (password: string, log: string) => async (dispatch: any,) 
                     chatToken: res.data.chatToken
                 }))
                 dispatch(getDirections())
-                dispatch(getIllness())
+                // dispatch(getIllness())
                 a = true
             },
             (error) => {
