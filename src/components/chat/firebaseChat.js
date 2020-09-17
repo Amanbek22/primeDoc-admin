@@ -2,30 +2,75 @@ import React, {useEffect, useState} from 'react'
 import {auth, db} from "../../firebase";
 import {firestore} from 'firebase'
 import ChatUI from "./Chat";
+
 const FirebaseChat = (props) => {
     const [user, setUser] = useState()
     const [users, setUsers] = useState([])
+    const [activeUser, setActiveUser] = useState(null)
+    const [uid, setUid] = useState('')
     const [chat, setChat] = useState()
+    const [userData, setUserData] = useState(null)
+    const [messages, setMessages] = useState([])
     const dataBase = firestore()
-    useEffect(()=> {
+    const messagesRef = db.ref('chatAdmin')
+        .orderByKey()
+        .limitToLast(100);
+
+    useEffect(() => {
         setUser(auth().currentUser)
-        const a = dataBase?.collection('chatAdmin')
-            .onSnapshot((querySnapshot)=>{
+        setUid(auth().currentUser)
+        const db = dataBase?.collection('chatAdmin')
+            .onSnapshot((querySnapshot) => {
                 let arr = []
                 querySnapshot.forEach((doc) => {
                     arr.push(doc.data())
                 })
                 setUsers([...arr])
-                console.log(arr)
             })
-    },[])
+    }, [])
+    useEffect(() => {
+        const User = activeUser ? dataBase?.collection('users')
+            .doc(activeUser)
+            .onSnapshot((res)=>{
+                let data = res.data()
+                setUserData(data)
+        }) : null
+
+        const messages = activeUser ? dataBase?.collection('chatAdmin')
+            .doc(activeUser).collection('messages')
+            .onSnapshot((querySnapshot) => {
+                let arr = []
+                querySnapshot.forEach((doc) => {
+                    arr.push(doc.data())
+                })
+                setMessages([...arr])
+            }) : null
+    }, [activeUser])
+    const onSubmit = async (e) => {
+        try {
+            await dataBase?.collection("chatAdmin").doc(activeUser).collection('messages').push({
+                message: "Hello from Frontend",
+                image: '',
+                type: 'text',
+                receiver: '',
+                timestamp: Date.now(),
+                sender: user.uid
+            });
+            // this.setState({ content: '' });
+        } catch (error) {
+            alert('some error with sending message')
+            console.log(error.message)
+        }
+    }
     return (
         <ChatUI
-            onSubmit={()=>{}}
+            onSubmit={() => onSubmit('hello')}
+            admin={user}
             users={users}
-            messages={[]}
-            onUserChoose={()=>{}}
-            user={user}
+            messages={messages}
+            onUserChoose={(e) => setActiveUser(e)}
+            user={userData}
+            active={activeUser}
         />
     )
 }
