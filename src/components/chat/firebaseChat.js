@@ -46,14 +46,16 @@ const FirebaseChat = (props) => {
                 setMessages([...arr])
             }) : null
     }, [activeUser])
+
     const onSubmit = async (e) => {
+        alert(e)
         try {
-            await dataBase?.collection("chatAdmin").doc(activeUser).collection('messages').push({
-                message: "Hello from Frontend",
+            await dataBase?.collection("chatAdmin").doc(activeUser).collection('messages').add({
+                message: e,
                 image: '',
                 type: 'text',
                 receiver: '',
-                timestamp: Date.now(),
+                time: new Date(),
                 sender: user.uid
             });
             // this.setState({ content: '' });
@@ -64,7 +66,7 @@ const FirebaseChat = (props) => {
     }
     return (
         <ChatUI
-            onSubmit={() => onSubmit('hello')}
+            onSubmit={onSubmit}
             admin={user}
             users={users}
             messages={messages}

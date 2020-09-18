@@ -181,7 +181,7 @@ const Faq = React.memo(() => {
                             <div className={css.btnWrapper}>
                             <span className={css.cancel}>
                                 <BtnFloat onClick={()=>setVisible(!visible)}>
-                                    <GreenDiv background={'#fe4242'}>Cancel</GreenDiv>
+                                    <GreenDiv background={'#fe4242'}>Отменить</GreenDiv>
                                 </BtnFloat>
                             </span>
                                 <BtnFloat>

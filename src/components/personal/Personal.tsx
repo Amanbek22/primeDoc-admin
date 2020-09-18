@@ -58,7 +58,7 @@ const Personal: React.FC<Props> = () => {
                         Направление
                     </div>
                     <div>
-                        Электронная почта
+                        Номер
                     </div>
                     <Last>
                         Операции
