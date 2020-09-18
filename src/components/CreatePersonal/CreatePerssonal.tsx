@@ -133,7 +133,7 @@ const CreatePersonal = () => {
                     const formData = new FormData()
 
                     formData.append('doctor', new Blob([JSON.stringify(data)], { type: 'application/json'}))
-                    formData.append('imageFile', image)
+                    if(image) formData.append('imageFile', image)
                     requestCheck(()=>api.setDoctor(formData))
                         .then((res: any) => {
                             console.log(res)
@@ -232,6 +232,7 @@ const CreatePersonal = () => {
                                                             <Field as={Input} placeholder={'Название'} name={`degree.${index}.name`}/>
                                                             <div className={css.dateWrapper}>
                                                                 <Field
+                                                                    autoComplete="off"
                                                                     placeholderText={'Начало'}
                                                                     locale={'ru'}
                                                                     className={css.datePicker} as={DatePickerField}
@@ -240,8 +241,10 @@ const CreatePersonal = () => {
                                                                 />
                                                                 <span className={css.second}/>
                                                                 <Field
+                                                                    autoComplete="off"
                                                                     placeholderText={'Конец'}
                                                                     locale={'ru'}
+                                                                    minDate={values.degree[index].start}
                                                                     className={css.datePicker} as={DatePickerField}
                                                                     name={`degree.${index}.end`}/>
                                                             </div>
@@ -268,7 +271,7 @@ const CreatePersonal = () => {
                                                         arrayHelpers.push(deg)
                                                     }
                                                 >
-                                                    +Добавить опыт работы
+                                                    +Добавить регалии
                                                 </button>
                                             </div>
                                         );

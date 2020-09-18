@@ -18,7 +18,7 @@ import Payment from "./components/payment/Payment";
 import Payments from "./components/payment/Payments";
 import PaymentDetail from "./components/payment/PaymentDetail";
 import Doctor from "./components/doctor/Doctor";
-import ChatApp from "./components/chat/chatContainer";
+import ChatApp from "./components/chat/firebaseChat";
 import Reservation from "./components/reservation/Reservation";
 
 export const useRoutes = (isAuth: boolean, header: string, Logout: ()=> void) => {

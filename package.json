@@ -20,6 +20,7 @@
     "@types/styled-components": "^5.1.0",
     "@types/yup": "^0.29.3",
     "axios": "^0.19.2",
+    "firebase": "^7.20.0",
     "formik": "^2.1.4",
     "lodash.isequal": "^4.5.0",
     "react": "^16.13.1",
