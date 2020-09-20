@@ -60,7 +60,7 @@ const MedCarts = () => {
                 {
                     user.map((item: any) => <List
                         key={item.id}
-                        fio={`${item.firstName} ${item.lastName} ${item.patronymic}`}
+                        fio={`${item.firstName ? item.firstName : ''} ${item.lastName ? item.lastName : ''} ${item.patronymic ? item.patronymic : ''}`}
                         number={item.username}
                         date={item.birthDate}
                         image={item.image}
@@ -91,7 +91,7 @@ const List: React.FC<ListProps> = (props) => {
         <div>
             <TableList>
                 <div>
-                    {props.fio}
+                    {props.fio.length <= 2 ? <span style={{color: 'red'}}>Отсутсвует</span> : props.fio}
                 </div>
                 <div>
                     {date}

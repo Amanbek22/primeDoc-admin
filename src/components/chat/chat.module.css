@@ -80,6 +80,7 @@
     font-size: 16px;
     line-height: 150%;
     color: #2A0200;
+    white-space: nowrap;
 }
 .lastMessage{
     font-size: 16px;
@@ -127,7 +128,7 @@
     flex-direction: column;
     overflow-y: scroll;
     position: absolute;
-    top: 76px;
+    top: 68px;
     bottom: 51px;
     right: 0;
     left: 0;

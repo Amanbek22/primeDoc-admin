@@ -194,7 +194,7 @@ const CreatePersonal = () => {
                                             {touched.login && errors.login ? <div>{errors.login}</div> : null}
                                         </span>
                                     </span>
-                                    <Field as={Input} name={"login"} type={'text'}/>
+                                    <Field as={Input} name={"login"} type={'number'}/>
                                 </label>
                                 <label className={css.label}>
                                     <span><span>*</span>Категории
@@ -232,6 +232,7 @@ const CreatePersonal = () => {
                                                             <Field as={Input} placeholder={'Название'} name={`degree.${index}.name`}/>
                                                             <div className={css.dateWrapper}>
                                                                 <Field
+                                                                    autoComplete="off"
                                                                     placeholderText={'Начало'}
                                                                     locale={'ru'}
                                                                     className={css.datePicker} as={DatePickerField}
@@ -240,8 +241,10 @@ const CreatePersonal = () => {
                                                                 />
                                                                 <span className={css.second}/>
                                                                 <Field
+                                                                    autoComplete="off"
                                                                     placeholderText={'Конец'}
                                                                     locale={'ru'}
+                                                                    minDate={values.degree[index].start}
                                                                     className={css.datePicker} as={DatePickerField}
                                                                     name={`degree.${index}.end`}/>
                                                             </div>
@@ -268,7 +271,7 @@ const CreatePersonal = () => {
                                                         arrayHelpers.push(deg)
                                                     }
                                                 >
-                                                    +Добавить опыт регалии
+                                                    +Добавить регалии
                                                 </button>
                                             </div>
                                         );

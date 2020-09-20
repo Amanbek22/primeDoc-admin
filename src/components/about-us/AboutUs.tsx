@@ -76,7 +76,10 @@ const AboutUs = () => {
                                 <GreenBtn onClick={saveFile}>Сохранить</GreenBtn>
                             </div>
                             : <label>
-                                <input className={css.none} onChange={(e:any) => setFile(e.target.files[0])} type={'file'} />
+                                <input
+                                    className={css.none} onChange={(e:any) => setFile(e.target.files[0])} type={'file'}
+                                    accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,text/plain, application/pdf,"
+                                />
                                 <GreenDiv>Добавить файл</GreenDiv>
                             </label>
                     }

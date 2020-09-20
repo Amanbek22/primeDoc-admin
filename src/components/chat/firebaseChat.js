@@ -1,31 +1,112 @@
 import React, {useEffect, useState} from 'react'
 import {auth, db} from "../../firebase";
-import {firestore} from 'firebase'
+import firebase, {firestore} from 'firebase'
 import ChatUI from "./Chat";
+
+const storage = firebase.storage()
+
 const FirebaseChat = (props) => {
     const [user, setUser] = useState()
     const [users, setUsers] = useState([])
+    const [activeUser, setActiveUser] = useState(null)
+    const [uid, setUid] = useState('')
     const [chat, setChat] = useState()
+    const [userData, setUserData] = useState(null)
+    const [messages, setMessages] = useState([])
+
     const dataBase = firestore()
-    useEffect(()=> {
+    const messagesRef = db.ref('chatAdmin')
+        .orderByKey()
+        .limitToLast(100);
+
+    useEffect(() => {
         setUser(auth().currentUser)
-        const a = dataBase?.collection('chatAdmin')
-            .onSnapshot((querySnapshot)=>{
+        setUid(auth().currentUser)
+        const db = dataBase?.collection('chatAdmin')
+            // .where("name", "==", "Ф")
+            .onSnapshot((querySnapshot) => {
                 let arr = []
                 querySnapshot.forEach((doc) => {
                     arr.push(doc.data())
                 })
                 setUsers([...arr])
-                console.log(arr)
             })
-    },[])
+    }, [])
+    useEffect(() => {
+        const User = activeUser ? dataBase?.collection('users')
+            .doc(activeUser)
+            .onSnapshot((res) => {
+                let data = res.data()
+                setUserData(data)
+            }) : null
+
+        const messages = activeUser ? dataBase?.collection('chatAdmin')
+            .doc(activeUser).collection('messages')
+            .onSnapshot((querySnapshot) => {
+                let arr = []
+                querySnapshot.forEach((doc) => {
+                    arr.push(doc.data())
+                })
+                arr.sort((a, b) => a.time.seconds - b.time.seconds)
+                setMessages([...arr])
+            }) : null
+    }, [activeUser])
+
+    const onSubmit = async (text) => {
+        const data = {
+            message: typeof text !== 'object' ? text : '',
+            image: typeof text === 'object' ? text : '',
+            type: typeof text === 'object' ? 'image' : 'text',
+            receiver: '',
+            time: new Date(),
+            sender: user.uid
+        }
+        if (typeof text === 'object') {
+            const uploadTask = storage.ref(`images/${text.name}`).put(text)
+            uploadTask.on("state_changed", (snapshot) => {
+
+                },
+                (error) => {
+
+                },
+                () => {
+                    storage
+                        .ref("images")
+                        .child(text.name)
+                        .getDownloadURL()
+                        .then(async (url) => {
+
+                            try {
+                                await dataBase?.collection("chatAdmin")
+                                    .doc(activeUser).collection('messages').add({
+                                        ...data,
+                                        image: url
+                                    });
+                            } catch (error) {
+                                alert('some error with sending message')
+                                console.log(error.message)
+                            }
+                        })
+                })
+        } else{
+            try {
+                await dataBase?.collection("chatAdmin")
+                    .doc(activeUser).collection('messages').add(data);
+            } catch (error) {
+                alert('some error with sending message')
+                console.log(error.message)
+            }
+        }
+    }
     return (
         <ChatUI
-            onSubmit={()=>{}}
+            onSubmit={onSubmit}
+            admin={user}
             users={users}
-            messages={[]}
-            onUserChoose={()=>{}}
-            user={user}
+            messages={messages}
+            onUserChoose={(e) => setActiveUser(e)}
+            user={userData}
+            active={activeUser}
         />
     )
 }
