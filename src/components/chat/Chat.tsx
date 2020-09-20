@@ -41,7 +41,7 @@ const Chat: React.FC<ChatProps> = (props) => {
                                                                     onC={props.onUserChoose}/>)
                     }
                     <div className={css.all}>
-                        <span>Загрузить все</span>
+                        {/*<span>Загрузить все</span>*/}
                     </div>
                 </div>
             </div>
@@ -90,12 +90,11 @@ const User: React.FC<UserProps> = (props) => {
 
 type MessageProps = {
     messages: any
-    onSubmit: (text: string) => void
+    onSubmit: (text: any) => void
     user: any
     admin: any
 }
 const MessageBlock: React.FC<MessageProps> = (props) => {
-    console.log(props)
     const messageId: any = useRef(null)
     const scrollToBottom = () => {
         const scrollHeight = messageId?.current?.scrollHeight;
@@ -103,10 +102,10 @@ const MessageBlock: React.FC<MessageProps> = (props) => {
         if (messageId.current) messageId.current.scrollTop = scrollHeight - height
     }
 
-    const handleSubmit = async (event: any) => {
+    const handleSubmit = async (text: any) => {
         // event.preventDefault();
         // this.setState({ writeError: null });
-        props.onSubmit(event)
+        props.onSubmit(text)
     }
     useEffect(() => {
         scrollToBottom()

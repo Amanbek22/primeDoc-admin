@@ -194,7 +194,7 @@ const CreatePersonal = () => {
                                             {touched.login && errors.login ? <div>{errors.login}</div> : null}
                                         </span>
                                     </span>
-                                    <Field as={Input} name={"login"} type={'text'}/>
+                                    <Field as={Input} name={"login"} type={'number'}/>
                                 </label>
                                 <label className={css.label}>
                                     <span><span>*</span>Категории
