@@ -15,6 +15,8 @@ type ChatProps = {
     user: any
     active: boolean | string | null
     admin: any
+    searchName: string
+    setSearchName: (str:string) => void
 }
 const Chat: React.FC<ChatProps> = (props) => {
     const dispatch = useDispatch()
@@ -31,7 +33,7 @@ const Chat: React.FC<ChatProps> = (props) => {
         <div className={css.wrapper}>
             <div className={css.userList}>
                 <div className={css.searchWrapper}>
-                    <input className={css.search} type="text" placeholder={'Найти сотрудника'}/>
+                    <input onChange={(e) => props.setSearchName(e.target.value)} className={css.search} value={props.searchName} type="text" placeholder={'Найти сотрудника'}/>
                 </div>
                 <div className={css.users}>
                     {
@@ -246,11 +248,12 @@ const MyMessage: React.FC<MyMessageProps> = ({text, ...props}) => {
 }
 
 const Message: React.FC<MyMessageProps> = (props) => {
+    console.log(props.user)
     return (
         <div className={css.message__wrapper}>
             <div>
                 <div className={css.message_ava}>
-                    <img src="https://data.whicdn.com/images/332611241/original.jpg" alt="logo"/>
+                    <img src={props.user?.image ? props.user?.image : "https://mediator.kg/wp-content/themes/twentynineteen/images/avatar-no-photo.png"} alt="logo"/>
                 </div>
                 <div className={css.message__name}>
                     {/*{props.user?.userPhone}*/}
