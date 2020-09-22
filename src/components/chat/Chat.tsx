@@ -248,7 +248,6 @@ const MyMessage: React.FC<MyMessageProps> = ({text, ...props}) => {
 }
 
 const Message: React.FC<MyMessageProps> = (props) => {
-    console.log(props.user)
     return (
         <div className={css.message__wrapper}>
             <div>

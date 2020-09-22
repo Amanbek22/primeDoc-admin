@@ -24,6 +24,7 @@ import {getCategories} from "../../state/initial-selector";
 import * as Yup from "yup";
 import deepEqual from "lodash.isequal";
 import {checkToken} from "../../state/authReducer";
+import {firestore} from "firebase";
 
 registerLocale('ru', ru)
 
@@ -54,6 +55,7 @@ const CreatePersonal = () => {
         return dispatch(checkToken(req))
     }
     const history = useHistory()
+    const dataBase = firestore()
 
     const categories = useSelector((state: GlobalStateType) => getCategories(state))
     const [img, setImg] = useState('')
@@ -79,6 +81,29 @@ const CreatePersonal = () => {
         end: '',
 
     }
+    const initialValue = {
+        surname: '',
+        name: '',
+        middleName: '',
+        aboutDoctor: '',
+        // degree: '',
+        regalia: '',
+        login: '',
+        password1: '',
+        password2: '',
+        email: '',
+        organizationName: '',
+        degree: [
+            {
+                infoType: '',
+                name: '',
+                organizationName: '',
+                start: '',
+                end: '',
+
+            }
+        ]
+    }
 
     useEffect(() => {
         const data = categories.map((item: any) => ({
@@ -91,29 +116,7 @@ const CreatePersonal = () => {
     return (<div>
             <Title>Данные врача</Title>
             <Formik
-                initialValues={{
-                    surname: '',
-                    name: '',
-                    middleName: '',
-                    aboutDoctor: '',
-                    // degree: '',
-                    regalia: '',
-                    login: '',
-                    password1: '',
-                    password2: '',
-                    email: '',
-                    organizationName: '',
-                    degree: [
-                        {
-                            infoType: '',
-                            name: '',
-                            organizationName: '',
-                            start: '',
-                            end: '',
-
-                        }
-                    ]
-                }}
+                initialValues={initialValue}
                 validationSchema={Yup.object().shape(validateFormik)}
                 onSubmit={(values, {setSubmitting}) => {
                     setSubmitting(true);
@@ -135,8 +138,21 @@ const CreatePersonal = () => {
                     formData.append('doctor', new Blob([JSON.stringify(data)], { type: 'application/json'}))
                     if(image) formData.append('imageFile', image)
                     requestCheck(()=>api.setDoctor(formData))
-                        .then((res: any) => {
+                        .then(async (res: any) => {
                             console.log(res)
+                            try {
+                                await dataBase?.collection("doctors").add({
+                                        name: res.data?.firstName,
+                                        isOnline: true,
+                                        fatherName: res.data?.lastName,
+                                        surname: res.data?.patronymic,
+                                        phone: res.data?.username,
+                                        image: res.data?.image
+                                    });
+                            } catch (error) {
+                                alert('some error with sending message')
+                                console.log(error.message)
+                            }
                             if(time){
                                 history.push(`/personal/0/add/${res.data.id}`)
                             }else{
