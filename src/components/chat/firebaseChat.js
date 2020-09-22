@@ -13,7 +13,7 @@ const FirebaseChat = (props) => {
     const [chat, setChat] = useState()
     const [userData, setUserData] = useState(null)
     const [messages, setMessages] = useState([])
-
+    const [searchName, setSearchName] = useState('')
     const dataBase = firestore()
     const messagesRef = db.ref('chatAdmin')
         .orderByKey()
@@ -23,7 +23,8 @@ const FirebaseChat = (props) => {
         setUser(auth().currentUser)
         setUid(auth().currentUser)
         const db = dataBase?.collection('chatAdmin')
-            // .where("name", "==", "Ф")
+            .orderBy('name')
+            // .where(`name`, "array-contains", searchName)
             .onSnapshot((querySnapshot) => {
                 let arr = []
                 querySnapshot.forEach((doc) => {
@@ -51,6 +52,15 @@ const FirebaseChat = (props) => {
                 setMessages([...arr])
             }) : null
     }, [activeUser])
+    const search = (str)=>{
+        setSearchName(str)
+        firebase.database.child('chatAdmin')
+            .orderByChild('name')
+            .equalTo(searchName)
+            .on('value', snapshot => {
+                console.log(snapshot.val());
+            })
+    }
 
     const onSubmit = async (text) => {
         const data = {
@@ -100,6 +110,8 @@ const FirebaseChat = (props) => {
     }
     return (
         <ChatUI
+            setSearchName={search}
+            searchName={searchName}
             onSubmit={onSubmit}
             admin={user}
             users={users}
