@@ -77,7 +77,7 @@ const User: React.FC<UserProps> = (props) => {
             <div className={css.avaWrapper}>
                 <img src="https://mediator.kg/wp-content/themes/twentynineteen/images/avatar-no-photo.png" alt="logo"/>
             </div>
-            <div>
+            <div className={css.nameWrapper}>
                 <div className={css.name}>{props.data?.name + ' ' + props.data?.surname}</div>
                 <div className={css.lastMessage}>
                     {props.data?.lastMessage}
