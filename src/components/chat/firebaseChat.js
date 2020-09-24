@@ -32,6 +32,8 @@ const FirebaseChat = (props) => {
                 })
                 setUsers([...arr])
             })
+        const messaging = firebase.messaging()
+        console.log(messaging)
     }, [])
     useEffect(() => {
         const User = activeUser ? dataBase?.collection('users')
@@ -54,12 +56,12 @@ const FirebaseChat = (props) => {
     }, [activeUser])
     const search = (str)=>{
         setSearchName(str)
-        firebase.database.child('chatAdmin')
-            .orderByChild('name')
-            .equalTo(searchName)
-            .on('value', snapshot => {
-                console.log(snapshot.val());
-            })
+        // firebase.database.child('chatAdmin')
+        //     .orderByChild('name')
+        //     .equalTo(searchName)
+        //     .on('value', snapshot => {
+        //         console.log(snapshot.val());
+        //     })
     }
 
     const onSubmit = async (text) => {
