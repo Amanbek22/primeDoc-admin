@@ -23,7 +23,7 @@ const FirebaseChat = (props) => {
         setUser(auth().currentUser)
         setUid(auth().currentUser)
         const db = dataBase?.collection('chatAdmin')
-            .orderBy('name')
+            // .orderBy('name')
             // .where(`name`, "array-contains", searchName)
             .onSnapshot((querySnapshot) => {
                 let arr = []
@@ -33,7 +33,6 @@ const FirebaseChat = (props) => {
                 setUsers([...arr])
             })
         const messaging = firebase.messaging()
-        console.log(messaging)
     }, [])
     useEffect(() => {
         const User = activeUser ? dataBase?.collection('users')
@@ -41,6 +40,7 @@ const FirebaseChat = (props) => {
             .onSnapshot((res) => {
                 let data = res.data()
                 setUserData(data)
+                console.log(data)
             }) : null
 
         const messages = activeUser ? dataBase?.collection('chatAdmin')
