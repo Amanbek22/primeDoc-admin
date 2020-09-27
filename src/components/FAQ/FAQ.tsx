@@ -111,17 +111,11 @@ const Faq = React.memo(() => {
         requestCheck(() => api.orderFaq(newArr))
             .then((res) => console.log(res))
     }
-    const wrapper: any = useRef(null)
-    const scrollToBottom = () => {
-        const scrollHeight = wrapper?.current?.scrollHeight;
-        const height = wrapper?.current?.clientHeight;
-        if (wrapper.current) wrapper.current.scrollTop = scrollHeight - height
-    }
     if (pending) {
         return <Preloader/>
     }
     return (
-        <div ref={wrapper} className={css.wrapper}>
+        <div className={css.wrapper}>
             <BtnFloat>
                 {
                     change

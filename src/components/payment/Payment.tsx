@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {setHeader} from "../../state/appReducer";
 import {FieldArray, Formik, Form, Field} from "formik";
 import api from "../../api/Api";
-import {Title} from "../admin/AdminComponents";
 import cs from './payment.module.css'
 import css from "../CreatePersonal/createPersonal.module.css";
 import {
@@ -47,12 +46,6 @@ const Payment = () => {
             text: i.step,
             number: index
         }))
-        const data = {
-            logo: img,
-            name: values.step0,
-            nextSteps: values.last,
-            paymentSteps: newArr
-        }
         const formData = new FormData()
         formData.append('imageFile', image)
         formData.append('name', values.step0)
@@ -79,8 +72,6 @@ const Payment = () => {
                          handleChange,
                          handleBlur,
                      }) => {
-                        const hasChanged = !deepEqual(values, initialValues);
-                        const hasErrors = Object.keys(errors).length > 0;
                         return <Form className={cs.wrapper}>
                             <div className={css.form}>
                                 <label className={css.label}>

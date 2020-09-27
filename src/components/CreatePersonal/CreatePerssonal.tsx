@@ -25,6 +25,8 @@ import * as Yup from "yup";
 import deepEqual from "lodash.isequal";
 import {checkToken} from "../../state/authReducer";
 import {firestore} from "firebase";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 registerLocale('ru', ru)
 
@@ -210,7 +212,7 @@ const CreatePersonal = () => {
                                             {touched.login && errors.login ? <div>{errors.login}</div> : null}
                                         </span>
                                     </span>
-                                    <Field as={Input} name={"login"} type={'number'}/>
+                                    <Field as={PhoneInput} containerClass={css.container} inputClass={css.inputClass} country={'kg'} name={"login"} type={'number'}/>
                                 </label>
                                 <label className={css.label}>
                                     <span><span>*</span>Категории
