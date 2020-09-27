@@ -23,8 +23,6 @@ const Chat: React.FC<ChatProps> = (props) => {
     useEffect(() => {
         dispatch(setHeader("Чат"))
     }, [dispatch])
-    const [name, setName] = useState('')
-    const [active, setActive] = useState(null)
     useEffect(() => {
         document.getElementsByTagName('body')[0].classList.add(css.bodyBg)
         return () => document.getElementsByTagName('body')[0].classList.remove(css.bodyBg)
@@ -60,16 +58,6 @@ type UserProps = {
     active: any
 }
 const User: React.FC<UserProps> = (props) => {
-    const [name, setName] = useState('')
-    // props.data.getMembers().then((member: any) => {
-    //     member.map(async (u: any) => {
-    //         let user = await u.getUser()
-    //         if (user.identity !== '1:[ADMIN]') {
-    //             // console.log(user.friendlyName)
-    //             setName(user.friendlyName)
-    //         }
-    //     })
-    // })
     return (
         <div className={props.active !== props.data?.clientId ? css.user : css.user + ' ' + css.activeUser}
              onClick={() => props.onC(props.data?.clientId)}

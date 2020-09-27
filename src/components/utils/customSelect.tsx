@@ -9,7 +9,6 @@ export const selectStyles = {
         width: "100%",
         minHeight: "36px",
         marginTop: "5px",
-        padding: "0 0 0 9px",
         fontFamily: 'Balsamiq Sans, cursive',
         fontWeight: 200,
         fontSize: "14px",

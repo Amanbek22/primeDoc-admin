@@ -243,9 +243,9 @@ const CreatePersonal = () => {
                                                             <span><span>*</span>Регалии</span>
                                                             <Select
                                                                 options={degreeOption}
-                                                                styles={selectStyles}
+                                                                styles={{...selectStyles}}
                                                                 onChange={(e:any) => values.degree[index].infoType = e.value  }
-                                                                placeholder={''}
+                                                                placeholder={'Тип регалии'}
                                                             />
                                                             <Field as={Input} placeholder={'Название'} name={`degree.${index}.name`}/>
                                                             <div className={css.dateWrapper}>
