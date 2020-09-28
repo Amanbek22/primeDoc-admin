@@ -40,7 +40,6 @@ const FirebaseChat = (props) => {
             .onSnapshot((res) => {
                 let data = res.data()
                 setUserData(data)
-                console.log(data)
             }) : null
 
         const messages = activeUser ? dataBase?.collection('chatAdmin')
@@ -95,7 +94,7 @@ const FirebaseChat = (props) => {
                                         image: url
                                     });
                             } catch (error) {
-                                alert('some error with sending message')
+                                // alert('some error with sending message')
                                 console.log(error.message)
                             }
                         })
