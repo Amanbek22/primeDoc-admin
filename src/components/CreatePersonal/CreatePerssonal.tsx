@@ -42,8 +42,8 @@ const validateFormik = {
         .min(8, 'Минимум 8 символов')
         .oneOf([Yup.ref('password1')], 'Не совпадают')
         .required('Объязательное поле'),
-    login: Yup.string()
-        .required('Объязательное поле'),
+    // login: Yup.string()
+    //     .required('Объязательное поле'),
 
 
 }
