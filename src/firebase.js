@@ -1,5 +1,3 @@
-import firebase from "firebase";
-
 const config = {
     apiKey: "AIzaSyCTU8gDsFCaeB4kCX8wtFA2O8a1U4X6PfU",
     authDomain: "primedoc-94c30.firebaseapp.com",
