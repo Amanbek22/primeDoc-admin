@@ -24,6 +24,9 @@ import {getCategories} from "../../state/initial-selector";
 import * as Yup from "yup";
 import deepEqual from "lodash.isequal";
 import {checkToken} from "../../state/authReducer";
+import {firestore} from "firebase";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 registerLocale('ru', ru)
 
@@ -39,8 +42,8 @@ const validateFormik = {
         .min(8, 'Минимум 8 символов')
         .oneOf([Yup.ref('password1')], 'Не совпадают')
         .required('Объязательное поле'),
-    login: Yup.string()
-        .required('Объязательное поле'),
+    // login: Yup.string()
+    //     .required('Объязательное поле'),
 
 
 }
@@ -54,6 +57,7 @@ const CreatePersonal = () => {
         return dispatch(checkToken(req))
     }
     const history = useHistory()
+    const dataBase = firestore()
 
     const categories = useSelector((state: GlobalStateType) => getCategories(state))
     const [img, setImg] = useState('')
@@ -61,6 +65,7 @@ const CreatePersonal = () => {
     const [category, setCategory] = useState<any>([])
     const [options, setOptions] = useState<any>([])
     const [time, setTime] = useState(false)
+    const [login, setLogin] = useState('')
     const degreeOption = [
         {
             value: 'EXPERIENCE',
@@ -79,6 +84,29 @@ const CreatePersonal = () => {
         end: '',
 
     }
+    const initialValue = {
+        surname: '',
+        name: '',
+        middleName: '',
+        aboutDoctor: '',
+        // degree: '',
+        regalia: '',
+        login: '',
+        password1: '',
+        password2: '',
+        email: '',
+        organizationName: '',
+        degree: [
+            {
+                infoType: '',
+                name: '',
+                organizationName: '',
+                start: '',
+                end: '',
+
+            }
+        ]
+    }
 
     useEffect(() => {
         const data = categories.map((item: any) => ({
@@ -91,29 +119,7 @@ const CreatePersonal = () => {
     return (<div>
             <Title>Данные врача</Title>
             <Formik
-                initialValues={{
-                    surname: '',
-                    name: '',
-                    middleName: '',
-                    aboutDoctor: '',
-                    // degree: '',
-                    regalia: '',
-                    login: '',
-                    password1: '',
-                    password2: '',
-                    email: '',
-                    organizationName: '',
-                    degree: [
-                        {
-                            infoType: '',
-                            name: '',
-                            organizationName: '',
-                            start: '',
-                            end: '',
-
-                        }
-                    ]
-                }}
+                initialValues={initialValue}
                 validationSchema={Yup.object().shape(validateFormik)}
                 onSubmit={(values, {setSubmitting}) => {
                     setSubmitting(true);
@@ -128,15 +134,27 @@ const CreatePersonal = () => {
                         patronymic: values.middleName,
                         position: null,
                         schedules: null,
-                        username: values.login
+                        username: '+' + login
                     }
                     const formData = new FormData()
-
                     formData.append('doctor', new Blob([JSON.stringify(data)], { type: 'application/json'}))
                     if(image) formData.append('imageFile', image)
                     requestCheck(()=>api.setDoctor(formData))
-                        .then((res: any) => {
+                        .then(async (res: any) => {
                             console.log(res)
+                            try {
+                                await dataBase?.collection("doctors").add({
+                                        name: res.data?.firstName,
+                                        isOnline: true,
+                                        fatherName: res.data.lastName ? res.data.lastName : '',
+                                        surname: res.data.patronymic ? res.data.patronymic : '',
+                                        phone: res.data.username ? res.data.username : '',
+                                        image: res.data.image ? res.data.image : ''
+                                    });
+                            } catch (error) {
+                                alert('some error with creating doctors')
+                                console.log(error.message)
+                            }
                             if(time){
                                 history.push(`/personal/0/add/${res.data.id}`)
                             }else{
@@ -190,11 +208,12 @@ const CreatePersonal = () => {
                                 </label>
                                 <label className={css.label}>
                                     <span><span>*</span>Логин
-                                    <span className={css.error}>
+                                        <span className={css.error}>
                                             {touched.login && errors.login ? <div>{errors.login}</div> : null}
                                         </span>
                                     </span>
-                                    <Field as={Input} name={"login"} type={'number'}/>
+                                    <PhoneInput onChange={(e)=> setLogin(e)} containerClass={css.container} inputClass={css.inputClass} country={'kg'} value={login}/>
+                                    {/*<Field as={PhoneInput} value={values.login} containerClass={css.container} inputClass={css.inputClass} country={'kg'} name={"login"}/>*/}
                                 </label>
                                 <label className={css.label}>
                                     <span><span>*</span>Категории
@@ -225,9 +244,9 @@ const CreatePersonal = () => {
                                                             <span><span>*</span>Регалии</span>
                                                             <Select
                                                                 options={degreeOption}
-                                                                styles={selectStyles}
+                                                                styles={{...selectStyles}}
                                                                 onChange={(e:any) => values.degree[index].infoType = e.value  }
-                                                                placeholder={''}
+                                                                placeholder={'Тип регалии'}
                                                             />
                                                             <Field as={Input} placeholder={'Название'} name={`degree.${index}.name`}/>
                                                             <div className={css.dateWrapper}>

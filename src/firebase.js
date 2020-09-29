@@ -11,6 +11,43 @@ const config = {
     measurementId: "G-ZMH1W3JMQH"
 };
 firebase.initializeApp(config)
+const messaging = firebase.messaging()
+
+function InitializeFireBaseMessaging() {
+    messaging.requestPermission()
+        .then(function () {
+            console.log("Notification permission")
+            return messaging.getToken()
+        })
+        .then(function (token){
+            console.log(token)
+            firebase.firestore().collection('adminToken').doc('admin').set({
+                token: token
+            })
+                .then((res)=>{
+                    console.log(res)
+                })
+        })
+        .catch(function (reason){
+            console.log(reason)
+        })
+}
+messaging.onMessage(function (payload){
+    console.log(payload)
+})
+
+messaging.onTokenRefresh(function (){
+    messaging.getToken()
+        .then(function (newToken){
+            console.log('New Token',newToken)
+        })
+        .catch(function (reason){
+            console.log(reason)
+        })
+})
+
+InitializeFireBaseMessaging()
+
 export const auth = firebase.auth;
 export const db = firebase.database();
 

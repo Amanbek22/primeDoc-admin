@@ -111,17 +111,24 @@ const Faq = React.memo(() => {
         requestCheck(() => api.orderFaq(newArr))
             .then((res) => console.log(res))
     }
-    const wrapper: any = useRef(null)
+    const wrapper: any = useRef()
     const scrollToBottom = () => {
         const scrollHeight = wrapper?.current?.scrollHeight;
         const height = wrapper?.current?.clientHeight;
-        if (wrapper.current) wrapper.current.scrollTop = scrollHeight - height
+        const maxScrollTop = scrollHeight - height;
+        if(wrapper.current) wrapper.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+        if(wrapper.current) wrapper.current.scrollIntoView({ behavior: "smooth" })
     }
+    useEffect(()=>{
+        if(visible) {
+            scrollToBottom()
+        }
+    }, [visible])
     if (pending) {
         return <Preloader/>
     }
     return (
-        <div ref={wrapper} className={css.wrapper}>
+        <div  className={css.wrapper}>
             <BtnFloat>
                 {
                     change
@@ -157,7 +164,7 @@ const Faq = React.memo(() => {
             <div>
                 {
                     visible
-                        ? <form onSubmit={formik.handleSubmit}>
+                        ? <form ref={wrapper} onSubmit={formik.handleSubmit}>
                         <span className={css.formWrapper}>
                             <label>
                                 <span>
@@ -192,6 +199,7 @@ const Faq = React.memo(() => {
                         : <BtnFloat>
                             <GreenBtn onClick={() => {
                                 setVisible(!visible)
+                                scrollToBottom()
                             }}>Добавить вопрос</GreenBtn>
                         </BtnFloat>
                 }

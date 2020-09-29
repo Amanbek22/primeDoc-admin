@@ -15,14 +15,14 @@ type ChatProps = {
     user: any
     active: boolean | string | null
     admin: any
+    searchName: string
+    setSearchName: (str:string) => void
 }
 const Chat: React.FC<ChatProps> = (props) => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader("Чат"))
     }, [dispatch])
-    const [name, setName] = useState('')
-    const [active, setActive] = useState(null)
     useEffect(() => {
         document.getElementsByTagName('body')[0].classList.add(css.bodyBg)
         return () => document.getElementsByTagName('body')[0].classList.remove(css.bodyBg)
@@ -31,7 +31,7 @@ const Chat: React.FC<ChatProps> = (props) => {
         <div className={css.wrapper}>
             <div className={css.userList}>
                 <div className={css.searchWrapper}>
-                    <input className={css.search} type="text" placeholder={'Найти сотрудника'}/>
+                    <input onChange={(e) => props.setSearchName(e.target.value)} className={css.search} value={props.searchName} type="text" placeholder={'Найти сотрудника'}/>
                 </div>
                 <div className={css.users}>
                     {
@@ -58,16 +58,6 @@ type UserProps = {
     active: any
 }
 const User: React.FC<UserProps> = (props) => {
-    const [name, setName] = useState('')
-    // props.data.getMembers().then((member: any) => {
-    //     member.map(async (u: any) => {
-    //         let user = await u.getUser()
-    //         if (user.identity !== '1:[ADMIN]') {
-    //             // console.log(user.friendlyName)
-    //             setName(user.friendlyName)
-    //         }
-    //     })
-    // })
     return (
         <div className={props.active !== props.data?.clientId ? css.user : css.user + ' ' + css.activeUser}
              onClick={() => props.onC(props.data?.clientId)}
@@ -75,7 +65,7 @@ const User: React.FC<UserProps> = (props) => {
             <div className={css.avaWrapper}>
                 <img src="https://mediator.kg/wp-content/themes/twentynineteen/images/avatar-no-photo.png" alt="logo"/>
             </div>
-            <div>
+            <div className={css.nameWrapper}>
                 <div className={css.name}>{props.data?.name + ' ' + props.data?.surname}</div>
                 <div className={css.lastMessage}>
                     {props.data?.lastMessage}
@@ -250,7 +240,7 @@ const Message: React.FC<MyMessageProps> = (props) => {
         <div className={css.message__wrapper}>
             <div>
                 <div className={css.message_ava}>
-                    <img src="https://data.whicdn.com/images/332611241/original.jpg" alt="logo"/>
+                    <img src={props.user?.image ? props.user?.image : "https://mediator.kg/wp-content/themes/twentynineteen/images/avatar-no-photo.png"} alt="logo"/>
                 </div>
                 <div className={css.message__name}>
                     {/*{props.user?.userPhone}*/}

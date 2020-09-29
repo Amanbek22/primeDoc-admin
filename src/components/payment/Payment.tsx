@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {setHeader} from "../../state/appReducer";
 import {FieldArray, Formik, Form, Field} from "formik";
 import api from "../../api/Api";
-import {Title} from "../admin/AdminComponents";
 import cs from './payment.module.css'
 import css from "../CreatePersonal/createPersonal.module.css";
 import {
@@ -16,7 +15,6 @@ import {
 import pic from "../../img/pic.png";
 import {useHistory} from 'react-router-dom'
 import {checkToken} from "../../state/authReducer";
-import deepEqual from "lodash.isequal";
 
 const Payment = () => {
     const history = useHistory()
@@ -47,12 +45,6 @@ const Payment = () => {
             text: i.step,
             number: index
         }))
-        const data = {
-            logo: img,
-            name: values.step0,
-            nextSteps: values.last,
-            paymentSteps: newArr
-        }
         const formData = new FormData()
         formData.append('imageFile', image)
         formData.append('name', values.step0)
@@ -79,8 +71,6 @@ const Payment = () => {
                          handleChange,
                          handleBlur,
                      }) => {
-                        const hasChanged = !deepEqual(values, initialValues);
-                        const hasErrors = Object.keys(errors).length > 0;
                         return <Form className={cs.wrapper}>
                             <div className={css.form}>
                                 <label className={css.label}>
@@ -135,11 +125,25 @@ const Payment = () => {
                                             const reader = new FileReader();
                                             reader.readAsDataURL(e.target.files[0]);
                                             reader.onload = (e: any) => {
+                                                let image = new Image();
+                                                image.src = e.target.result;
+                                                image.onload = function (evn) {
+                                                    let height:any = 1100;
+                                                    let width:any = 750;
+                                                    if (height < 1100 || width < 750) {
+                                                        alert("At least you can upload a 1100*750 photo size.");
+                                                        return false;
+                                                    }else{
+                                                        alert("Uploaded image has valid Height and Width.");
+                                                        return true;
+                                                    }
+                                                };
                                                 const newUrl = e.target.result.split(',')
                                                 setImg(newUrl[1])
                                             }
+                                            console.log(e.target.files[0])
                                             setImage(e.target.files[0])
-                                        }} type={'file'}/>
+                                        }} type={'file'} accept={"image/jpeg,image/png,image/gif"}/>
                                         <DownloadPictureWrapper>
                                             <img src={img ? "data:image/jpg;base64," + img : pic} alt="pic"/>
                                         </DownloadPictureWrapper>
