@@ -35,14 +35,16 @@ const FirebaseChat = (props) => {
         const messaging = firebase.messaging()
     }, [])
     useEffect(() => {
+        let arr2 = []
         const User = activeUser ? dataBase?.collection('users')
             .doc(activeUser)
             .onSnapshot((res) => {
+                // setMessages([])
                 let data = res.data()
                 setUserData(data)
             }) : null
 
-        const messages = activeUser ? dataBase?.collection('chatAdmin')
+        const message = activeUser ? dataBase?.collection('chatAdmin')
             .doc(activeUser).collection('messages')
             .onSnapshot((querySnapshot) => {
                 let arr = []
@@ -50,6 +52,12 @@ const FirebaseChat = (props) => {
                     arr.push(doc.data())
                 })
                 arr.sort((a, b) => a.time.seconds - b.time.seconds)
+                // console.log(arr2)
+                // console.log(arr)
+                // if(arr2.length && arr.length > arr2.length){
+                //     alert('new Message')
+                // }
+                arr2 = [...arr]
                 setMessages([...arr])
             }) : null
     }, [activeUser])
@@ -86,7 +94,6 @@ const FirebaseChat = (props) => {
                         .child(text.name)
                         .getDownloadURL()
                         .then(async (url) => {
-
                             try {
                                 await dataBase?.collection("chatAdmin")
                                     .doc(activeUser).collection('messages').add({

@@ -65,6 +65,7 @@ const CreatePersonal = () => {
     const [category, setCategory] = useState<any>([])
     const [options, setOptions] = useState<any>([])
     const [time, setTime] = useState(false)
+    const [login, setLogin] = useState('')
     const degreeOption = [
         {
             value: 'EXPERIENCE',
@@ -133,10 +134,9 @@ const CreatePersonal = () => {
                         patronymic: values.middleName,
                         position: null,
                         schedules: null,
-                        username: values.login
+                        username: '+' + login
                     }
                     const formData = new FormData()
-
                     formData.append('doctor', new Blob([JSON.stringify(data)], { type: 'application/json'}))
                     if(image) formData.append('imageFile', image)
                     requestCheck(()=>api.setDoctor(formData))
@@ -146,13 +146,13 @@ const CreatePersonal = () => {
                                 await dataBase?.collection("doctors").add({
                                         name: res.data?.firstName,
                                         isOnline: true,
-                                        fatherName: res.data?.lastName,
-                                        surname: res.data?.patronymic,
-                                        phone: res.data?.username,
-                                        image: res.data?.image
+                                        fatherName: res.data.lastName ? res.data.lastName : '',
+                                        surname: res.data.patronymic ? res.data.patronymic : '',
+                                        phone: res.data.username ? res.data.username : '',
+                                        image: res.data.image ? res.data.image : ''
                                     });
                             } catch (error) {
-                                alert('some error with sending message')
+                                alert('some error with creating doctors')
                                 console.log(error.message)
                             }
                             if(time){
@@ -208,11 +208,12 @@ const CreatePersonal = () => {
                                 </label>
                                 <label className={css.label}>
                                     <span><span>*</span>Логин
-                                    <span className={css.error}>
+                                        <span className={css.error}>
                                             {touched.login && errors.login ? <div>{errors.login}</div> : null}
                                         </span>
                                     </span>
-                                    <Field as={PhoneInput} containerClass={css.container} inputClass={css.inputClass} country={'kg'} name={"login"} type={'number'}/>
+                                    <PhoneInput onChange={(e)=> setLogin(e)} containerClass={css.container} inputClass={css.inputClass} country={'kg'} value={login}/>
+                                    {/*<Field as={PhoneInput} value={values.login} containerClass={css.container} inputClass={css.inputClass} country={'kg'} name={"login"}/>*/}
                                 </label>
                                 <label className={css.label}>
                                     <span><span>*</span>Категории
