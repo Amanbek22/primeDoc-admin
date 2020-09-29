@@ -21,6 +21,12 @@ function InitializeFireBaseMessaging() {
         })
         .then(function (token){
             console.log(token)
+            firebase.firestore().collection('adminToken').doc('admin').set({
+                token: token
+            })
+                .then((res)=>{
+                    console.log(res)
+                })
         })
         .catch(function (reason){
             console.log(reason)
