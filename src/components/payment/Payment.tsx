@@ -15,7 +15,6 @@ import {
 import pic from "../../img/pic.png";
 import {useHistory} from 'react-router-dom'
 import {checkToken} from "../../state/authReducer";
-import deepEqual from "lodash.isequal";
 
 const Payment = () => {
     const history = useHistory()
@@ -126,11 +125,25 @@ const Payment = () => {
                                             const reader = new FileReader();
                                             reader.readAsDataURL(e.target.files[0]);
                                             reader.onload = (e: any) => {
+                                                let image = new Image();
+                                                image.src = e.target.result;
+                                                image.onload = function (evn) {
+                                                    let height:any = 1100;
+                                                    let width:any = 750;
+                                                    if (height < 1100 || width < 750) {
+                                                        alert("At least you can upload a 1100*750 photo size.");
+                                                        return false;
+                                                    }else{
+                                                        alert("Uploaded image has valid Height and Width.");
+                                                        return true;
+                                                    }
+                                                };
                                                 const newUrl = e.target.result.split(',')
                                                 setImg(newUrl[1])
                                             }
+                                            console.log(e.target.files[0])
                                             setImage(e.target.files[0])
-                                        }} type={'file'}/>
+                                        }} type={'file'} accept={"image/jpeg,image/png,image/gif"}/>
                                         <DownloadPictureWrapper>
                                             <img src={img ? "data:image/jpg;base64," + img : pic} alt="pic"/>
                                         </DownloadPictureWrapper>
