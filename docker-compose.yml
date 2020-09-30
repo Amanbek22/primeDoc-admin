@@ -8,5 +8,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - '80:80'
+    volumes:
+      - /etc/ssl/certs/dhparam-2048.pem:/etc/ssl/certs/dhparam-2048.pem
+      - /etc/letsencrypt/live/primedocapp.one/fullchain.pem:/etc/letsencrypt/live/primedocapp.one/fullchain.pem
+      - /etc/letsencrypt/live/primedocapp.one/privkey.pem:/etc/letsencrypt/live/primedocapp.one/privkey.pem
+
     command: ["nginx", "-g", "daemon off;"]
 
