@@ -1,3 +1,5 @@
+import firebase from "firebase";
+
 const config = {
     apiKey: "AIzaSyCTU8gDsFCaeB4kCX8wtFA2O8a1U4X6PfU",
     authDomain: "primedoc-94c30.firebaseapp.com",
@@ -31,7 +33,9 @@ function InitializeFireBaseMessaging() {
         })
 }
 messaging.onMessage(function (payload){
+    alert('sdgsd')
     console.log(payload)
+    document.title = 'Новое сообщение'
 })
 
 messaging.onTokenRefresh(function (){

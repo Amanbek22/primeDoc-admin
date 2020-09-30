@@ -15,9 +15,10 @@ const FirebaseChat = (props) => {
     const [messages, setMessages] = useState([])
     const [searchName, setSearchName] = useState('')
     const dataBase = firestore()
+
     const messagesRef = db.ref('chatAdmin')
         .orderByKey()
-        .limitToLast(100);
+        // .limitToLast(100);
 
     useEffect(() => {
         setUser(auth().currentUser)
@@ -34,8 +35,10 @@ const FirebaseChat = (props) => {
             })
         const messaging = firebase.messaging()
     }, [])
+    let listener = dataBase.collection('chatAdmin').doc('chatAdminId')
+    console.log(listener)
     useEffect(() => {
-        let arr2 = []
+        // let arr2 = []
         const User = activeUser ? dataBase?.collection('users')
             .doc(activeUser)
             .onSnapshot((res) => {
@@ -57,7 +60,6 @@ const FirebaseChat = (props) => {
                 // if(arr2.length && arr.length > arr2.length){
                 //     alert('new Message')
                 // }
-                arr2 = [...arr]
                 setMessages([...arr])
             }) : null
     }, [activeUser])

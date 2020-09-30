@@ -15,7 +15,6 @@ firebase.initializeApp(config)
 const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler(function (payload){
-    alert('dsfsdf')
     console.log(payload)
     const title = "New message"
     const options = {
@@ -23,3 +22,8 @@ messaging.setBackgroundMessageHandler(function (payload){
     }
     return self.registration.showNotification(title, options)
 })
+
+self.addEventListener('notificationclick', event => {
+    console.log(event)
+    return event;
+});
