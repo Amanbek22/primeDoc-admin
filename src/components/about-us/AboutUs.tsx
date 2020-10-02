@@ -29,11 +29,11 @@ const AboutUs = () => {
         getAboutUs(api.getAboutUs)
             .then((res:any)=>{
                 setData(res.data)
+                setPending(false)
             })
         getAboutUs(api.getDocs)
             .then((res:any)=>{
                 setFiles(res.data)
-                setPending(false)
             })
     },[pending])
     const saveFile = () => {

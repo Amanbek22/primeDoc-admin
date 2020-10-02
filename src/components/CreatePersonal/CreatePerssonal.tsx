@@ -143,13 +143,15 @@ const CreatePersonal = () => {
                         .then(async (res: any) => {
                             console.log(res)
                             try {
-                                await dataBase?.collection("doctors").add({
-                                        name: res.data?.firstName,
+                                let doc = await dataBase?.collection("doctors").doc(`${res.data.id}`)
+                                    doc.set({
+                                        id: res.data.id,
+                                        name: res.data?.firstName ? res.data?.firstName : ' ',
                                         isOnline: true,
-                                        fatherName: res.data.lastName ? res.data.lastName : '',
-                                        surname: res.data.patronymic ? res.data.patronymic : '',
-                                        phone: res.data.username ? res.data.username : '',
-                                        image: res.data.image ? res.data.image : ''
+                                        fatherName: res.data.lastName ? res.data.lastName : ' ',
+                                        surname: res.data.patronymic ? res.data.patronymic : ' ',
+                                        phone: res.data.username ? res.data.username : ' ',
+                                        image: res.data.image ? res.data.image : ' '
                                     });
                             } catch (error) {
                                 alert('some error with creating doctors')
