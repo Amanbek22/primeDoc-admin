@@ -13,7 +13,6 @@ const config = {
 firebase.initializeApp(config)
 // const messaging = firebase.messaging()
 
-
 // function InitializeFireBaseMessaging() {
 //     messaging.requestPermission()
 //         .then(function () {
