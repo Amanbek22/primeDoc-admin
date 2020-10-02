@@ -33,7 +33,7 @@ const FirebaseChat = (props) => {
                 })
                 setUsers([...arr])
             })
-        const messaging = firebase.messaging()
+        // const messaging = firebase.messaging()
     }, [])
     let listener = dataBase.collection('chatAdmin').doc('chatAdminId')
     console.log(listener)
