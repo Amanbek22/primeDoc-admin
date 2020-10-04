@@ -35,8 +35,8 @@ const FirebaseChat = (props) => {
             })
         // const messaging = firebase.messaging()
     }, [])
-    let listener = dataBase.collection('chatAdmin').doc('chatAdminId')
-    console.log(listener)
+    // let listener = dataBase.collection('chatAdmin').doc('chatAdminId')
+    // console.log(listener)
     useEffect(() => {
         // let arr2 = []
         const User = activeUser ? dataBase?.collection('users')
@@ -109,12 +109,14 @@ const FirebaseChat = (props) => {
                         })
                 })
         } else{
-            try {
-                await dataBase?.collection("chatAdmin")
-                    .doc(activeUser).collection('messages').add(data);
-            } catch (error) {
-                alert('some error with sending message')
-                console.log(error.message)
+            if(data.message){
+                try {
+                    await dataBase?.collection("chatAdmin")
+                        .doc(activeUser).collection('messages').add(data);
+                } catch (error) {
+                    // alert('some error with sending message')
+                    console.log(error.message)
+                }
             }
         }
     }

@@ -20,6 +20,7 @@ import Select from "react-select";
 import {GlobalStateType} from "../../state/root-reducer";
 import {getCategories} from "../../state/initial-selector";
 import {checkToken} from "../../state/authReducer";
+import PhoneInput from "react-phone-input-2";
 
 type Props = {}
 const Personal: React.FC<Props> = () => {
@@ -143,7 +144,7 @@ const List: React.FC<ListProps> = (props) => {
         e.preventDefault()
         requestCheck(()=>api.editDoctor(props.id, {
             categories: direction.map((item:any) => item.value),
-            username: email,
+            username: '+' + email,
             firstName: fio,
             lastName: lastName,
             patronymic: patronymic
@@ -170,7 +171,7 @@ const List: React.FC<ListProps> = (props) => {
                     <Input required onChange={(e) => setPatronymic(e.target.value)} type="text" value={patronymic}/>
                     <Select isMulti options={options} placeholder={'Направление'}  onChange={(e) => setDirection(e)} value={direction}/>
                     {/*<Input onChange={(e) => setDirection(e.target.value)} type="text" value={direction}/>*/}
-                    <Input onChange={(e) => setEmail(e.target.value)} type="text" value={email}/>
+                    <PhoneInput country={'kg'} inputClass={css.inputClass} containerClass={css.container} onChange={(e) => setEmail(e)} value={email}/>
                     <GreenBtn>Сохранить</GreenBtn>
                 </form>
             </ModalWrapper>
