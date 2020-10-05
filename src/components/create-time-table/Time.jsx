@@ -79,7 +79,7 @@ const Time = (props) => {
     const [clock2, setClock2] = useState([...clocks])
     const ClockChange = (e) => {
         props.setStartH(e.label, props.days, props.index, 'fromH')
-        let newArr = clocks.map(item => e.value === item.value ? {
+        let newArr = clocks.map(item => e.value >= item.value ? {
             ...item,
             disabled: true
         } : item)

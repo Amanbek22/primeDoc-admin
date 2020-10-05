@@ -42,7 +42,7 @@ export default {
     setDoctor: (data: any) => http.post(`doctor`, data, config()),
     editDoctor: (id: number, data: any) => http.put(`doctor/${id}`, data, config()),
     getSchedule: (id: number) => http.get(`schedule/doctor/${id ? id : ''}`, config()),
-    createSchedule: (data: any) => http.post(`schedule`, data, config()),
+    createSchedule:(data: any) => http.post(`schedule`, data, config()),
     deleteSchedule: (id: number) => http.delete(`schedule/${id}`, config()),
     changeSchedule: (id: number, data: any) => http.put(`schedule/${id}`, data, config()),
     getPayments: (id?: number) => http.get(`payment/${id ? id : ''}`, config()),
@@ -52,7 +52,6 @@ export default {
     putPaymentImage: (id: number, data: any) => http.put(`payment/image/${id}`, data, config()),
     getReservation: (page: number = 0) => http.get(`reservation/info?page=${page}`, config()),
     delReservation: (id: number) => http.delete(`reservation/${id}`, config()),
-    approve: (id: number) => http.put(`reservation/approve/${id}`, {
-        paid: true
-    }, config())
+    approve: (id: number) => http.put(`reservation/approve/${id}`, {paid: true}, config()),
+    approveSchedule: (id: number) => http.get(`worktime/generate/${id}`)
 }

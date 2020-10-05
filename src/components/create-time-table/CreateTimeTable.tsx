@@ -121,30 +121,30 @@ const CreateTimeTable = (props: any) => {
         setVal(e)
         setStep(e.value)
     }
+    const Generate = (id: number) => requestCheck(()=> Api.approveSchedule(id))
     const submit = async (e: any) => {
         e.preventDefault()
+        let status: boolean = true
         const schedule = {
             doctorId: params.time | doctorId,
             currentWeek: 1,
             weekDuration: 1,
             weeks: weeks.map((item, index) => ({
-                weekDays: item.days.map((i: any, index: number) => {
-                    const el = i.list[index]
-                    if (el && el.fromH && el.fromM && el.toH && el.toM) {
-                        return {
-                            intervals: i.list.map((j: any) => {
-                                if (j && j.toH && j.toM && j.fromH && j.fromM) {
-                                    return {
-                                        end: j.toH && j.toM ? j.toH + ':' + j.toM + ':' + '00' : '',
-                                        start: j.fromH && j.fromM ? j.fromH + ':' + j.fromM + ':' + '00' : ''
-                                    }
+                weekDays: item.days.map((i: any, index: any) => {
+                    return {
+                        intervals: i.list.map((j: any) => {
+                            if (j && j.toH && j.toM && j.fromH && j.fromM) {
+                                return {
+                                    end: j.toH && j.toM ? j.toH + ':' + j.toM + ':' + '00' : '',
+                                    start: j.fromH && j.fromM ? j.fromH + ':' + j.fromM + ':' + '00' : ''
                                 }
+                            }else{
+                                status = false
                                 return null
-                            }),
-                            weekDayName: i.weekDayName
-                        }
+                            }
+                        }),
+                        weekDayName: i.weekDayName
                     }
-                    return null
                 }),
                 weekOrder: index + 1
             }))
@@ -158,20 +158,23 @@ const CreateTimeTable = (props: any) => {
                 // console.log(schedule.weeks[weekIndex].weekDays[dayIndex].intervals)
             }
         })))
-        if (props.data) {
+        if (props.data && status) {
             requestCheck(() => Api.deleteSchedule(props.data.id))
                 .then((res) => {
                     requestCheck(() => Api.createSchedule(schedule))
-                        .then((res) => {
-                            console.log(res)
+                        .then((res: any) => {
+                            Generate(res.data.id)
                             props.setPending()
                         })
                 })
-        } else {
+        } else if(status) {
             requestCheck(() => Api.createSchedule(schedule))
-                .then((res) => {
+                .then((res: any) => {
+                    Generate(res.data.id)
                     history.push('/personal')
                 })
+        }else{
+            alert('Нужно заполнить все поля!!!')
         }
     }
     const changeWeek = (index: number) => {
@@ -201,9 +204,7 @@ const CreateTimeTable = (props: any) => {
                         <div>
                             <Dat options={option} val={val} setVal={setData}/>
                             <Title>Интервалы</Title>
-                            {!step && (
-                                <div/>
-                            )}
+                            {!step && (<div/>)}
                             {
                                 weeks[currentWeek]?.days.map((item: any, index: number) => {
                                     return step === index + 1 && (
