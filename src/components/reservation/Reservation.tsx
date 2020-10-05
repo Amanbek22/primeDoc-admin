@@ -17,6 +17,7 @@ import api from '../../api/Api'
 import Pagination from "../paggination/Paggination";
 import Preloader from "../preloader/Preloader";
 import {firestore} from "firebase";
+import {log} from "util";
 
 const Reservation = () => {
     const dispatch = useDispatch()
@@ -60,6 +61,8 @@ const Reservation = () => {
                             reservations?.data.map((item: any) => {
                                 return <List
                                     key={item.id}
+                                    doctorId={item.doctorId}
+                                    clientId={item.clientId}
                                     fio={item?.firstname + ' ' + item?.lastname + ' ' + item?.patronymic}
                                     number={item.phone}
                                     date={item.date}
@@ -91,6 +94,8 @@ type ListProps = {
     from: string
     to: string
     id: number
+    clientId: number
+    doctorId: number
 }
 const List: React.FC<ListProps> = (props) => {
     const dispatch = useDispatch()
@@ -102,31 +107,34 @@ const List: React.FC<ListProps> = (props) => {
     const approve = () => {
         requestCheck(() => api.approve(props.id))
             .then(async (res) => {
-                console.log(res)
-                try {
-                    await dataBase?.collection("PrimeDocChat").add({
-                        adminId: 5,
-                        adminPhone: '+996708626795',
-                        chatStarted: true,
-                        clientId: 1,
-                        doctorName: 'Test',
-                        doctorSurname: 'Surname',
-                        lastMessage: '',
-                        lastMessageSenderId: 1,
-                        lastMessageTime: new Date(),
-                        userPhone: ''
-                    });
-                } catch (error) {
-                    alert('some error with creating PrimeDocChat chat')
-                    console.log(error.message)
-                }
-                dispatch(setPending(true))
+                api.getDoc(props.doctorId)
+                    .then(async (response)=>{
+                        let {username, firstName, lastName, patronymic} = response.data
+                        try {
+                            await dataBase?.collection("PrimeDocChat").add({
+                                adminId: props.doctorId,
+                                adminPhone: username,
+                                chatStarted: false,
+                                clientId: props.clientId,
+                                doctorName: firstName,
+                                doctorSurname: lastName,
+                                patronymic: patronymic,
+                                lastMessage: '',
+                                lastMessageSenderId: null,
+                                lastMessageTime: new Date(),
+                                userPhone: ''
+                            });
+                        } catch (error) {
+                            alert('some error with creating chat between doctor and user!')
+                            // console.log(error.message)
+                        }
+                        dispatch(setPending(true))
+                    })
             })
     }
     const deleteReservation = () => {
         requestCheck(() => api.delReservation(props.id))
             .then((res) => {
-                console.log(res)
                 dispatch(setPending(true))
             })
     }
