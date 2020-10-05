@@ -16,6 +16,7 @@ import {checkToken} from "../../state/authReducer";
 import api from '../../api/Api'
 import Pagination from "../paggination/Paggination";
 import Preloader from "../preloader/Preloader";
+import {firestore} from "firebase";
 
 const Reservation = () => {
     const dispatch = useDispatch()
@@ -97,10 +98,28 @@ const List: React.FC<ListProps> = (props) => {
     const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
     }
+    const dataBase = firestore()
     const approve = () => {
         requestCheck(() => api.approve(props.id))
-            .then((res) => {
+            .then(async (res) => {
                 console.log(res)
+                try {
+                    await dataBase?.collection("PrimeDocChat").add({
+                        adminId: 5,
+                        adminPhone: '+996708626795',
+                        chatStarted: true,
+                        clientId: 1,
+                        doctorName: 'Test',
+                        doctorSurname: 'Surname',
+                        lastMessage: '',
+                        lastMessageSenderId: 1,
+                        lastMessageTime: new Date(),
+                        userPhone: ''
+                    });
+                } catch (error) {
+                    alert('some error with creating PrimeDocChat chat')
+                    console.log(error.message)
+                }
                 dispatch(setPending(true))
             })
     }
@@ -114,7 +133,7 @@ const List: React.FC<ListProps> = (props) => {
     return (
         <div>
             <ReservationList>
-                <div title={props.fio}>{props.fio}</div>
+                <div title={props.fio}>{props.fio.length <= 2 ? <span style={{color: 'red'}}>Отсутсвует</span> : props.fio}</div>
                 <div>{props.number}</div>
                 <div>{date.toLocaleDateString()}</div>
                 <div>{props.from}</div>
