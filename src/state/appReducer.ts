@@ -13,7 +13,7 @@ const REMOVE_DIRECTION = "app/REMOVE_DIRECTION"
 const initialState = {
     pending: true,
     initialise: false,
-    header: 'Клиника',
+    header: 'Prime Doc',
     directions: [],
     users: [],
     illnesses: [],

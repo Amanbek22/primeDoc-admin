@@ -53,5 +53,5 @@ export default {
     getReservation: (page: number = 0) => http.get(`reservation/info?page=${page}`, config()),
     delReservation: (id: number) => http.delete(`reservation/${id}`, config()),
     approve: (id: number) => http.put(`reservation/approve/${id}`, {paid: true}, config()),
-    approveSchedule: (id: number) => http.get(`worktime/generate/${id}`)
+    approveSchedule: (id: number) => http.post(`worktime/generate/${id}/`,{}, config())
 }
