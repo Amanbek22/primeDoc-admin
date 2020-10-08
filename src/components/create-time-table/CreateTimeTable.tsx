@@ -167,15 +167,16 @@ const CreateTimeTable = (props: any) => {
                             props.setPending()
                         })
                 })
-        } else if(status) {
+        } else {
             requestCheck(() => Api.createSchedule(schedule))
                 .then((res: any) => {
                     Generate(res.data.id)
                     history.push('/personal')
                 })
-        }else{
-            alert('Нужно заполнить все поля!!!')
         }
+        // else{
+        //     alert('Нужно заполнить все поля!!!')
+        // }
     }
     const changeWeek = (index: number) => {
         setVal(null)
