@@ -112,10 +112,10 @@ const List: React.FC<ListProps> = (props) => {
                         let {username, firstName, lastName, patronymic} = response.data
                         try {
                             await dataBase?.collection("PrimeDocChat").add({
-                                adminId: props.doctorId,
+                                adminId: props.doctorId.toString(),
                                 adminPhone: username,
                                 chatStarted: false,
-                                clientId: props.clientId,
+                                clientId: props.clientId.toString(),
                                 doctorName: firstName,
                                 doctorSurname: lastName,
                                 patronymic: patronymic,
