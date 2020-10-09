@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import {
-    Center,
+    Center, GreenBtn,
     Last,
     ReservationHeader,
     ReservationList,
@@ -18,6 +18,8 @@ import Pagination from "../paggination/Paggination";
 import Preloader from "../preloader/Preloader";
 import {firestore} from "firebase";
 import {log} from "util";
+import ModalWrapper from "../modal/Modal";
+import css from './reservation.module.css'
 
 const Reservation = () => {
     const dispatch = useDispatch()
@@ -99,11 +101,19 @@ type ListProps = {
 }
 const List: React.FC<ListProps> = (props) => {
     const dispatch = useDispatch()
+    const [visible, setVisible] = useState(false)
+    const [approved, setApproved] = useState(false)
+    const onModal = () => setVisible(!visible)
+    const onApprove = () => setApproved(!approved)
     let date = new Date(props?.date)
     const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
     }
     const dataBase = firestore()
+    const onChatCreate = () => {
+        onApprove()
+        dispatch(setPending(true))
+    }
     const approve = () => {
         requestCheck(() => api.approve(props.id))
             .then(async (res) => {
@@ -128,8 +138,11 @@ const List: React.FC<ListProps> = (props) => {
                             alert('some error with creating chat between doctor and user!')
                             // console.log(error.message)
                         }
-                        dispatch(setPending(true))
+                        onApprove()
+                        // dispatch(setPending(true))
                     })
+            }, (error) => {
+                onModal()
             })
     }
     const deleteReservation = () => {
@@ -153,6 +166,18 @@ const List: React.FC<ListProps> = (props) => {
                     <img onClick={deleteReservation} src={reject} alt="откланить"/>
                 </Last>
             </ReservationList>
+            <ModalWrapper onModal={onModal} onClickAway={onModal} width={'450'} height={'400'} visible={visible}>
+                <div className={css.removed}>
+                    <h1>Бронь был отменен!</h1>
+                    <span onClick={onModal}><GreenBtn>ОК</GreenBtn></span>
+                </div>
+            </ModalWrapper>
+            <ModalWrapper onModal={onChatCreate} onClickAway={onChatCreate} width={'450'} height={'400'} visible={approved}>
+                <div className={css.removed}>
+                    <h2>Бронь успешно подтвержден!</h2>
+                    <span onClick={onChatCreate}><GreenBtn>ОК</GreenBtn></span>
+                </div>
+            </ModalWrapper>
         </div>
     )
 }

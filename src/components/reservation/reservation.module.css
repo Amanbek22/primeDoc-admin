@@ -1,0 +1,7 @@
+.removed{
+    margin-top: 150px;
+    text-align: center;
+}
+.removed>h1, .removed>h2{
+    margin-bottom: 100px;
+}
