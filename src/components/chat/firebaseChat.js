@@ -78,7 +78,7 @@ const FirebaseChat = (props) => {
             message: typeof text !== 'object' ? text : '',
             image: typeof text === 'object' ? text : '',
             type: typeof text === 'object' ? 'image' : 'text',
-            receiver: '',
+            receiver: activeUser,
             time: new Date(),
             sender: user.uid
         }

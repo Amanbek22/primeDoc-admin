@@ -19,6 +19,7 @@ type ChatProps = {
     setSearchName: (str:string) => void
 }
 const Chat: React.FC<ChatProps> = (props) => {
+    console.log(props.active)
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader("Чат"))
@@ -31,7 +32,7 @@ const Chat: React.FC<ChatProps> = (props) => {
         <div className={css.wrapper}>
             <div className={css.userList}>
                 <div className={css.searchWrapper}>
-                    <input onChange={(e) => props.setSearchName(e.target.value)} className={css.search} value={props.searchName} type="text" placeholder={'Найти сотрудника'}/>
+                    {/*<input onChange={(e) => props.setSearchName(e.target.value)} className={css.search} value={props.searchName} type="text" placeholder={'Найти поциента'}/>*/}
                 </div>
                 <div className={css.users}>
                     {

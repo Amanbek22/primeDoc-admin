@@ -16,16 +16,14 @@ const messaging = firebase.messaging()
 function InitializeFireBaseMessaging() {
     messaging.requestPermission()
         .then(function () {
-            console.log("Notification permission")
             return messaging.getToken()
         })
         .then(function (token){
-            console.log(token)
             firebase.firestore().collection('adminToken').doc('admin').set({
                 token: token
             })
                 .then((res)=>{
-                    console.log(res)
+                    // console.log(res)
                 })
         })
         .catch(function (reason){
@@ -34,8 +32,10 @@ function InitializeFireBaseMessaging() {
 }
 messaging.onMessage(function (payload){
     console.log(payload)
-    document.title = 'Новое сообщение'
-    document.getElementById('sound').play()
+    if(payload.data["gcm.notification.receiver"] === 'a'){
+        document.title = 'Новое сообщение'
+        document.getElementById('sound').play()
+    }
 })
 
 messaging.onTokenRefresh(function (){
