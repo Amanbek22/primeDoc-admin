@@ -31,9 +31,6 @@
 }
 .btnWrapper{
     margin-top: 25px;
-    margin-left: auto;
-    display: grid;
-    grid-gap: 1em;
 }
 .blue{
     background: #00BDD0 !important;
@@ -60,6 +57,57 @@
     white-space: nowrap; /* Запрещаем перенос строк */
     overflow: hidden;
     text-overflow: ellipsis;
+    position: relative;
+}
+.file__wrapper{
+    position: relative;
+}
+.file__wrapper:hover .delete{
+    opacity: 1;
+}
+.delete{
+    cursor: pointer;
+    transition: all 0.3s;
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    width: 20px;
+    height: 20px;
+    /*background: #000;*/
+}
+.delete>img{
+    width: 100%;
+    height: 100%;
+}
+.greenDiv{
+    background: none;
+    border: 1px solid #20CF54;
+    border-radius: 10px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    height: 40px;
+    color: #20CF54;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 19px;
+    font-family: 'Balsamiq Sans', cursive;
+    transition: all 0.5s;
+}
+.greenDiv:hover{
+    background: #20CF54;
+    color: #ffffff;
+}
+.modalWrapper{
+    margin: 160px 25px;
+    text-align: center;
+}
+.modalWrapper>h3{
+    margin-bottom: 70px;
 }
 .file__name{
     width: 200px;
