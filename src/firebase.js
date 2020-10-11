@@ -35,6 +35,9 @@ messaging.onMessage(function (payload){
     if(payload.data["gcm.notification.receiver"] === 'a'){
         document.title = 'Новое сообщение'
         document.getElementById('sound').play()
+        setTimeout(()=>{
+            document.title = "Prime Doc"
+        }, 2000)
     }
 })
 

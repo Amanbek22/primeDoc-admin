@@ -201,7 +201,7 @@ const File = (props: FileProps) => {
         return dispatch(checkToken(req))
     }
     const getFile = () => {
-        get_file_url(`http://165.22.74.215:8080/api/v1/docs/download/${props.code}`)
+        get_file_url(`https://primedocapp.one:8443/api/v1/docs/download/${props.code}`)
     }
     const [visible, setVisible] = useState(false)
     const onModal = () => setVisible(!visible)
