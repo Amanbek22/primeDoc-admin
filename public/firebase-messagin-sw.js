@@ -13,8 +13,8 @@ const config = {
 };
 firebase.initializeApp(config)
 
-// const messaging = firebase.messaging();
-//
+const messaging = firebase.messaging();
+
 // messaging.setBackgroundMessageHandler(function (payload){
 //     console.log(payload)
 //     const title = "New message"
@@ -23,8 +23,8 @@ firebase.initializeApp(config)
 //     }
 //     return self.registration.showNotification(title, options)
 // })
-//
-// self.addEventListener('notificationclick', event => {
-//     console.log(event)
-//     return event;
-// });
+
+self.addEventListener('notificationclick', event => {
+    console.log(event)
+    return event;
+});

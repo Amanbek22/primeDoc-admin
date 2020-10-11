@@ -5,20 +5,16 @@ import ChatUI from "./Chat";
 
 const storage = firebase.storage()
 
-const FirebaseChat = (props) => {
+const FirebaseChat = () => {
     const [user, setUser] = useState()
     const [users, setUsers] = useState([])
     const [activeUser, setActiveUser] = useState(null)
     const [uid, setUid] = useState('')
-    const [chat, setChat] = useState()
     const [userData, setUserData] = useState(null)
     const [messages, setMessages] = useState([])
     const [searchName, setSearchName] = useState('')
     const dataBase = firestore()
 
-    const messagesRef = db.ref('chatAdmin')
-        .orderByKey()
-        // .limitToLast(100);
 
     useEffect(() => {
         setUser(auth().currentUser)
