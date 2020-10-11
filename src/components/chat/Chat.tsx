@@ -32,7 +32,7 @@ const Chat: React.FC<ChatProps> = (props) => {
         <div className={css.wrapper}>
             <div className={css.userList}>
                 <div className={css.searchWrapper}>
-                    <input onChange={(e) => props.setSearchName(e.target.value)} className={css.search} value={props.searchName} type="text" placeholder={'Найти поциента'}/>
+                    <input onChange={(e) => props.setSearchName(e.target.value)} className={css.search} value={props.searchName} type="text" placeholder={'Найти пациента'}/>
                 </div>
                 <div className={css.users}>
                     {
