@@ -103,8 +103,13 @@ const List: React.FC<ListProps> = (props) => {
     const dispatch = useDispatch()
     const [visible, setVisible] = useState(false)
     const [approved, setApproved] = useState(false)
+    const [error, setError] = useState(false)
+    const [err, setErr] = useState('')
+
     const onModal = () => setVisible(!visible)
     const onApprove = () => setApproved(!approved)
+    const onError = () => setError(!error)
+
     let date = new Date(props?.date)
     const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
@@ -142,7 +147,9 @@ const List: React.FC<ListProps> = (props) => {
                         // dispatch(setPending(true))
                     })
             }, (error) => {
-                onModal()
+                onError()
+                setErr(error.message)
+                console.log(error)
             })
     }
     const deleteReservation = () => {
@@ -176,6 +183,12 @@ const List: React.FC<ListProps> = (props) => {
                 <div className={css.removed}>
                     <h2>Бронь успешно подтвержден!</h2>
                     <span onClick={onChatCreate}><GreenBtn>ОК</GreenBtn></span>
+                </div>
+            </ModalWrapper>
+            <ModalWrapper onModal={onError} onClickAway={onError} width={'450'} height={'400'} visible={error}>
+                <div className={css.removed}>
+                    <h2>{err}</h2>
+                    <span onClick={onError}><GreenBtn>ОК</GreenBtn></span>
                 </div>
             </ModalWrapper>
         </div>

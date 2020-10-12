@@ -23,7 +23,7 @@ function InitializeFireBaseMessaging() {
                 token: token
             })
                 .then((res)=>{
-                    // console.log(res)
+                    console.log(res)
                 })
         })
         .catch(function (reason){
