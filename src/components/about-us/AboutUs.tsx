@@ -48,8 +48,8 @@ const AboutUs = () => {
         fileData.append('file', file)
         getAboutUs(() => api.docsUpload(fileData, PAID_SERVICE))
             .then((res: any) => {
-                setPending(false)
                 setFile(null)
+                setPending(false)
             })
     }
     const savePersonalFile = () => {
@@ -58,8 +58,8 @@ const AboutUs = () => {
         fileData.append('file', personal_file)
         getAboutUs(() => api.docsUpload(fileData, PERSONAL_DATA))
             .then((res: any) => {
-                setPending(false)
                 setPersonal_file(null)
+                setPending(false)
             })
     }
     const saveOfferFile = () => {
@@ -68,8 +68,8 @@ const AboutUs = () => {
         fileData.append('file', offerFile)
         getAboutUs(() => api.docsUpload(fileData, CONTRACT_OFFER))
             .then((res: any) => {
-                setPending(false)
                 setOfferFile(null)
+                setPending(false)
             })
     }
     const paid_service = files.map((item: any) => item.documentType === PAID_SERVICE ?
@@ -233,13 +233,6 @@ const File = (props: FileProps) => {
                 <img src={delImage} alt=""/>
             </div>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
-                {/*<div className={css.modalWrapper}>*/}
-                {/*    <Title style={{*/}
-                {/*        textAlign: "center",*/}
-                {/*        marginTop: "120px"*/}
-                {/*    }}>Вы действительно хотите удолить файл: {props.name}</Title>*/}
-                {/*    <GreenBtn onClick={del}>ДА</GreenBtn>*/}
-                {/*</div>*/}
                 <DeleteModal text={`Вы действительно хотите удолить файл: ${props.name}`} onModal={onModal} title={''}
                              del={del}/>
             </ModalWrapper>
