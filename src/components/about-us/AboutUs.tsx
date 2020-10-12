@@ -10,6 +10,8 @@ import ModalWrapper from "../modal/Modal";
 import Preloader from "../preloader/Preloader";
 import {checkToken} from "../../state/authReducer";
 import delImage from '../../img/delete.png'
+import {Title} from "../admin/AdminComponents";
+import DeleteModal from "../utils/DeleteModal";
 
 const PERSONAL_DATA = "PERSONAL_DATA"
 const PAID_SERVICE = "PAID_SERVICE"
@@ -46,7 +48,7 @@ const AboutUs = () => {
         fileData.append('file', file)
         getAboutUs(() => api.docsUpload(fileData, PAID_SERVICE))
             .then((res: any) => {
-                console.log(res)
+                setPending(false)
                 setFile(null)
             })
     }
@@ -56,7 +58,7 @@ const AboutUs = () => {
         fileData.append('file', personal_file)
         getAboutUs(() => api.docsUpload(fileData, PERSONAL_DATA))
             .then((res: any) => {
-                console.log(res)
+                setPending(false)
                 setPersonal_file(null)
             })
     }
@@ -66,30 +68,28 @@ const AboutUs = () => {
         fileData.append('file', offerFile)
         getAboutUs(() => api.docsUpload(fileData, CONTRACT_OFFER))
             .then((res: any) => {
-                console.log(res)
+                setPending(false)
                 setOfferFile(null)
             })
     }
     const paid_service = files.map((item: any) => item.documentType === PAID_SERVICE ?
-        <File key={item.id} id={item.id} code={item.code} type={item.documentType} name={item.fileName}/> : null).filter((item: any) => {
+        <File setPending={setPending} key={item.id} id={item.id} code={item.code} type={item.documentType} name={item.fileName}/> : null).filter((item: any) => {
         if (item) {
             return item
         }
     })
     const personal_data = files.map((item: any) => item.documentType === PERSONAL_DATA ?
-        <File key={item.id} id={item.id} code={item.code} type={item.documentType} name={item.fileName}/> : null).filter((item: any) => {
+        <File setPending={setPending} key={item.id} id={item.id} code={item.code} type={item.documentType} name={item.fileName}/> : null).filter((item: any) => {
         if (item) {
             return item
         }
     })
-
     const offer = files.map((item: any) => item.documentType === CONTRACT_OFFER ?
-        <File key={item.id} id={item.id} code={item.code} type={item.documentType} name={item.fileName}/> : null).filter((item: any) => {
+        <File setPending={setPending} key={item.id} id={item.id} code={item.code} type={item.documentType} name={item.fileName}/> : null).filter((item: any) => {
         if (item) {
             return item
         }
     })
-
     if (pending) {
         return <Preloader/>
     }
@@ -106,9 +106,8 @@ const AboutUs = () => {
                 }
                 <div>
                     <div className={css.contact}>Договор на оказание платных медицинских услуг</div>
-                    <div className={css.files}>{paid_service}</div>
                     {
-                        !paid_service ? <div className={css.btnWrapper}>
+                        !paid_service.length ? <div className={css.btnWrapper}>
                                 {
                                     file
                                         ? <div>
@@ -127,14 +126,14 @@ const AboutUs = () => {
                                         </label>
                                 }
                             </div>
-                            : null
+                            : <div className={css.files}>{paid_service}</div>
                     }
                 </div>
                 <div>
                     <div className={css.contact}>Соглашение на обработку персональных данных</div>
                     <div className={css.files}>{personal_data}</div>
                     {
-                        !personal_data
+                        !personal_data.length
                             ? <div className={css.btnWrapper}>
                                 {
                                     personal_file
@@ -161,7 +160,7 @@ const AboutUs = () => {
                     <div className={css.contact}>Условия договора оферты</div>
                     <div className={css.files}>{offer}</div>
                     {
-                        !offer ?
+                        !offer.length ?
                             <div className={css.btnWrapper}>
                                 {
                                     offerFile
@@ -194,6 +193,7 @@ type FileProps = {
     name: string
     code: string
     id: number
+    setPending: any
 }
 const File = (props: FileProps) => {
     const dispatch = useDispatch()
@@ -218,7 +218,7 @@ const File = (props: FileProps) => {
     const del = async () => {
         onModal()
         let res = await reqCheck(()=> api.deleteDoc(props.type))
-        console.log(res)
+        props.setPending()
     }
 
     return (
@@ -233,10 +233,15 @@ const File = (props: FileProps) => {
                 <img src={delImage} alt=""/>
             </div>
             <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
-                <div className={css.modalWrapper}>
-                    <h3>Вы действительно хотите удолить файл: {props.name}</h3>
-                    <GreenBtn onClick={del}>ДА</GreenBtn>
-                </div>
+                {/*<div className={css.modalWrapper}>*/}
+                {/*    <Title style={{*/}
+                {/*        textAlign: "center",*/}
+                {/*        marginTop: "120px"*/}
+                {/*    }}>Вы действительно хотите удолить файл: {props.name}</Title>*/}
+                {/*    <GreenBtn onClick={del}>ДА</GreenBtn>*/}
+                {/*</div>*/}
+                <DeleteModal text={`Вы действительно хотите удолить файл: ${props.name}`} onModal={onModal} title={''}
+                             del={del}/>
             </ModalWrapper>
         </div>
     )
