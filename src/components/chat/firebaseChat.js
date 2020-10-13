@@ -98,6 +98,11 @@ const FirebaseChat = () => {
                                         ...data,
                                         image: url
                                     });
+                                await dataBase?.collection("chatAdmin").doc(activeUser).update({
+                                    lastMessageSenderId: "a",
+                                    lastMessage: "картинка",
+                                    lastMessageTime: new Date()
+                                })
                             } catch (error) {
                                 // alert('some error with sending message')
                                 console.log(error.message)

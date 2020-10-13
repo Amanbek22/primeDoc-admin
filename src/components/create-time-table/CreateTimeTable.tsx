@@ -128,7 +128,7 @@ const CreateTimeTable = (props: any) => {
         const schedule = {
             doctorId: params.time | doctorId,
             currentWeek: 1,
-            weekDuration: 1,
+            weekDuration: weeks.length,
             weeks: weeks.map((item, index) => ({
                 weekDays: item.days.map((i: any, index: any) => {
                     return {
@@ -163,7 +163,7 @@ const CreateTimeTable = (props: any) => {
                 .then((res) => {
                     requestCheck(() => Api.createSchedule(schedule))
                         .then((res: any) => {
-                            Generate(res.data.id)
+                            // Generate(res.data.id)
                             props.setPending()
                         })
                 })
@@ -174,9 +174,6 @@ const CreateTimeTable = (props: any) => {
                     history.push('/personal')
                 })
         }
-        // else{
-        //     alert('Нужно заполнить все поля!!!')
-        // }
     }
     const changeWeek = (index: number) => {
         setVal(null)
