@@ -35,11 +35,13 @@ const AboutUs = () => {
         getAboutUs(api.getAboutUs)
             .then((res: any) => {
                 setData(res.data)
-                setPending(false)
-            })
-        getAboutUs(api.getDocs)
-            .then((res: any) => {
-                setFiles(res.data)
+                getAboutUs(api.getDocs)
+                    .then((res: any) => {
+                        setFiles(res.data)
+                        setPending(false)
+                    }, (error:any)=>{
+                        setPending(false)
+                    })
             })
     }, [pending])
     const saveFile = () => {
@@ -48,8 +50,8 @@ const AboutUs = () => {
         fileData.append('file', file)
         getAboutUs(() => api.docsUpload(fileData, PAID_SERVICE))
             .then((res: any) => {
+                console.log(res.data)
                 setFile(null)
-                setPending(false)
             })
     }
     const savePersonalFile = () => {
@@ -59,7 +61,6 @@ const AboutUs = () => {
         getAboutUs(() => api.docsUpload(fileData, PERSONAL_DATA))
             .then((res: any) => {
                 setPersonal_file(null)
-                setPending(false)
             })
     }
     const saveOfferFile = () => {
@@ -69,7 +70,6 @@ const AboutUs = () => {
         getAboutUs(() => api.docsUpload(fileData, CONTRACT_OFFER))
             .then((res: any) => {
                 setOfferFile(null)
-                setPending(false)
             })
     }
     const paid_service = files.map((item: any) => item.documentType === PAID_SERVICE ?
