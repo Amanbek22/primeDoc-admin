@@ -63,8 +63,8 @@ const Reservation = () => {
                             reservations?.data.map((item: any) => {
                                 return <List
                                     key={item.id}
-                                    doctorId={item.doctorId}
-                                    clientId={item.clientId}
+                                    doctorId={item.userDoctorId}
+                                    clientId={item.userClientId}
                                     fio={item?.firstname + ' ' + item?.lastname + ' ' + item?.patronymic}
                                     number={item.phone}
                                     date={item.date}

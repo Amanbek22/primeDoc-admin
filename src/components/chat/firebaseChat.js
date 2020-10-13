@@ -108,7 +108,12 @@ const FirebaseChat = () => {
             if(data.message){
                 try {
                     await dataBase?.collection("chatAdmin")
-                        .doc(activeUser).collection('messages').add(data);
+                        .doc(activeUser).collection('messages').add(data)
+                    await dataBase?.collection("chatAdmin").doc(activeUser).update({
+                        lastMessageSenderId: "a",
+                        lastMessage: data.message,
+                        lastMessageTime: new Date()
+                    })
                 } catch (error) {
                     // alert('some error with sending message')
                     console.log(error.message)
