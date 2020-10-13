@@ -19,7 +19,7 @@ function InitializeFireBaseMessaging() {
             return messaging.getToken()
         })
         .then(function (token){
-            firebase.firestore().collection('adminToken').doc('admin').set({
+            firebase.firestore().collection('adminToken').doc('admin').update({
                 token: token
             })
                 .then((res)=>{
@@ -51,12 +51,13 @@ messaging.onTokenRefresh(function (){
         })
 })
 
-InitializeFireBaseMessaging()
 
 export const auth = firebase.auth;
 export const db = firebase.database();
 
 
-export function signInFirebase(email, password) {
-    return auth().signInWithEmailAndPassword(email, password);
+export async function signInFirebase(email, password) {
+    let res = await auth().signInWithEmailAndPassword(email, password);
+    InitializeFireBaseMessaging()
+    return res
 }
