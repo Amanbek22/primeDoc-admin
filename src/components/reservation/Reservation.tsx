@@ -63,6 +63,7 @@ const Reservation = () => {
                             reservations?.data.map((item: any) => {
                                 return <List
                                     key={item.id}
+                                    doctor={item.doctorId}
                                     doctorId={item.userDoctorId}
                                     clientId={item.userClientId}
                                     fio={item?.firstname + ' ' + item?.lastname + ' ' + item?.patronymic}
@@ -98,8 +99,10 @@ type ListProps = {
     id: number
     clientId: number
     doctorId: number
+    doctor: number
 }
 const List: React.FC<ListProps> = (props) => {
+    console.log(props)
     const dispatch = useDispatch()
     const [visible, setVisible] = useState(false)
     const [approved, setApproved] = useState(false)
@@ -122,7 +125,7 @@ const List: React.FC<ListProps> = (props) => {
     const approve = () => {
         requestCheck(() => api.approve(props.id))
             .then(async (res) => {
-                api.getDoc(props.doctorId)
+                api.getDoc(props.doctor)
                     .then(async (response)=>{
                         let {username, firstName, lastName, patronymic} = response.data
                         try {
