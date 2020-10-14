@@ -19,7 +19,8 @@ function InitializeFireBaseMessaging() {
             return messaging.getToken()
         })
         .then(function (token){
-            firebase.firestore().collection('adminToken').doc('admin').update({
+            console.log(token)
+            firebase.firestore().collection('adminToken').doc('admin').set({
                 token: token
             })
                 .then((res)=>{
@@ -30,6 +31,33 @@ function InitializeFireBaseMessaging() {
             console.log(reason)
         })
 }
+
+function saveMessagingDeviceToken() {
+    firebase.messaging().getToken().then(function(currentToken) {
+        if (currentToken) {
+            console.log('Got FCM device token:', currentToken);
+            // Saving the Device Token to the datastore.
+            firebase.firestore().collection('adminToken').doc('admin')
+                .set({token: currentToken});
+        } else {
+            // Need to request permissions to show notifications.
+            requestNotificationsPermissions();
+        }
+    }).catch(function(error){
+        console.error('Unable to get messaging token.', error);
+    });
+}
+
+function requestNotificationsPermissions() {
+    console.log('Requesting notifications permission...');
+    firebase.messaging().requestPermission().then(function() {
+        // Notification permission granted.
+        saveMessagingDeviceToken();
+    }).catch(function(error) {
+        console.error('Unable to get permission to notify.', error);
+    });
+}
+
 messaging.onMessage(function (payload){
     console.log(payload)
     if(payload.data["gcm.notification.receiver"] === 'a'){
@@ -41,23 +69,24 @@ messaging.onMessage(function (payload){
     }
 })
 
-messaging.onTokenRefresh(function (){
-    messaging.getToken()
-        .then(function (newToken){
-            console.log('New Token',newToken)
-        })
-        .catch(function (reason){
-            console.log(reason)
-        })
-})
+
+// messaging.onTokenRefresh(function (){
+//     messaging.getToken()
+//         .then(function (newToken){
+//             console.log('New Token',newToken)
+//         })
+//         .catch(function (reason){
+//             console.log(reason)
+//         })
+// })
 
 
 export const auth = firebase.auth;
 export const db = firebase.database();
 
+saveMessagingDeviceToken()
+// InitializeFireBaseMessaging()
 
-export async function signInFirebase(email, password) {
-    let res = await auth().signInWithEmailAndPassword(email, password);
-    InitializeFireBaseMessaging()
-    return res
+export function signInFirebase(email, password) {
+    return auth().signInWithEmailAndPassword(email, password);
 }

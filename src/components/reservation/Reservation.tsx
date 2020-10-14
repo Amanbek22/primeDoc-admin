@@ -175,13 +175,13 @@ const List: React.FC<ListProps> = (props) => {
             </ReservationList>
             <ModalWrapper onModal={onModal} onClickAway={onModal} width={'450'} height={'400'} visible={visible}>
                 <div className={css.removed}>
-                    <h1>Бронь был отменен!</h1>
+                    <h1>Бронирование было отменено!</h1>
                     <span onClick={onModal}><GreenBtn>ОК</GreenBtn></span>
                 </div>
             </ModalWrapper>
             <ModalWrapper onModal={onChatCreate} onClickAway={onChatCreate} width={'450'} height={'400'} visible={approved}>
                 <div className={css.removed}>
-                    <h2>Бронь успешно подтвержден!</h2>
+                    <h2>Бронирование успешно подтверждено!</h2>
                     <span onClick={onChatCreate}><GreenBtn>ОК</GreenBtn></span>
                 </div>
             </ModalWrapper>
