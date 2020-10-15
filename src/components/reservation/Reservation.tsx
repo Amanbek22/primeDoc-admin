@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import {
@@ -102,7 +102,6 @@ type ListProps = {
     doctor: number
 }
 const List: React.FC<ListProps> = (props) => {
-    console.log(props)
     const dispatch = useDispatch()
     const [visible, setVisible] = useState(false)
     const [approved, setApproved] = useState(false)
@@ -128,25 +127,30 @@ const List: React.FC<ListProps> = (props) => {
                 api.getDoc(props.doctor)
                     .then(async (response)=>{
                         let {username, firstName, lastName, patronymic} = response.data
-                        try {
-                            await dataBase?.collection("PrimeDocChat").add({
-                                adminId: props.doctorId.toString(),
-                                adminPhone: username,
-                                chatStarted: false,
-                                clientId: props.clientId.toString(),
-                                doctorName: firstName,
-                                doctorSurname: lastName,
-                                patronymic: patronymic,
-                                lastMessage: '',
-                                lastMessageSenderId: null,
-                                lastMessageTime: new Date(),
-                                userPhone: ''
-                            });
-                        } catch (error) {
-                            alert('some error with creating chat between doctor and user!')
-                            // console.log(error.message)
+                        let chat = await dataBase.collection("PrimeDocChat").doc(`${props.doctorId}${props.clientId}`).get()
+                        if(chat.exists){
+                            onApprove()
+                        }else{
+                            try {
+                                await dataBase?.collection("PrimeDocChat").doc(`${props.doctorId}${props.clientId}`).set({
+                                    adminId: props.doctorId.toString(),
+                                    adminPhone: username,
+                                    chatStarted: false,
+                                    clientId: props.clientId.toString(),
+                                    doctorName: firstName,
+                                    doctorSurname: lastName,
+                                    patronymic: patronymic,
+                                    lastMessage: '',
+                                    lastMessageSenderId: null,
+                                    lastMessageTime: new Date(),
+                                    userPhone: ''
+                                });
+                            } catch (error) {
+                                alert('some error with creating chat between doctor and user!')
+                                // console.log(error.message)
+                            }
+                            onApprove()
                         }
-                        onApprove()
                         // dispatch(setPending(true))
                     })
             }, (error) => {

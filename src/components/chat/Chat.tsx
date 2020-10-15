@@ -19,7 +19,6 @@ type ChatProps = {
     setSearchName: (str:string) => void
 }
 const Chat: React.FC<ChatProps> = (props) => {
-    console.log(props.active)
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setHeader("Чат"))
