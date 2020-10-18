@@ -106,9 +106,9 @@ const SignInFormik = (props: any) => {
                                       placeholder={'Введите пароль'}
                             />
                         </div>
-                        <div className={css.forgot}>
-                            <Link to={'/forgot'}>забыли пароль?</Link>
-                        </div>
+                        {/*<div className={css.forgot}>*/}
+                        {/*    <Link to={'/forgot'}>забыли пароль?</Link>*/}
+                        {/*</div>*/}
                         <BtnNext type="submit" disabled={!hasChanged || hasErrors || isSubmitting}>
                             Далее
                         </BtnNext>
