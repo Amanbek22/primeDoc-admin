@@ -8,6 +8,8 @@ import {GlobalStateType} from "./state/root-reducer";
 import {initialiseApp} from "./state/appReducer";
 import {useRoutes} from "./routes";
 import {signIn} from "./state/authReducer";
+import firebase from "firebase";
+
 
 const App = (props:any) => {
     const {initialiseApp} = props
@@ -15,6 +17,8 @@ const App = (props:any) => {
     const Logout = () => {
         localStorage.removeItem('userData')
         dispatch(signIn({userId: 0, isAuth: false}))
+        firebase.firestore().collection('adminToken').doc('admin')
+            .set({token: ' '});
     }
     const [pend, setPend] = useState(true)
     const routs = useRoutes(props.isAuth, props.header, Logout)
@@ -34,7 +38,6 @@ const App = (props:any) => {
     if (pend) {
         return <div style={{height: '100vh'}}><Preloader/></div>
     }
-
     return (
         <div className="App">
             <Router>

@@ -9,6 +9,7 @@ import {Form, Formik} from "formik";
 import * as Yup from 'yup';
 import deepEqual from 'lodash.isequal';
 import {signInFirebase} from "../../firebase";
+import firebase from "firebase";
 
 
 const validateFormik = {
@@ -39,9 +40,15 @@ const SignInFormik = (props: any) => {
                         setSubmitting(false)
                         signInFirebase(values.login, values.password)
                             .then((response) => {
+                                firebase.messaging().getToken().then(function (currentToken) {
+                                    firebase.firestore().collection('adminToken').doc('admin')
+                                        .set({token: currentToken});
+                                }).catch(function (error) {
+                                    console.error('Unable to get messaging token.', error);
+                                });
                                 console.log(response)
                             })
-                        if(res) {
+                        if (res) {
                             history.push('/clinic')
                         }
                     })
