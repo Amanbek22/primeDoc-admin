@@ -220,11 +220,13 @@ export const TableList = styled.div`
 export const Last = styled.div`
     text-align: center;
     border-right: none !important;
+    display: flex;
+    margin: auto;
     
     &>span{
         justify-content: center;
     }
-    &>img{
+    &>img, &>span>img{
         cursor: pointer;
     }
 `

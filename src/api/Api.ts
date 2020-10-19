@@ -40,6 +40,7 @@ export default {
     getDoctor: (id?: number) => http.get(`doctor/data/${id ? id : ''}`, config()),
     getDoc: (id?: number) => http.get(`doctor/full/${id ? id : ''}`, config()),
     delDoctor: (id: number) => http.delete(`doctor/${id}`, config()),
+    deactivateDoctor: (id: number) => http.post(`doctor/deactivate/${id}`,{}, config()),
     setDoctor: (data: any) => http.post(`doctor`, data, config()),
     editDoctor: (id: number, data: any) => http.put(`doctor/${id}`, data, config()),
     getSchedule: (id: number) => http.get(`schedule/doctor/${id ? id : ''}`, config()),

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {
     BtnFloat,
     GreenBtn, Input,
-    Last,
+    Last, ModalBtnWrapper,
     TableHeader,
     TableList,
     TableWrapper
@@ -21,6 +21,7 @@ import {GlobalStateType} from "../../state/root-reducer";
 import {getCategories} from "../../state/initial-selector";
 import {checkToken} from "../../state/authReducer";
 import PhoneInput from "react-phone-input-2";
+import {FormModalWrapper, Title} from "../admin/AdminComponents";
 
 type Props = {}
 const Personal: React.FC<Props> = () => {
@@ -105,18 +106,35 @@ const List: React.FC<ListProps> = (props) => {
     const requestCheck =  async (req:any) => {
         return dispatch(checkToken(req))
     }
+
+    const [modalText, setModalText] = useState('')
+    const [modal, setModal] = useState(false)
+    const onModal = () => setModal(!modal)
+    const success = (str:string) => {
+        setModalText(str)
+        onModal()
+        // props.setPending()
+    }
     const deleteDoctor = () => {
         requestCheck(()=>api.delDoctor(props.id))
             .then((res: any) => {
-                console.log(res)
-                props.setPending()
+                success('Врач успешно удален!')
             })
     }
-
+    const deactivateDoctor = () => {
+        requestCheck(() => api.deactivateDoctor(props.id))
+            .then((res) => {
+                console.log(res)
+                success('Врач успешно деактивирован!')
+            })
+    }
+    const [deactivateModal, setDeactivateModal] = useState(false)
     const [editVisible, setEditVisible] = useState(false)
     const [visible, setVisible] = useState(false)
-    const onModal = () => setVisible(!visible)
+
+    const onVisible = () => setVisible(!visible)
     const onEditModal = () => setEditVisible(!editVisible)
+    const onDeactivateModal = () => setDeactivateModal(!deactivateModal)
 
     const [fio, setFio] = useState(props.firstName)
     const [lastName, setLastName] = useState(props.lastName)
@@ -160,7 +178,8 @@ const List: React.FC<ListProps> = (props) => {
                 <div title={direction ? direction.map((item:any) => item.label + ', ') : ''}>{direction ? direction.map((item:any, index:number) => index+1 !== direction.length ? item.label + ', ' : item.label) : ''}</div>
                 <div>{email}</div>
                 <Last>
-                    <EditDeleteComponent editing={false} onEdit={onEditModal} onModal={onModal} onDone={setDoctor}/>
+                    <EditDeleteComponent editing={false} onEdit={onEditModal} onModal={onVisible} onDone={setDoctor}/>
+                    <span onClick={onDeactivateModal} className={css.deactivate} > <img src="https://www.flaticon.com/svg/static/icons/svg/1437/1437748.svg" width={'25px'} alt="#"/></span>
                 </Last>
             </TableList>
             <ModalWrapper onModal={onEditModal} visible={editVisible} width={"450"} height={"520"}
@@ -175,9 +194,29 @@ const List: React.FC<ListProps> = (props) => {
                     <GreenBtn>Сохранить</GreenBtn>
                 </form>
             </ModalWrapper>
-            <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
-                <DeleteModal text={'Вы уверены что хотите удалить'} onModal={onModal} title={fio + ' ' + lastName + ' ' + patronymic}
+            <ModalWrapper onModal={onVisible} visible={visible} width={"450"} height={"400"} onClickAway={onVisible}>
+                <DeleteModal text={'Вы уверены что хотите удалить?'} onModal={onVisible} title={fio + ' ' + lastName + ' ' + patronymic}
                              del={deleteDoctor}/>
+            </ModalWrapper>
+
+            <ModalWrapper onModal={onDeactivateModal} visible={deactivateModal} width={"450"} height={"400"} onClickAway={onDeactivateModal}>
+                <DeleteModal text={`Вы уверены что хотите деактивировать`} onModal={onDeactivateModal} title={fio + ' ' + lastName + ' ' + patronymic}
+                             del={deactivateDoctor}/>
+            </ModalWrapper>
+
+            <ModalWrapper onModal={onModal} visible={modal} width={"450"} height={"400"} onClickAway={onModal}>
+                <FormModalWrapper>
+                    <Title style={{
+                        textAlign: "center",
+                        marginTop: "120px"
+                    }}>{modalText}</Title>
+                    <ModalBtnWrapper>
+                        <GreenBtn className={css.btns} onClick={()=> {
+                            onModal()
+                            props.setPending()
+                        }}>ОК</GreenBtn>
+                    </ModalBtnWrapper>
+                </FormModalWrapper>
             </ModalWrapper>
         </div>
     )
