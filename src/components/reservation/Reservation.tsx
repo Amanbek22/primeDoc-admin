@@ -47,6 +47,9 @@ const Reservation = () => {
                                 Номер телефона
                             </div>
                             <div>
+                                ФИО врача
+                            </div>
+                            <div>
                                 Дата брони
                             </div>
                             <div>
@@ -66,7 +69,8 @@ const Reservation = () => {
                                     doctor={item.doctorId}
                                     doctorId={item.userDoctorId}
                                     clientId={item.userClientId}
-                                    fio={item?.firstname + ' ' + item?.lastname + ' ' + item?.patronymic}
+                                    fio={`${item.firstname ? item.firstname : ''} ${item.lastname ? item.lastname : ''} ${item.patronymic ? item.patronymic : ''}`}
+                                    doctorFio={`${item.doctorFirstName ? item.doctorFirstName : ''} ${item.doctorLastName ? item.doctorLastName : ''} ${item.doctorPatronymic ? item.doctorPatronymic : ''}`}
                                     number={item.phone}
                                     date={item.date}
                                     from={item.start}
@@ -100,6 +104,7 @@ type ListProps = {
     clientId: number
     doctorId: number
     doctor: number
+    doctorFio: string
 }
 const List: React.FC<ListProps> = (props) => {
     const dispatch = useDispatch()
@@ -170,6 +175,7 @@ const List: React.FC<ListProps> = (props) => {
             <ReservationList>
                 <div title={props.fio}>{props.fio.length <= 2 ? <span style={{color: 'red'}}>Отсутсвует</span> : props.fio}</div>
                 <div>{props.number}</div>
+                <div title={props.doctorFio}>{props.doctorFio.length <= 2 ? <span style={{color: 'red'}}>Отсутсвует</span> : props.doctorFio}</div>
                 <div>{date.toLocaleDateString()}</div>
                 <div>{props.from}</div>
                 <div>{props.to}</div>

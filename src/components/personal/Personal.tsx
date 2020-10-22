@@ -39,9 +39,8 @@ const Personal: React.FC<Props> = () => {
         requestCheck(api.getDoctor).then((res: any) => {
             setDoctors(res.data)
             setPending(false)
-        }, (error: any) => {
+        }, () => {
             setPending(false)
-            console.error(error)
         })
     }, [pending])
 
@@ -118,14 +117,13 @@ const List: React.FC<ListProps> = (props) => {
     const deleteDoctor = () => {
         requestCheck(()=>api.delDoctor(props.id))
             .then((res: any) => {
-                success('Врач успешно удален!')
+                success(res.data)
             })
     }
     const deactivateDoctor = () => {
         requestCheck(() => api.deactivateDoctor(props.id))
-            .then((res) => {
-                console.log(res)
-                success('Врач успешно деактивирован!')
+            .then((res:any) => {
+                success(res.data)
             })
     }
     const [deactivateModal, setDeactivateModal] = useState(false)
