@@ -130,7 +130,7 @@ const CreateTimeTable = (props: any) => {
             currentWeek: 1,
             weekDuration: weeks.length,
             weeks: weeks.map((item, index) => ({
-                weekDays: item.days.map((i: any, index: any) => {
+                weekDays: item.days.map((i: any) => {
                     return {
                         intervals: i.list.map((j: any) => {
                             if (j && j.toH && j.toM && j.fromH && j.fromM) {
@@ -149,26 +149,34 @@ const CreateTimeTable = (props: any) => {
                 weekOrder: index + 1
             }))
         }
-        await schedule.weeks.map((item: any, weekIndex) => item.weekDays.map((i: any, dayIndex: number) => i?.intervals.map((intervals: any, index: number) => {
-            if (!intervals) {
-                let filtered = schedule.weeks[weekIndex].weekDays[dayIndex].intervals.filter((el: any) => {
-                    return el != null;
-                })
-                schedule.weeks[weekIndex].weekDays[dayIndex].intervals = [...filtered]
-                // console.log(schedule.weeks[weekIndex].weekDays[dayIndex].intervals)
+
+        let res:any = await schedule.weeks.map((item: any) => item.weekDays.map((i: any) => {
+            if(!i.intervals.length){
+                return null
             }
-        })))
+            return  i
+        }))
+
+        let filteredWeeks = await res.map((item:any) => item.filter((time:any) => time !== null))
+        let newSchedule = {
+            ...schedule,
+            weeks: filteredWeeks.map((week:any, index:number) => ({weekDays: week, weekOrder: index+1}))
+        }
+        // console.log(schedule)
+        // console.log(newSchedule)
+
+
         if (props.data && status) {
             requestCheck(() => Api.deleteSchedule(props.data.id))
-                .then((res) => {
-                    requestCheck(() => Api.createSchedule(schedule))
-                        .then((res: any) => {
+                .then(() => {
+                    requestCheck(() => Api.createSchedule(newSchedule))
+                        .then(() => {
                             // Generate(res.data.id)
                             props.setPending()
                         })
                 })
         } else {
-            requestCheck(() => Api.createSchedule(schedule))
+            requestCheck(() => Api.createSchedule(newSchedule))
                 .then((res: any) => {
                     Generate(res.data.id)
                     history.push('/personal')
