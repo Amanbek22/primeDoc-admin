@@ -44,6 +44,15 @@ const validateFormik = {
         .required('Объязательное поле'),
     // login: Yup.string()
     //     .required('Объязательное поле'),
+    degree: Yup.array()
+        .of(
+            Yup.object().shape({
+                start: Yup.date().required('Объязательное поле'),
+                organizationName: Yup.string().required('Объязательное поле'),
+                name: Yup.string().required('Объязательное поле'),
+                // infoType: Yup.string().required('Объязательное поле'),
+            })
+        )
 
 
 }
@@ -249,7 +258,9 @@ const CreatePersonal = () => {
                                                                 styles={{...selectStyles}}
                                                                 onChange={(e:any) => values.degree[index].infoType = e.value  }
                                                                 placeholder={'Тип регалии'}
+                                                                name={`degree.${index}.infoType`}
                                                             />
+                                                            <input type="text"  style={{display: 'none'}} name={`degree.${index}.infoType`}/>
                                                             <Field as={Input} placeholder={'Название'} name={`degree.${index}.name`}/>
                                                             <div className={css.dateWrapper}>
                                                                 <Field
