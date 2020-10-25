@@ -134,9 +134,11 @@ const CreateTimeTable = (props: any) => {
                     return {
                         intervals: i.list.map((j: any) => {
                             if (j && j.toH && j.toM && j.fromH && j.fromM) {
+                                let endHour = (Number(j.toH) - 6).toString()
+                                let startHour = (Number(j.fromH) - 6).toString()
                                 return {
-                                    end: j.toH && j.toM ? j.toH + ':' + j.toM + ':' + '00' : '',
-                                    start: j.fromH && j.fromM ? j.fromH + ':' + j.fromM + ':' + '00' : ''
+                                    end: j.toH && j.toM ? (endHour.length === 1 && Number(endHour) > 0 ? '0' + endHour : (Number(endHour) > 0 ? endHour : 24 + Number(endHour) )) + ':' + j.toM + ':' + '00' : '',
+                                    start: j.fromH && j.fromM ? (startHour.length === 1 && Number(startHour) > 0  ? '0' + startHour : (Number(startHour) > 0 ? startHour : 24 + Number(startHour) ) ) + ':' + j.fromM + ':' + '00' : ''
                                 }
                             }else{
                                 status = false
@@ -164,7 +166,6 @@ const CreateTimeTable = (props: any) => {
         }
         // console.log(schedule)
         // console.log(newSchedule)
-
 
         if (props.data && status) {
             requestCheck(() => Api.deleteSchedule(props.data.id))

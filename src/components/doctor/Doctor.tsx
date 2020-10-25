@@ -201,9 +201,9 @@ const Days: React.FC<DaysProps> = (props) => {
                 {
                     props?.list.map((item: any, index: number) => item ? <div className={css.schedule}
                                                                               key={index}>
-                        <span> {item.fromH}:{item.fromM} </span>
+                        <span> {(Number(item.fromH) + 6) > 24 ? '0'+((Number(item.fromH) + 6) - 24) : ((Number(item.fromH) + 6).toString().length === 1 ? '0'+(Number(item.fromH) + 6) : Number(item.fromH) + 6)  }:{item.fromM} </span>
                         |
-                        <span> {item.toH}:{item.toM} </span>
+                        <span> {(Number(item.toH) + 6) > 24 ? '0'+((Number(item.toH) + 6) - 24) : ((Number(item.toH) + 6).toString().length === 1 ? '0'+(Number(item.toH) + 6) : Number(item.toH) + 6) }:{item.toM} </span>
                     </div> : null)
                 }
             </div>
