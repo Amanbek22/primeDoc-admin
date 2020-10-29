@@ -79,7 +79,22 @@ const CreateTimeTable = (props: any) => {
     ])
     useEffect(() => {
         if (props.data) {
-            setWeeks([...props.data?.weeks])
+            let weeks = [...props.data?.weeks]
+            let newWeeks = [...props.data?.weeks]
+            weeks.forEach((week, index) => {
+                // console.log(week, index)
+                week.days.forEach((day:any, dayIndex: number) => {
+                    // console.log(day, dayIndex)
+                    day.list.forEach((interval:any, intervalIndex:number) => {
+                        newWeeks[index].days[dayIndex].list[intervalIndex].fromH = +newWeeks[index].days[dayIndex].list[intervalIndex].fromH + 6
+                        newWeeks[index].days[dayIndex].list[intervalIndex].toH = +newWeeks[index].days[dayIndex].list[intervalIndex].toH + 6
+                        // console.log(newWeeks[index].days[dayIndex].list[intervalIndex])
+                    })
+                })
+            })
+            // console.log([...props.data?.weeks])
+            // console.log(newWeeks)
+            setWeeks(weeks)
             setDoctorId(props.id)
         }
     }, [props.data])
