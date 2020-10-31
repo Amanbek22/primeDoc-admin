@@ -11,7 +11,7 @@ import css from './createPersonal.module.css'
 import {useDispatch, useSelector} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import pic from "../../img/pic.png";
-import {Field, FieldArray, Form, Formik, useField, useFormikContext} from "formik";
+import {Field, FieldArray, Form, Formik, useField, useFormikContext, FieldProps} from "formik";
 import api from '../../api/Api'
 import {useHistory} from "react-router-dom";
 import DatePicker, {registerLocale} from "react-datepicker";
@@ -22,7 +22,7 @@ import {selectStyles} from "../utils/customSelect";
 import {GlobalStateType} from "../../state/root-reducer";
 import {getCategories} from "../../state/initial-selector";
 import * as Yup from "yup";
-import deepEqual from "lodash.isequal";
+// import deepEqual from "lodash.isequal";
 import {checkToken} from "../../state/authReducer";
 import {firestore} from "firebase";
 import PhoneInput from 'react-phone-input-2'
@@ -47,10 +47,10 @@ const validateFormik = {
     degree: Yup.array()
         .of(
             Yup.object().shape({
-                start: Yup.date().required('Объязательное поле'),
+                start: Yup.date().required('Объязательное поле начало'),
                 organizationName: Yup.string().required('Объязательное поле'),
                 name: Yup.string().required('Объязательное поле'),
-                // infoType: Yup.string().required('Объязательное поле'),
+                infoType: Yup.string().required('Объязательное поле'),
             })
         )
 
@@ -62,7 +62,7 @@ const CreatePersonal = () => {
     useEffect(() => {
         dispatch(setHeader("Создание врача"))
     }, [dispatch])
-    const requestCheck =  async (req:any) => {
+    const requestCheck = async (req: any) => {
         return dispatch(checkToken(req))
     }
     const history = useHistory()
@@ -98,7 +98,6 @@ const CreatePersonal = () => {
         name: '',
         middleName: '',
         aboutDoctor: '',
-        // degree: '',
         regalia: '',
         login: '',
         password1: '',
@@ -112,7 +111,6 @@ const CreatePersonal = () => {
                 organizationName: '',
                 start: '',
                 end: '',
-
             }
         ]
     }
@@ -132,7 +130,7 @@ const CreatePersonal = () => {
                 validationSchema={Yup.object().shape(validateFormik)}
                 onSubmit={(values, {setSubmitting}) => {
                     setSubmitting(true);
-                    let data:any = {
+                    let data: any = {
                         bio: values.aboutDoctor,
                         birthDate: null,
                         categories: category.map((item: any) => item.value),
@@ -145,37 +143,37 @@ const CreatePersonal = () => {
                         schedules: null,
                         username: '+' + login
                     }
+                    console.log(data)
                     const formData = new FormData()
-                    formData.append('doctor', new Blob([JSON.stringify(data)], { type: 'application/json'}))
-                    if(image) formData.append('imageFile', image)
-                    requestCheck(()=>api.setDoctor(formData))
+                    formData.append('doctor', new Blob([JSON.stringify(data)], {type: 'application/json'}))
+                    if (image) formData.append('imageFile', image)
+                    requestCheck(() => api.setDoctor(formData))
                         .then(async (res: any) => {
                             console.log(res)
                             try {
                                 let doc = await dataBase?.collection("doctors").doc(`${res.data.id}`)
-                                    doc.set({
-                                        id: res.data.id,
-                                        name: res.data?.firstName ? res.data?.firstName : ' ',
-                                        isOnline: true,
-                                        fatherName: res.data.lastName ? res.data.lastName : ' ',
-                                        surname: res.data.patronymic ? res.data.patronymic : ' ',
-                                        phone: res.data.username ? res.data.username : ' ',
-                                        image: res.data.image ? res.data.image : ' '
-                                    });
+                                doc.set({
+                                    id: res.data.id,
+                                    name: res.data?.firstName ? res.data?.firstName : ' ',
+                                    isOnline: true,
+                                    fatherName: res.data.lastName ? res.data.lastName : ' ',
+                                    surname: res.data.patronymic ? res.data.patronymic : ' ',
+                                    phone: res.data.username ? res.data.username : ' ',
+                                    image: res.data.image ? res.data.image : ' '
+                                });
                             } catch (error) {
                                 alert('some error with creating doctors')
                                 console.log(error.message)
                             }
-                            if(time){
+                            if (time) {
                                 history.push(`/personal/0/add/${res.data.id}`)
-                            }else{
+                            } else {
                                 history.push('/personal')
                             }
                         }, (error: any) => {
                             setSubmitting(false)
                             console.log(error)
                         })
-
                 }}
             >
                 {
@@ -183,13 +181,13 @@ const CreatePersonal = () => {
                          values,
                          touched,
                          errors,
-                         initialValues,
-                         isSubmitting,
+                         // initialValues,
+                         // isSubmitting,
                          handleChange,
                          handleBlur,
                      }) => {
-                        const hasChanged = !deepEqual(values, initialValues);
-                        const hasErrors = Object.keys(errors).length > 0;
+                        // const hasChanged = !deepEqual(values, initialValues);
+                        // const hasErrors = Object.keys(errors).length > 0;
                         return <Form className={css.formWrapper}>
                             <div className={css.form}>
                                 <label className={css.label}>
@@ -223,7 +221,8 @@ const CreatePersonal = () => {
                                             {touched.login && errors.login ? <div>{errors.login}</div> : null}
                                         </span>
                                     </span>
-                                    <PhoneInput onChange={(e)=> setLogin(e)} containerClass={css.container} inputClass={css.inputClass} country={'kg'} value={login}/>
+                                    <PhoneInput onChange={(e) => setLogin(e)} containerClass={css.container}
+                                                inputClass={css.inputClass} country={'kg'} value={login}/>
                                     {/*<Field as={PhoneInput} value={values.login} containerClass={css.container} inputClass={css.inputClass} country={'kg'} name={"login"}/>*/}
                                 </label>
                                 <label className={css.label}>
@@ -233,7 +232,7 @@ const CreatePersonal = () => {
                                         </span>
                                     </span>
                                     <Select
-                                        noOptionsMessage={()=>'Загрузка...'}
+                                        noOptionsMessage={() => 'Загрузка...'}
                                         onBlur={handleBlur}
                                         isMulti
                                         styles={selectStyles}
@@ -252,16 +251,40 @@ const CreatePersonal = () => {
                                                 {values.degree && values.degree.length > 0 ? (
                                                     values.degree.map((degree, index) => (
                                                         <label key={index} className={css.label}>
-                                                            <span><span>*</span>Регалии</span>
-                                                            <Select
-                                                                options={degreeOption}
-                                                                styles={{...selectStyles}}
-                                                                onChange={(e:any) => values.degree[index].infoType = e.value  }
-                                                                placeholder={'Тип регалии'}
-                                                                name={`degree.${index}.infoType`}
-                                                            />
-                                                            <input type="text"  style={{display: 'none'}} name={`degree.${index}.infoType`}/>
-                                                            <Field as={Input} placeholder={'Название'} name={`degree.${index}.name`}/>
+                                                            {/*<span className={css.remove} onClick={()=> arrayHelpers.remove(index)}>Удалить регалии</span>*/}
+                                                            <span><span>*</span>Регалии
+                                                                <span className={css.error}>
+                                                                {
+                                                                    // @ts-ignore
+                                                                    touched.degree && touched.degree[index].name && errors.degree && errors.degree[index].infoType ? <div>{errors?.degree[index].infoType}</div> : null
+                                                                }
+                                                            </span>
+                                                            </span>
+                                                            <Field name={`degree.${index}.infoType`} component={SelectField} options={degreeOption} />
+                                                            {/*<Select*/}
+                                                            {/*    options={degreeOption}*/}
+                                                            {/*    styles={{...selectStyles}}*/}
+                                                            {/*    onChange={(e: any) => {*/}
+
+                                                            {/*        values.degree[index].infoType = e.value*/}
+                                                            {/*    }}*/}
+                                                            {/*    placeholder={'Тип регалии'}*/}
+                                                            {/*    name={`degree.${index}.infoType`}*/}
+                                                            {/*/>*/}
+                                                            <span className={css.error}>
+                                                                {
+                                                                    // @ts-ignore
+                                                                    touched.degree && touched.degree[index].name && errors.degree && errors.degree[index].name ? <div>{errors.degree[index].name}</div> : null
+                                                                }
+                                                            </span>
+                                                            <Field as={Input} placeholder={'Название'}
+                                                                   name={`degree.${index}.name`}/>
+                                                            <span className={css.error}>
+                                                                {
+                                                                    // @ts-ignore
+                                                                    touched.degree && touched.degree[index].start && errors.degree && errors.degree[index].start ? <div>{errors.degree[index].start}</div> : null
+                                                                }
+                                                            </span>
                                                             <div className={css.dateWrapper}>
                                                                 <Field
                                                                     autoComplete="off"
@@ -280,22 +303,18 @@ const CreatePersonal = () => {
                                                                     className={css.datePicker} as={DatePickerField}
                                                                     name={`degree.${index}.end`}/>
                                                             </div>
+                                                            <span className={css.error}>
+                                                                {
+                                                                    // @ts-ignore
+                                                                    touched.degree && touched.degree[index].organizationName && errors.degree && errors.degree[index].organizationName ? <div>{errors.degree[index].organizationName}</div> : null
+                                                                }
+                                                            </span>
                                                             <Field as={Input}
                                                                    placeholder={'Название организации'}
                                                                    name={`degree.${index}.organizationName`}/>
                                                         </label>
                                                     ))
-                                                ) : (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            arrayHelpers.push(deg)
-                                                        }
-                                                    >
-                                                        {/* show this when user has removed all friends from the list */}
-                                                        Добавить регплии
-                                                    </button>
-                                                )}
+                                                ) : null}
                                                 <button
                                                     className={css.add}
                                                     type="button"
@@ -324,14 +343,16 @@ const CreatePersonal = () => {
                             </span>
                         </span>
                                     <Field as={Input}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        value={values.password2}
-                                        name={"password2"}
-                                        type={'password'}/>
+                                           onBlur={handleBlur}
+                                           onChange={handleChange}
+                                           value={values.password2}
+                                           name={"password2"}
+                                           type={'password'}/>
                                 </label>
                                 <div className={css.btnWrapper}>
-                                    <GreenBtn type={'submit'} disabled={!hasChanged || hasErrors || isSubmitting}>
+                                    <GreenBtn type={'submit'}
+                                        // disabled={!hasChanged || hasErrors || isSubmitting}
+                                    >
                                         Зарегистрировать
                                     </GreenBtn>
                                 </div>
@@ -356,7 +377,9 @@ const CreatePersonal = () => {
                                 </div>
                                 <div className={css.blue}>
                                     {/*<Link to={'/personal/0/add/time'}>*/}
-                                        <GreenBtn onClick={()=>setTime(true)} disabled={!hasChanged || hasErrors || isSubmitting} >Создать расписание</GreenBtn>
+                                    <GreenBtn onClick={() => setTime(true)}
+                                        // disabled={!hasChanged || hasErrors || isSubmitting}
+                                    >Создать расписание</GreenBtn>
                                     {/*</Link>*/}
                                 </div>
                             </div>
@@ -368,6 +391,21 @@ const CreatePersonal = () => {
     )
 }
 
+const SelectField: React.SFC<any> = ({
+                                                                   options,
+                                                                   field,
+                                                                   form,
+                                                               }) => (
+    <Select
+        options={options}
+        name={field.name}
+        placeholder={'Тип регалии'}
+        styles={{...selectStyles}}
+        value={options ? options.find((option:any) => option.value === field.value) : ''}
+        onChange={(option: any) => form.setFieldValue(field.name, option.value)}
+        onBlur={field.onBlur}
+    />
+)
 
 export const DatePickerField = ({...props}: any) => {
     const {setFieldValue} = useFormikContext();
