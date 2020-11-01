@@ -208,7 +208,7 @@ const CreatePersonal = () => {
                                     <Field as={Input} name={"name"}/>
                                 </label>
                                 <label className={css.label}>
-                                    <span><span>*</span>Отчество</span>
+                                    <span>Отчество</span>
                                     <Field as={Input} name={"middleName"} type={'text'}/>
                                 </label>
                                 <label className={css.label}>

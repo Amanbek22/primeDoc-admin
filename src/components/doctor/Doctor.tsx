@@ -207,7 +207,7 @@ const Days: React.FC<DaysProps> = (props) => {
                                     ? '0'+((Number(item.fromH) + 6) - 24)
                                     : ((Number(item.fromH) + 6).toString().length === 1
                                         ? '0'+(Number(item.fromH) + 6)
-                                        : Number(item.fromH) + 6) === 24 ? '00' :  Number(item.fromH) + 6  } :{item.fromM} </span>
+                                        : Number(item.fromH) + 6) === 24 ? '00' :  '0'+(Number(item.fromH) + 6)  } : {item.fromM} </span>
                         |
                         <span>
                             {
