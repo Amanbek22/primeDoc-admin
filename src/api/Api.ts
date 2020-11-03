@@ -43,6 +43,7 @@ export default {
     deactivateDoctor: (id: number) => http.post(`doctor/deactivate/${id}`,{}, config()),
     setDoctor: (data: any) => http.post(`doctor`, data, config()),
     editDoctor: (id: number, data: any) => http.put(`doctor/${id}`, data, config()),
+    setDoctorImage: (id: number, data: any) => http.put(`doctor/image/${id}`, data, config()),
     getSchedule: (id: number) => http.get(`schedule/doctor/${id ? id : ''}`, config()),
     createSchedule:(data: any) => http.post(`schedule`, data, config()),
     deleteSchedule: (id: number) => http.delete(`schedule/${id}`, config()),

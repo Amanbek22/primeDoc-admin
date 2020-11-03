@@ -3,9 +3,27 @@
     overflow: hidden;
     width: 180px;
     height: 180px;
+    cursor: pointer;
+    position: relative;
 }
 .logo>img{
     height: 100%;
+    z-index: 1;
+}
+.plusWrapper{
+    opacity: 0;
+    background: rgba(0,0,0, 0.7);
+    position: absolute;
+    z-index: 10;
+    transition: all 0.4s ease-in-out;
+    padding: 25px;
+
+}
+.plus{
+    width: 100%;
+}
+.logo:hover .plusWrapper{
+    opacity: 1;
 }
 .name{
     font-family: Roboto, sans-serif;
@@ -82,3 +100,16 @@
     border-radius: 5px;
     margin: 0 10px;
 }
+.addPhotoModal{
+    text-align: center;
+    display: grid;
+    height: 100%;
+    grid-template-rows: 1fr 100px;
+}
+.addPhotoModal>label{
+    align-self: center;
+}
+.addPhotoModal>button{
+    margin: 0 auto;
+}
+

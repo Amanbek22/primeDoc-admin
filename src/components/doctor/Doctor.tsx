@@ -2,12 +2,21 @@ import React, {useEffect, useState} from 'react';
 import {useParams, useHistory} from 'react-router-dom';
 import api from '../../api/Api'
 import Preloader from "../preloader/Preloader";
-import {GreenBtn, HeaderWrapper, Weeks, WeeksWrapper} from "../mainStyledComponents/MainStyledComponents";
+import {
+    DownloadPictureWrapper,
+    GreenBtn, GreenDiv,
+    HeaderWrapper,
+    InputNone,
+    Weeks,
+    WeeksWrapper
+} from "../mainStyledComponents/MainStyledComponents";
 import css from './doctor.module.css'
 import {useDispatch} from "react-redux";
 import {setHeader} from "../../state/appReducer";
 import CreateTimeTable from "../create-time-table/CreateTimeTable";
 import {checkToken} from "../../state/authReducer";
+import ModalWrapper from "../modal/Modal";
+import pic from "../../img/pic.png";
 
 type DoctorProps = {}
 const Doctor: React.FC<DoctorProps> = React.memo(() => {
@@ -22,26 +31,70 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
     const [pending, setPending] = useState(true)
     const [user, setUser] = useState<any>(null)
     const [image, setImage] = useState<string | null>(null)
+    const [visible, setVisible] = useState(false)
+    const [img, setImg] = useState('')
+    const [img2, setImg2] = useState('')
+
+    const onModal = () => setVisible(!visible)
 
     useEffect(() => {
         requestCheck(() => api.getDoc(params.id))
             .then((res: any) => {
-                setPending(false)
                 setUser(res.data)
                 setImage(res.data.image)
+                setPending(false)
             })
     }, [pending])
+
+    const uploadPhoto = () => {
+        const formData = new FormData()
+        formData.append('imageFile', img)
+        setImg('')
+        setImage(null)
+        requestCheck( () => api.setDoctorImage(params.id, formData))
+            .then((res:any)=> {
+                onModal()
+                setImage(res.data.image)
+                setPending(true)
+            }, () =>{
+                onModal()
+                setPending(true)
+            })
+    }
 
     if (pending) {
         return <Preloader/>
     }
     return (
         <div>
+            <ModalWrapper onModal={onModal} visible={visible} width={"450"} height={"400"} onClickAway={onModal}>
+                <div className={css.addPhotoModal}>
+                    <label>
+                        <InputNone onChange={(e: any) => {
+                            const reader = new FileReader();
+                            reader.readAsDataURL(e.target.files[0]);
+                            reader.onload = (e: any) => {
+                                setImg2(e.target.result)
+                            }
+                            setImg(e.target.files[0])
+                        }} type={'file'}/>
+                        <DownloadPictureWrapper>
+                            <img src={img2 ? img2 : pic} alt="pic"/>
+                        </DownloadPictureWrapper>
+                        <GreenDiv>Загрузить фото</GreenDiv>
+                    </label>
+                    <GreenBtn onClick={uploadPhoto} disabled={!img}>Сохранить</GreenBtn>
+                </div>
+            </ModalWrapper>
             <HeaderWrapper>
-                <span className={css.logo}>
+                <span className={css.logo} onClick={onModal}>
+                    <span className={css.plusWrapper}>
+                        <img className={css.plus} src="https://image.flaticon.com/icons/png/512/32/32339.png" alt="+"/>
+                    </span>
                     <img
                         src={image ? image : "https://mediator.kg/wp-content/themes/twentynineteen/images/avatar-no-photo.png"}
-                        alt={user?.firstName}/>
+                        alt={user?.firstName}
+                    />
                 </span>
                 <div>
                     <div className={css.name}>
@@ -100,7 +153,6 @@ const Schedule = (props: ScheduleProps) => {
         return dispatch(checkToken(req))
     }
     const [schedule, setSchedule] = useState<any>(null)
-    const [oldSchedule, setOldSchedule] = useState<any>([])
     const [edit, setEdit] = useState(false)
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     useEffect(() => {
@@ -111,7 +163,7 @@ const Schedule = (props: ScheduleProps) => {
                     ...res.data,
                     weeks: res.data.weeks.map((item: any) => ({
                         days: days.map((i: any) => {
-                            let day:any = {
+                            let day: any = {
                                 list: [],
                                 weekDayName: i
                             }
@@ -204,18 +256,20 @@ const Days: React.FC<DaysProps> = (props) => {
                         <span>
                             {
                                 (Number(item.fromH) + 6) > 24
-                                    ? '0'+((Number(item.fromH) + 6) - 24)
+                                    ? '0' + ((Number(item.fromH) + 6) - 24)
                                     : ((Number(item.fromH) + 6).toString().length === 1
-                                        ? '0'+(Number(item.fromH) + 6)
-                                        : Number(item.fromH) + 6) === 24 ? '00' :  '0'+(Number(item.fromH) + 6)  } : {item.fromM} </span>
+                                    ? '0' + (Number(item.fromH) + 6)
+                                    : Number(item.fromH) + 6) === 24
+                                    ? '00'
+                                    : (Number(item.fromH) + 6) < 10 ? '0' + (Number(item.fromH) + 6) : (Number(item.fromH) + 6)} : {item.fromM} </span>
                         |
                         <span>
                             {
                                 (Number(item.toH) + 6) > 24
-                                    ? '0'+((Number(item.toH) + 6) - 24)
+                                    ? '0' + ((Number(item.toH) + 6) - 24)
                                     : ((Number(item.toH) + 6).toString().length === 1
-                                        ? '0'+(Number(item.toH) + 6)
-                                        : Number(item.toH) + 6)} : {item.toM}
+                                    ? '0' + (Number(item.toH) + 6)
+                                    : Number(item.toH) + 6)} : {item.toM}
                         </span>
                     </div> : null)
                 }
