@@ -27,6 +27,7 @@ import {checkToken} from "../../state/authReducer";
 import {firestore} from "firebase";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import del from '../../img/delete.png'
 
 registerLocale('ru', ru)
 
@@ -246,17 +247,20 @@ const CreatePersonal = () => {
                                 <FieldArray
                                     name="degree"
                                     render={(arrayHelpers) => {
+
                                         return (
                                             <div>
                                                 {values.degree && values.degree.length > 0 ? (
                                                     values.degree.map((degree, index) => (
                                                         <label key={index} className={css.label}>
-                                                            {/*<span className={css.remove} onClick={()=> arrayHelpers.remove(index)}>Удалить регалии</span>*/}
+                                                            <span className={css.remove} onClick={()=> arrayHelpers.remove(index)}>
+                                                                <img src={del} alt="remove"/>
+                                                            </span>
                                                             <span><span>*</span>Регалии
                                                                 <span className={css.error}>
                                                                 {
                                                                     // @ts-ignore
-                                                                    touched.degree && touched.degree[index].name && errors.degree && errors.degree[index].infoType ? <div>{errors?.degree[index].infoType}</div> : null
+                                                                    touched.degree && touched.degree[index] && touched.degree[index].infoType && errors.degree && errors.degree[index].infoType ? <div>{errors?.degree[index].infoType}</div> : null
                                                                 }
                                                             </span>
                                                             </span>
@@ -274,7 +278,7 @@ const CreatePersonal = () => {
                                                             <span className={css.error}>
                                                                 {
                                                                     // @ts-ignore
-                                                                    touched.degree && touched.degree[index].name && errors.degree && errors.degree[index].name ? <div>{errors.degree[index].name}</div> : null
+                                                                    touched.degree && touched.degree[index] && touched.degree[index].name && errors.degree && errors.degree[index].name ? <div>{errors.degree[index].name}</div> : null
                                                                 }
                                                             </span>
                                                             <Field as={Input} placeholder={'Название'}
@@ -282,7 +286,7 @@ const CreatePersonal = () => {
                                                             <span className={css.error}>
                                                                 {
                                                                     // @ts-ignore
-                                                                    touched.degree && touched.degree[index].start && errors.degree && errors.degree[index].start ? <div>{errors.degree[index].start}</div> : null
+                                                                    touched.degree && touched.degree[index] && touched.degree[index].start && errors.degree && errors.degree[index].start ? <div>{errors.degree[index].start}</div> : null
                                                                 }
                                                             </span>
                                                             <div className={css.dateWrapper}>
@@ -306,7 +310,7 @@ const CreatePersonal = () => {
                                                             <span className={css.error}>
                                                                 {
                                                                     // @ts-ignore
-                                                                    touched.degree && touched.degree[index].organizationName && errors.degree && errors.degree[index].organizationName ? <div>{errors.degree[index].organizationName}</div> : null
+                                                                    touched.degree && touched.degree[index] && touched.degree[index].organizationName && errors.degree && errors.degree[index].organizationName ? <div>{errors.degree[index].organizationName}</div> : null
                                                                 }
                                                             </span>
                                                             <Field as={Input}
