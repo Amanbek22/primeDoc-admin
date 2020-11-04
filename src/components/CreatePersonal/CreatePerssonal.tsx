@@ -78,7 +78,7 @@ const CreatePersonal = () => {
     const [options, setOptions] = useState<any>([])
     const [time, setTime] = useState(false)
     const [login, setLogin] = useState('')
-    console.log(login)
+    const [errorText, setErrorText] = useState('')
     const degreeOption = [
         {
             value: 'EXPERIENCE',
@@ -147,13 +147,11 @@ const CreatePersonal = () => {
                         schedules: null,
                         username: '+' + login
                     }
-                    console.log(data)
                     const formData = new FormData()
                     formData.append('doctor', new Blob([JSON.stringify(data)], {type: 'application/json'}))
                     if (image) formData.append('imageFile', image)
                     requestCheck(() => api.setDoctor(formData))
                         .then(async (res: any) => {
-                            console.log(res)
                             try {
                                 let doc = await dataBase?.collection("doctors").doc(`${res.data.id}`)
                                 doc.set({
@@ -175,6 +173,9 @@ const CreatePersonal = () => {
                                 history.push('/personal')
                             }
                         }, (error: any) => {
+                            if(error.response.status === 409){
+                                setErrorText('Пользователь с данным номером уже существует!')
+                            }
                             setSubmitting(false)
                             console.log(error)
                         })
@@ -186,12 +187,12 @@ const CreatePersonal = () => {
                          touched,
                          errors,
                          // initialValues,
-                         // isSubmitting,
+                         isSubmitting,
                          handleChange,
                          handleBlur,
                      }) => {
                         // const hasChanged = !deepEqual(values, initialValues);
-                        // const hasErrors = Object.keys(errors).length > 0;
+                        const hasErrors = Object.keys(errors).length > 0;
                         return <Form className={css.formWrapper}>
                             <div className={css.form}>
                                 <label className={css.label}>
@@ -225,10 +226,7 @@ const CreatePersonal = () => {
                                             {touched.login && errors.login ? <div>{errors.login}</div> : null}
                                         </span>
                                     </span>
-                                    <PhoneInput inputProps={{
-                                        name: 'phone',
-                                        required: true,
-                                    }} onChange={(e) => setLogin(e)} containerClass={css.container}
+                                    <PhoneInput onChange={(e) => setLogin(e)} containerClass={css.container}
                                                 inputClass={css.inputClass} country={'kg'} value={login}/>
                                     <input type="text" style={{opacity: 0, height: 0, border: 'none'}} disabled value={login} required/>
                                     {/*<Field as={PhoneInput} value={values.login} containerClass={css.container} inputClass={css.inputClass} country={'kg'} name={"login"}/>*/}
@@ -352,9 +350,10 @@ const CreatePersonal = () => {
                                            name={"password2"}
                                            type={'password'}/>
                                 </label>
+                                { errorText ? <div className={css.error} style={{textAlign: 'center', marginLeft: 0}}>{errorText}</div> : null}
                                 <div className={css.btnWrapper}>
                                     <GreenBtn type={'submit'}
-                                        // disabled={!hasChanged || hasErrors || isSubmitting}
+                                        disabled={isSubmitting}
                                     >
                                         Зарегистрировать
                                     </GreenBtn>
@@ -381,7 +380,7 @@ const CreatePersonal = () => {
                                 <div className={css.blue}>
                                     {/*<Link to={'/personal/0/add/time'}>*/}
                                     <GreenBtn onClick={() => setTime(true)}
-                                        // disabled={!hasChanged || hasErrors || isSubmitting}
+                                        disabled={isSubmitting}
                                     >Создать расписание</GreenBtn>
                                     {/*</Link>*/}
                                 </div>
