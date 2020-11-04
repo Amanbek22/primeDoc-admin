@@ -53,12 +53,9 @@ const Doctor: React.FC<DoctorProps> = React.memo(() => {
         setImage(null)
         requestCheck( () => api.setDoctorImage(params.id, formData))
             .then((res:any)=> {
-                onModal()
-                setImage(res.data.image)
-                setPending(true)
+                window.location.reload()
             }, () =>{
-                onModal()
-                setPending(true)
+                window.location.reload()
             })
     }
 

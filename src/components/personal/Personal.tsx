@@ -185,7 +185,7 @@ const List: React.FC<ListProps> = (props) => {
                 <form onSubmit={setDoctor} className={css.editWrapper}>
                     <Input required onChange={(e) => setFio(e.target.value)} type="text" value={fio}/>
                     <Input required onChange={(e) => setLastName(e.target.value)} type="text" value={lastName}/>
-                    <Input required onChange={(e) => setPatronymic(e.target.value)} type="text" value={patronymic}/>
+                    <Input onChange={(e) => setPatronymic(e.target.value)} type="text" value={patronymic}/>
                     <Select isMulti options={options} placeholder={'Направление'}  onChange={(e) => setDirection(e)} value={direction}/>
                     {/*<Input onChange={(e) => setDirection(e.target.value)} type="text" value={direction}/>*/}
                     <PhoneInput country={'kg'} inputClass={css.inputClass} containerClass={css.container} onChange={(e) => setEmail(e)} value={email}/>

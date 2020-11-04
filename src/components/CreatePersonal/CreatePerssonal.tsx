@@ -43,6 +43,8 @@ const validateFormik = {
         .min(8, 'Минимум 8 символов')
         .oneOf([Yup.ref('password1')], 'Не совпадают')
         .required('Объязательное поле'),
+    login: Yup.string()
+        .min(4, 'Объязательное поле'),
     // login: Yup.string()
     //     .required('Объязательное поле'),
     degree: Yup.array()
@@ -76,6 +78,7 @@ const CreatePersonal = () => {
     const [options, setOptions] = useState<any>([])
     const [time, setTime] = useState(false)
     const [login, setLogin] = useState('')
+    console.log(login)
     const degreeOption = [
         {
             value: 'EXPERIENCE',
@@ -187,7 +190,6 @@ const CreatePersonal = () => {
                          handleChange,
                          handleBlur,
                      }) => {
-                        console.log(touched)
                         // const hasChanged = !deepEqual(values, initialValues);
                         // const hasErrors = Object.keys(errors).length > 0;
                         return <Form className={css.formWrapper}>
@@ -223,8 +225,12 @@ const CreatePersonal = () => {
                                             {touched.login && errors.login ? <div>{errors.login}</div> : null}
                                         </span>
                                     </span>
-                                    <PhoneInput onChange={(e) => setLogin(e)} containerClass={css.container}
+                                    <PhoneInput inputProps={{
+                                        name: 'phone',
+                                        required: true,
+                                    }} onChange={(e) => setLogin(e)} containerClass={css.container}
                                                 inputClass={css.inputClass} country={'kg'} value={login}/>
+                                    <input type="text" style={{opacity: 0, height: 0, border: 'none'}} disabled value={login} required/>
                                     {/*<Field as={PhoneInput} value={values.login} containerClass={css.container} inputClass={css.inputClass} country={'kg'} name={"login"}/>*/}
                                 </label>
                                 <label className={css.label}>
