@@ -3,9 +3,7 @@
     grid-template-columns: 1fr 1fr;
     grid-gap: 1em;
 }
-.form>div>label{
-    position: relative;
-}
+
 .form{
     display: grid;
     grid-template-columns: 1fr;
@@ -15,8 +13,8 @@
     margin-top: 1em;
     text-align: end;
 }
-.label{
-    /*position: relative;*/
+.trash{
+    position: relative;
 }
 .label>span{
     font-style: normal;
@@ -113,8 +111,8 @@
 }
 .remove{
     position: absolute;
-    top: 30px;
-    right: 10px;
+    top: 27px;
+    right: 103%;
     z-index: 10;
     height: 20px;
     cursor: pointer;

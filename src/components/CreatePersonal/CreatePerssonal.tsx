@@ -163,7 +163,7 @@ const CreatePersonal = () => {
                                     image: res.data.image ? res.data.image : ' '
                                 });
                             } catch (error) {
-                                alert('some error with creating doctors')
+                                // alert('some error with creating doctors')
                                 console.log(error.message)
                             }
                             if (time) {
@@ -187,6 +187,7 @@ const CreatePersonal = () => {
                          handleChange,
                          handleBlur,
                      }) => {
+                        console.log(touched)
                         // const hasChanged = !deepEqual(values, initialValues);
                         // const hasErrors = Object.keys(errors).length > 0;
                         return <Form className={css.formWrapper}>
@@ -253,32 +254,24 @@ const CreatePersonal = () => {
                                                 {values.degree && values.degree.length > 0 ? (
                                                     values.degree.map((degree, index) => (
                                                         <label key={index} className={css.label}>
+                                                            <div className={css.trash}>
                                                             <span className={css.remove} onClick={()=> arrayHelpers.remove(index)}>
                                                                 <img src={del} alt="remove"/>
                                                             </span>
+                                                            </div>
                                                             <span><span>*</span>Регалии
                                                                 <span className={css.error}>
                                                                 {
                                                                     // @ts-ignore
-                                                                    touched.degree && touched.degree[index] && touched.degree[index].infoType && errors.degree && errors.degree[index].infoType ? <div>{errors?.degree[index].infoType}</div> : null
+                                                                    touched.degree && touched.degree[index] && touched.degree[index].infoType && errors.degree && errors.degree[index] && errors.degree[index].infoType ? <div>{errors?.degree[index].infoType}</div> : null
                                                                 }
                                                             </span>
                                                             </span>
                                                             <Field name={`degree.${index}.infoType`} component={SelectField} options={degreeOption} />
-                                                            {/*<Select*/}
-                                                            {/*    options={degreeOption}*/}
-                                                            {/*    styles={{...selectStyles}}*/}
-                                                            {/*    onChange={(e: any) => {*/}
-
-                                                            {/*        values.degree[index].infoType = e.value*/}
-                                                            {/*    }}*/}
-                                                            {/*    placeholder={'Тип регалии'}*/}
-                                                            {/*    name={`degree.${index}.infoType`}*/}
-                                                            {/*/>*/}
                                                             <span className={css.error}>
                                                                 {
                                                                     // @ts-ignore
-                                                                    touched.degree && touched.degree[index] && touched.degree[index].name && errors.degree && errors.degree[index].name ? <div>{errors.degree[index].name}</div> : null
+                                                                    touched.degree && touched.degree[index] && touched.degree[index].name && errors.degree && errors.degree[index] && errors.degree[index].name ? <div>{errors.degree[index].name}</div> : null
                                                                 }
                                                             </span>
                                                             <Field as={Input} placeholder={'Название'}
@@ -286,7 +279,7 @@ const CreatePersonal = () => {
                                                             <span className={css.error}>
                                                                 {
                                                                     // @ts-ignore
-                                                                    touched.degree && touched.degree[index] && touched.degree[index].start && errors.degree && errors.degree[index].start ? <div>{errors.degree[index].start}</div> : null
+                                                                    touched.degree && touched.degree[index] && touched.degree[index].start && errors.degree && errors.degree[index] && errors.degree[index].start ? <div>{errors.degree[index].start}</div> : null
                                                                 }
                                                             </span>
                                                             <div className={css.dateWrapper}>
@@ -310,7 +303,7 @@ const CreatePersonal = () => {
                                                             <span className={css.error}>
                                                                 {
                                                                     // @ts-ignore
-                                                                    touched.degree && touched.degree[index] && touched.degree[index].organizationName && errors.degree && errors.degree[index].organizationName ? <div>{errors.degree[index].organizationName}</div> : null
+                                                                    touched.degree && touched.degree[index] && touched.degree[index].organizationName && errors.degree && errors.degree[index] && errors.degree[index].organizationName ? <div>{errors.degree[index].organizationName}</div> : null
                                                                 }
                                                             </span>
                                                             <Field as={Input}
