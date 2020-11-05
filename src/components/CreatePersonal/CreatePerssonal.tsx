@@ -153,7 +153,7 @@ const CreatePersonal = () => {
                     requestCheck(() => api.setDoctor(formData))
                         .then(async (res: any) => {
                             try {
-                                let doc = await dataBase?.collection("doctors").doc(`${res.data.id}`)
+                                let doc = await dataBase?.collection("doctors").doc(`${res.data.doctor_id}`)
                                 doc.set({
                                     id: res.data.doctor_id ? res.data.doctor_id : res.data.id,
                                     name: res.data?.firstName ? res.data?.firstName : ' ',

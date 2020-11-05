@@ -117,13 +117,13 @@ const List: React.FC<ListProps> = (props) => {
     const deleteDoctor = () => {
         requestCheck(()=>api.delDoctor(props.id))
             .then((res: any) => {
-                success(`Доктор c id: ${props.id} был удален!`)
+                success(`Доктор c id: ${fio + ' ' + lastName + ' ' + patronymic} был удален!`)
             })
     }
     const deactivateDoctor = () => {
         requestCheck(() => api.deactivateDoctor(props.id))
             .then((res:any) => {
-                success(`Доктор c id: ${props.id} был деактивирован!`)
+                success(`Доктор c id: ${fio + ' ' + lastName + ' ' + patronymic} был деактивирован!`)
             })
     }
     const [deactivateModal, setDeactivateModal] = useState(false)
