@@ -155,7 +155,7 @@ const CreatePersonal = () => {
                             try {
                                 let doc = await dataBase?.collection("doctors").doc(`${res.data.id}`)
                                 doc.set({
-                                    id: res.data.id,
+                                    id: res.data.doctor_id ? res.data.doctor_id : res.data.id,
                                     name: res.data?.firstName ? res.data?.firstName : ' ',
                                     isOnline: true,
                                     fatherName: res.data.lastName ? res.data.lastName : ' ',
