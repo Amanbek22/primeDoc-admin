@@ -86,8 +86,10 @@ const CreateTimeTable = (props: any) => {
                 week.days.forEach((day:any, dayIndex: number) => {
                     // console.log(day, dayIndex)
                     day.list.forEach((interval:any, intervalIndex:number) => {
-                        newWeeks[index].days[dayIndex].list[intervalIndex].fromH = +newWeeks[index].days[dayIndex].list[intervalIndex].fromH + 6
-                        newWeeks[index].days[dayIndex].list[intervalIndex].toH = +newWeeks[index].days[dayIndex].list[intervalIndex].toH + 6
+                        let fromH = +newWeeks[index].days[dayIndex].list[intervalIndex].fromH + 6
+                        let toH = +newWeeks[index].days[dayIndex].list[intervalIndex].toH + 6
+                        newWeeks[index].days[dayIndex].list[intervalIndex].fromH = fromH >= 24 ? '0'+(fromH - 24) : fromH
+                        newWeeks[index].days[dayIndex].list[intervalIndex].toH = toH >= 24 ? '0'+(toH - 24) : toH
                         // console.log(newWeeks[index].days[dayIndex].list[intervalIndex])
                     })
                 })
